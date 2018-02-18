@@ -59,6 +59,12 @@ def login_user(request):
 	except Exception as e:
 		return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
 
+#def logout_user(request):
+#	'''
+#	Log user out of session
+#	'''
+
+@csrf_exempt
 def register_user(request):
 	'''
 	Add user
@@ -81,6 +87,7 @@ def register_user(request):
 	except Exception as e:
 		return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
 
+@csrf_exempt
 def add_forum_post(request):
 	'''
 	Add forum post
@@ -99,6 +106,7 @@ def add_forum_post(request):
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
 
+@csrf_exempt
 def test_request(request):
 	if request.user.is_authenticated:
 		return HttpResponse(request.user.username)
