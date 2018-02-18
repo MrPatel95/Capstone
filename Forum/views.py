@@ -59,10 +59,13 @@ def login_user(request):
 	except Exception as e:
 		return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
 
-#def logout_user(request):
-#	'''
-#	Log user out of session
-#	'''
+@csrf_exempt
+def logout_user(request):
+	'''
+	Log user out of session
+	'''
+	logout(request)
+	return HttpResponse('{"response":"pass"}')
 
 @csrf_exempt
 def register_user(request):
