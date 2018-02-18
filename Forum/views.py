@@ -38,6 +38,7 @@ def _get_does_email_exist(email):
 	except ObjectDoesNotExist:
 		return False
 
+@csrf_exempt
 def login_user(request):
 	'''
 	Attach user to current session
