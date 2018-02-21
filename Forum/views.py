@@ -105,6 +105,7 @@ def add_forum_post(request):
 			post_image = body['post_image']
 			post = ForumPost(user=user, post_title=post_title, post_body=post_body, post_image=post_image)
 			post.save()
+			return HttpResponse('{"response":"pass"}')
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
 	else:
