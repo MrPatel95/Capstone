@@ -116,4 +116,4 @@ def test_request(request):
 	if request.user.is_authenticated:
 		return HttpResponse(request.user.username)
 	else:
-		return HttpResponse('unauthenticated')
+		return HttpResponse('{"response":"unauthenticated"}')
