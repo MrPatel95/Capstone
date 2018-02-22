@@ -1,11 +1,11 @@
+from django.core import serializers
+
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.contrib.auth import authenticate
-from django.contrib.auth import login
-from django.contrib.auth import logout
-from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.csrf import ensure_csrf_cookie
+
+from django.contrib.auth import authenticate, login, logout
+
+from django.views.decorators.csrf import csrf_protect, csrf_exempt, ensure_csrf_cookie
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -125,12 +125,28 @@ def add_reply(request):
 			if 'parent_id' not in body:
 				parent_id = None
 			else:
-				parent_id = ReplyPost.objects.get(reply_id=body['reply_id'])
+				parent_id = ReplyPost.objects.get(reply_id=body['parent_id'])
 			reply_body = body['reply_body']
 			reply = ReplyPost(user=user, post_id=post_id, parent_id=parent_id, reply_body=reply_body)
 			reply.save()
 			return HttpResponse('{"response":"pass"}')
 		except Exception as e:
+			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
+
+@csrf_exempt
+def get_n_recent_forum_posts(request):
+	'''
+	Return's json of top n forum posts
+	'''
+	if request.user.is_authenticated:
+		body = json.loads(request.body.decode('utf-8'))
+		try:
+			posts = ForumPost.objects.filter().values(username=User('username')).order_by('post_datetime')[:body['n']]
+			serialized = serializers.serialize('json', posts)
+			return HttpResponse(serialized)
+		except:
 			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')

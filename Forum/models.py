@@ -1,6 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+def _get_name(self):
+    return self.username
+
+User.add_to_class("__str__", _get_name)
+
 class ForumPost(models.Model):
 	post_id = models.AutoField(primary_key=True)
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
