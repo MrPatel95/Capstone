@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
 from Forum.models import ForumPost
+from Forum.models import ReplyPost
 
 import traceback
 import logging
@@ -105,6 +106,29 @@ def add_forum_post(request):
 			post_image = body['post_image']
 			post = ForumPost(user=user, post_title=post_title, post_body=post_body, post_image=post_image)
 			post.save()
+			return HttpResponse('{"response":"pass"}')
+		except Exception as e:
+			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
+
+@csrf_exempt
+def add_reply(request):
+	'''
+	Add a reply to a post or comment
+	'''
+	if request.user.is_authenticated:
+		body = json.loads(request.body.decode('utf-8'))
+		try:
+			user = request.user
+			post_id = ForumPost.objects.get(post_id=body['post_id'])
+			if 'parent_id' not in body:
+				parent_id = None
+			else:
+				parent_id = ReplyPost.objects.get(reply_id=body['reply_id'])
+			reply_body = body['reply_body']
+			reply = ReplyPost(user=user, post_id=post_id, parent_id=parent_id, reply_body=reply_body)
+			reply.save()
 			return HttpResponse('{"response":"pass"}')
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
