@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-def _get_name(self):
-    return self.username
-
-User.add_to_class("__str__", _get_name)
+#Querying User model with use_natural_foreign_keys=True returns username instead of key
+class UserManager(models.Manager):
+    def unatural_key(self):
+        return self.username
+    User.natural_key = unatural_key
 
 class ForumPost(models.Model):
 	post_id = models.AutoField(primary_key=True)

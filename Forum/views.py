@@ -143,8 +143,9 @@ def get_n_recent_forum_posts(request):
 	if request.user.is_authenticated:
 		body = json.loads(request.body.decode('utf-8'))
 		try:
-			posts = ForumPost.objects.filter().values(username=User('username')).order_by('post_datetime')[:body['n']]
-			serialized = serializers.serialize('json', posts)
+			posts = ForumPost.objects.filter().order_by('post_datetime')[:body['n']]
+			#Querying User model with use_natural_foreign_keys=True returns username instead of key
+			serialized = serializers.serialize('json', posts, use_natural_foreign_keys=True)
 			return HttpResponse(serialized)
 		except:
 			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
