@@ -147,14 +147,7 @@ def get_n_recent_forum_posts(request):
 			#Querying User model with use_natural_foreign_keys=True returns username instead of key
 			serialized = serializers.serialize('json', posts, use_natural_foreign_keys=True)
 			return HttpResponse(serialized)
-		except:
+		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
-	else:
-		return HttpResponse('{"response":"unauthenticated"}')
-
-@csrf_exempt
-def test_request(request):
-	if request.user.is_authenticated:
-		return HttpResponse(request.user.username)
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
