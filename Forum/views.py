@@ -50,8 +50,7 @@ def login_user(request):
 		username = body['username']
 		password = body['password']
 		if _get_does_username_exist(username):
-			#user = authenticate(request, username=username, password=password)
-			user = authenticate(username=username, password=password)
+			user = authenticate(request, username=username, password=password)
 			if user is not None:
 				login(request, user)
 				return HttpResponse('{"response":"pass"}')
@@ -82,7 +81,7 @@ def register_user(request):
 		email = body['email']
 		if not _get_does_username_exist(username):
 			if not _get_does_email_exist(email):
-				user = User(username=username, password=password, email=email)
+				user = User.objects.create_user(username=username, password=password, email=email)
 				user.save()
 				return HttpResponse('{"response":"pass"}')
 			else:

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-#Querying User model with use_natural_foreign_keys=True returns username instead of key
+Querying User model with use_natural_foreign_keys=True returns username instead of key
 class UserManager(models.Manager):
     def unatural_key(self):
         return self.username
