@@ -50,7 +50,8 @@ def login_user(request):
 		username = body['username']
 		password = body['password']
 		if _get_does_username_exist(username):
-			user = authenticate(request, username=username, password=password)
+			#user = authenticate(request, username=username, password=password)
+			user = authenticate(username=username, password=password)
 			if user is not None:
 				login(request, user)
 				return HttpResponse('{"response":"pass"}')
