@@ -176,25 +176,26 @@ def get_post_and_replies_by_post_id(request):
 				},
 			}
 			root_replies = list(ReplyPost.objects.filter(post_id=post_id, parent_id=None).order_by('reply_datetime'))
-			s = '{'
-			counter = 0
-			for reply in root_replies:
-				s += (
-					'"' + str(counter) + '":{'
-					+ '"reply_id":"' + str(reply.reply_id) + '",'
-					+ '"user":"' + reply.user.username + '",'
-					+ '"post_id":"' + str(reply.post_id) + '",'
-					+ '"parent_id":"' + str(reply.parent_id) + '",'
-					+ '"reply_body":"' + reply.reply_body + '",'
-					+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
-					+ '"connect_count":"' + str(reply.connect_count) + '",'
-					+ '"replies":'
-				)
-				s += _traverse(reply) + '},'
-				counter += 1
-			s = s[:-1]
-			s += '}'
-			info_dict['replies'] = json.loads(s)
+			if len(root_replies) > 0:
+				s = '{'
+				counter = 0
+				for reply in root_replies:
+					s += (
+						'"' + str(counter) + '":{'
+						+ '"reply_id":"' + str(reply.reply_id) + '",'
+						+ '"user":"' + reply.user.username + '",'
+						+ '"post_id":"' + str(reply.post_id) + '",'
+						+ '"parent_id":"' + str(reply.parent_id) + '",'
+						+ '"reply_body":"' + reply.reply_body + '",'
+						+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
+						+ '"connect_count":"' + str(reply.connect_count) + '",'
+						+ '"replies":'
+					)
+					s += _traverse(reply) + '},'
+					counter += 1
+				s = s[:-1]
+				s += '}'
+				info_dict['replies'] = json.loads(s)
 			return HttpResponse(json.dumps(info_dict))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
