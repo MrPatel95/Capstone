@@ -17,6 +17,7 @@ import traceback
 import logging
 import json
 import yaml
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -143,7 +144,8 @@ def get_n_recent_forum_posts(request):
 	if request.user.is_authenticated:
 		body = json.loads(request.body.decode('utf-8'))
 		try:
-			posts = ForumPost.objects.filter().order_by('post_datetime')[:body['n']]
+			n = body['n']
+			posts = ForumPost.objects.filter().order_by('post_datetime')[:n]
 			#Querying User model with use_natural_foreign_keys=True returns username instead of key
 			serialized = serializers.serialize('json', posts, use_natural_foreign_keys=True)
 			return HttpResponse(serialized)
@@ -151,3 +153,111 @@ def get_n_recent_forum_posts(request):
 			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
+
+@csrf_exempt
+def get_post_and_replies_by_post_id(request):
+	'''
+	Return's the post and replies pertaining to the post in nested fasion
+	'''
+	if request.user.is_authenticated:
+		body = json.loads(request.body.decode('utf-8'))
+		try:
+			post_id = body['post_id']
+			post = ForumPost.objects.get(post_id=post_id)
+			info_dict = {
+				"post":{
+					"post_id":post.post_id,
+					"user":post.user.username,
+					"post_title":post.post_title,
+					"post_body":post.post_body,
+					"post_image":post.post_image,
+					"post_datetime":str(post.post_datetime),
+					"connect_count":post.connect_count,
+				},
+			}
+			root_replies = list(ReplyPost.objects.filter(post_id=post_id, parent_id=None).order_by('reply_datetime'))
+			s = '{'
+			counter = 0
+			for reply in root_replies:
+				s += (
+					'"' + str(counter) + '":{'
+					+ '"reply_id":"' + str(reply.reply_id) + '",'
+					+ '"user":"' + reply.user.username + '",'
+					+ '"post_id":"' + str(reply.post_id) + '",'
+					+ '"parent_id":"' + str(reply.parent_id) + '",'
+					+ '"reply_body":"' + reply.reply_body + '",'
+					+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
+					+ '"connect_count":"' + str(reply.connect_count) + '",'
+					+ '"replies":'
+				)
+				s += _traverse(reply) + '},'
+				counter += 1
+			s = s[:-1]
+			s += '}'
+			info_dict['replies'] = json.loads(s)
+			return HttpResponse(json.dumps(info_dict))
+		except Exception as e:
+			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
+
+def _traverse(root_reply):
+	reply_stack = list(ReplyPost.objects.filter(parent_id=root_reply.reply_id).order_by('reply_datetime'))
+	counter = 0
+	s = '['
+	while reply_stack:
+		reply = reply_stack.pop(0)
+		reply_list = list(ReplyPost.objects.filter(parent_id=reply.reply_id).order_by('reply_datetime'))
+		#This comment has a reply
+		if len(reply_list) > 0:
+			counter += 1
+			reply_stack = list(ReplyPost.objects.filter(parent_id=reply.reply_id).order_by('reply_datetime')) + reply_stack
+			s += (
+				'{"reply_id":"' + str(reply.reply_id) + '",'
+				+ '"user":"' + reply.user.username + '",'
+				+ '"post_id":"' + str(reply.post_id) + '",'
+				+ '"parent_id":"' + str(reply.parent_id) + '",'
+				+ '"reply_body":"' + reply.reply_body + '",'
+				+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
+				+ '"connect_count":"' + str(reply.connect_count) + '",'
+				+ '"replies":'
+			)
+		#This comment does not have a reply, we can end this chain
+		else:
+			if len(reply_stack) > 0:
+				counter -= 1
+				s += (
+					'{"reply_id":"' + str(reply.reply_id) + '",'
+					+ '"user":"' + reply.user.username + '",'
+					+ '"post_id":"' + str(reply.post_id) + '",'
+					+ '"parent_id":"' + str(reply.parent_id) + '",'
+					+ '"reply_body":"' + reply.reply_body + '",'
+					+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
+					+ '"connect_count":"' + str(reply.connect_count) + '"'
+					+ '}},'
+				)
+			else:
+				if counter == 0:
+					s += (
+						'{"reply_id":"' + str(reply.reply_id) + '",'
+						+ '"user":"' + reply.user.username + '",'
+						+ '"post_id":"' + str(reply.post_id) + '",'
+						+ '"parent_id":"' + str(reply.parent_id) + '",'
+						+ '"reply_body":"' + reply.reply_body + '",'
+						+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
+						+ '"connect_count":"' + str(reply.connect_count) + '"'
+						+ '}'
+					)
+				else:
+					s += (
+						'{"reply_id":"' + str(reply.reply_id) + '",'
+						+ '"user":"' + reply.user.username + '",'
+						+ '"post_id":"' + str(reply.post_id) + '",'
+						+ '"parent_id":"' + str(reply.parent_id) + '",'
+						+ '"reply_body":"' + reply.reply_body + '",'
+						+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
+						+ '"connect_count":"' + str(reply.connect_count) + '"'
+						+ '}}'
+					)
+	s += ']'
+	return s
