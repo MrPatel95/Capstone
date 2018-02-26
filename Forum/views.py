@@ -209,56 +209,29 @@ def _traverse(root_reply):
 	while reply_stack:
 		reply = reply_stack.pop(0)
 		reply_list = list(ReplyPost.objects.filter(parent_id=reply.reply_id).order_by('reply_datetime'))
+		s += (
+			'{"reply_id":"' + str(reply.reply_id) + '",'
+			+ '"user":"' + reply.user.username + '",'
+			+ '"post_id":"' + str(reply.post_id) + '",'
+			+ '"parent_id":"' + str(reply.parent_id) + '",'
+			+ '"reply_body":"' + reply.reply_body + '",'
+			+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
+			+ '"connect_count":"' + str(reply.connect_count) + '",'
+		)
 		#This comment has a reply
 		if len(reply_list) > 0:
 			counter += 1
 			reply_stack = list(ReplyPost.objects.filter(parent_id=reply.reply_id).order_by('reply_datetime')) + reply_stack
-			s += (
-				'{"reply_id":"' + str(reply.reply_id) + '",'
-				+ '"user":"' + reply.user.username + '",'
-				+ '"post_id":"' + str(reply.post_id) + '",'
-				+ '"parent_id":"' + str(reply.parent_id) + '",'
-				+ '"reply_body":"' + reply.reply_body + '",'
-				+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
-				+ '"connect_count":"' + str(reply.connect_count) + '",'
-				+ '"replies":'
-			)
+			s += '"replies":'
 		#This comment does not have a reply, we can end this chain
 		else:
 			if len(reply_stack) > 0:
 				counter -= 1
-				s += (
-					'{"reply_id":"' + str(reply.reply_id) + '",'
-					+ '"user":"' + reply.user.username + '",'
-					+ '"post_id":"' + str(reply.post_id) + '",'
-					+ '"parent_id":"' + str(reply.parent_id) + '",'
-					+ '"reply_body":"' + reply.reply_body + '",'
-					+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
-					+ '"connect_count":"' + str(reply.connect_count) + '"'
-					+ '}},'
-				)
+				s += '}},'
 			else:
 				if counter == 0:
-					s += (
-						'{"reply_id":"' + str(reply.reply_id) + '",'
-						+ '"user":"' + reply.user.username + '",'
-						+ '"post_id":"' + str(reply.post_id) + '",'
-						+ '"parent_id":"' + str(reply.parent_id) + '",'
-						+ '"reply_body":"' + reply.reply_body + '",'
-						+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
-						+ '"connect_count":"' + str(reply.connect_count) + '"'
-						+ '}'
-					)
+					s += '}'
 				else:
-					s += (
-						'{"reply_id":"' + str(reply.reply_id) + '",'
-						+ '"user":"' + reply.user.username + '",'
-						+ '"post_id":"' + str(reply.post_id) + '",'
-						+ '"parent_id":"' + str(reply.parent_id) + '",'
-						+ '"reply_body":"' + reply.reply_body + '",'
-						+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
-						+ '"connect_count":"' + str(reply.connect_count) + '"'
-						+ '}}'
-					)
+					s += '}}'
 	s += ']'
 	return s
