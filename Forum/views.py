@@ -164,20 +164,19 @@ def get_post_and_replies_by_post_id(request):
 		try:
 			post_id = body['post_id']
 			post = ForumPost.objects.get(post_id=post_id)
-			info_dict = {
-				"post":{
-					"post_id":post.post_id,
-					"user":post.user.username,
-					"post_title":post.post_title,
-					"post_body":post.post_body,
-					"post_image":post.post_image,
-					"post_datetime":str(post.post_datetime),
-					"connect_count":post.connect_count,
-				},
-			}
+			s = (
+				'{"post":{'
+				+ '"post_id":"' + str(post.post_id)
+				+ '","user":"' + post.user.username
+				+ '","post_title":"' + post.post_title
+				+ '","post_body":"' + post.post_body
+				+ '","post_image":"' + post.post_image
+				+ '","post_datetime":"' + str(post.post_datetime)
+				+ '","connect_count":"' + str(post.connect_count)
+				+ '"},"replies":{'
+			)
 			root_replies = list(ReplyPost.objects.filter(post_id=post_id, parent_id=None).order_by('reply_datetime'))
 			if len(root_replies) > 0:
-				s = '{'
 				counter = 0
 				for reply in root_replies:
 					s += (
@@ -194,9 +193,10 @@ def get_post_and_replies_by_post_id(request):
 					s += _traverse(reply) + '},'
 					counter += 1
 				s = s[:-1]
-				s += '}'
-				info_dict['replies'] = json.loads(s)
-			return HttpResponse(json.dumps(info_dict))
+				s += '}}'
+			else:
+				s += '}}'
+			return HttpResponse(s)
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
 	else:
@@ -216,22 +216,22 @@ def _traverse(root_reply):
 			+ '"parent_id":"' + str(reply.parent_id) + '",'
 			+ '"reply_body":"' + reply.reply_body + '",'
 			+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
-			+ '"connect_count":"' + str(reply.connect_count) + '",'
+			+ '"connect_count":"' + str(reply.connect_count)
 		)
 		#This comment has a reply
 		if len(reply_list) > 0:
 			counter += 1
 			reply_stack = list(ReplyPost.objects.filter(parent_id=reply.reply_id).order_by('reply_datetime')) + reply_stack
-			s += '"replies":'
+			s += '","replies":'
 		#This comment does not have a reply, we can end this chain
 		else:
 			if len(reply_stack) > 0:
 				counter -= 1
-				s += '}},'
+				s += '"}},'
 			else:
 				if counter == 0:
-					s += '}'
+					s += '"}'
 				else:
-					s += '}}'
+					s += '"}}'
 	s += ']'
 	return s
