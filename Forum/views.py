@@ -280,7 +280,7 @@ def increment_connect_by_post_id(request):
 @csrf_exempt
 def get_post_and_replies_by_post_id(request):
 	'''
-	Return's the post and replies pertaining to the post in nested fasion
+	Return's the post and replies pertaining to the post
 	'''
 
 	if request.user.is_authenticated:

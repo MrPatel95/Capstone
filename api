@@ -1,5 +1,7 @@
 URL: https://infinite-reef-90129.herokuapp.com/
 
+----------------------------------------------
+
 loginUser
 body:
 {
@@ -12,11 +14,15 @@ responses:
 	"username not found"
 	"exception", "error":"<traceback>"
 
+----------------------------------------------
+
 logoutUser
 body:
 <empty>
 responses:
 	"pass"
+
+----------------------------------------------
 
 registerUser
 body:
@@ -31,6 +37,8 @@ responses:
 	"username in use"
 	"exception", "error":"<traceback>"
 
+----------------------------------------------
+
 addForumPost
 body:
 {
@@ -43,6 +51,8 @@ responses:
 	"exception", "error":"<traceback>"
 	"unauthenticated"
 
+----------------------------------------------
+
 addReply
 body:
 {
@@ -54,6 +64,8 @@ responses:
 	"pass"
 	"exception", "error":"<traceback>"
 	"unauthenticated"
+
+----------------------------------------------
 
 getTopNForumPosts
 body:
@@ -80,6 +92,8 @@ response:
 	]
 	"exception", "error":"<traceback>"
 	"unauthenticated"
+
+----------------------------------------------
 
 getPostAndRepliesByPostId
 body:
@@ -132,6 +146,8 @@ response:
 "exception", "error":"<traceback>"
 "unauthenticated"
 
+----------------------------------------------
+
 getForumPostsByUsername
 body:
 {
@@ -167,6 +183,8 @@ response:
 "exception", "error":"<traceback>"
 "unauthenticated"
 
+----------------------------------------------
+
 incrementConnectByPostId
 body:
 {
@@ -179,6 +197,8 @@ response:
 }
 "exception", "error":"<traceback>"
 "unauthenticated"
+
+----------------------------------------------
 
 changePasswordFromProfile
 body:
