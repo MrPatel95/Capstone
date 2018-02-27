@@ -1,0 +1,193 @@
+URL: https://infinite-reef-90129.herokuapp.com/
+
+loginUser
+body:
+{
+	"username":"ali",
+	"password":"tipshat123"
+}
+responses:
+	"pass"
+	"invalid password"
+	"username not found"
+	"exception", "error":"<traceback>"
+
+logoutUser
+body:
+<empty>
+responses:
+	"pass"
+
+registerUser
+body:
+{
+	"username":"ali",
+	"password":"tipshat123",
+	"email":"as2487@njit.edu"
+}
+responses:
+	"pass"
+	"email in use"
+	"username in use"
+	"exception", "error":"<traceback>"
+
+addForumPost
+body:
+{
+	"post_title":"my title",
+	"post_body":"my post's body"
+	"post_image":"https://i.imgur.com/QJRl0cC.jpg"
+}
+responses:
+	"pass"
+	"exception", "error":"<traceback>"
+	"unauthenticated"
+
+addReply
+body:
+{
+	"post_id":"1",
+	"parent_id":"2" | None
+	"reply_body":"this is my reply"
+}
+responses:
+	"pass"
+	"exception", "error":"<traceback>"
+	"unauthenticated"
+
+getTopNForumPosts
+body:
+{
+	"n":<int>
+}
+response:
+	[
+		{
+			"model"
+			"pk"
+			"fields": {
+				"user"
+				"post_title"
+				"post_body"
+				"post_image"
+				"post_datetime"
+				"connect_count"
+			}
+		},
+		{
+			...
+		}
+	]
+	"exception", "error":"<traceback>"
+	"unauthenticated"
+
+getPostAndRepliesByPostId
+body:
+{
+	"post_id":"1"
+}
+response:
+{
+  "post": {
+    "post_id": "1",
+    "user": "ali",
+    "post_title": "There will be an event tomorrow",
+    "post_body": "At the campus center",
+    "post_image": "",
+    "post_datetime": "2018-02-22 22:22:22.350197+00:00",
+    "connect_count": "0"
+  },
+  "replies": {
+    "0": {
+      "reply_id": "15",
+      "user": "ali",
+      "post_id": "1",
+      "parent_id": "None",
+      "reply_body": "1",
+      "reply_datetime": "2018-02-24 21:20:59.467868+00:00",
+      "connect_count": "0",
+      "replies": [
+        {
+          "reply_id": "17",
+          "user": "ali",
+          "post_id": "1",
+          "parent_id": "15",
+          "reply_body": "1 1",
+          "reply_datetime": "2018-02-24 21:21:16.215173+00:00",
+          "connect_count": "0",
+          "replies": {
+            "reply_id": "19",
+            "user": "ali",
+            "post_id": "1",
+            "parent_id": "17",
+            "reply_body": "1 1 1",
+            "reply_datetime": "2018-02-24 21:22:18.594680+00:00",
+            "connect_count": "0"
+          }
+        }
+      ]
+    }
+  }
+}
+"exception", "error":"<traceback>"
+"unauthenticated"
+
+getForumPostsByUsername
+body:
+{
+	"username":"ali"
+}
+response:
+[
+  {
+    "model": "Forum.forumpost",
+    "pk": 3,
+    "fields": {
+      "user": "ali",
+      "post_title": "Who hates the capstone class?",
+      "post_body": "It's kind of annoying to be honest",
+      "post_image": "",
+      "post_datetime": "2018-02-24T19:10:09.980Z",
+      "connect_count": 0
+    }
+  },
+  {
+    "model": "Forum.forumpost",
+    "pk": 2,
+    "fields": {
+      "user": "ali",
+      "post_title": "my second forum post",
+      "post_body": "my second forum post body",
+      "post_image": "",
+      "post_datetime": "2018-02-22T22:56:36.772Z",
+      "connect_count": 0
+    }
+  }
+]
+"exception", "error":"<traceback>"
+"unauthenticated"
+
+incrementConnectByPostId
+body:
+{
+	"post_id":"1"
+}
+response:
+{
+	"response":"pass",
+	"connect_count":"3"
+}
+"exception", "error":"<traceback>"
+"unauthenticated"
+
+changePasswordFromProfile
+body:
+{
+	"username":"ali",
+	"old_password":"myoldpassword",
+	"new_password":"mynewpassword"
+}
+response:
+"response":"pass"
+"exception", "error":"<traceback>"
+"unauthenticated"
