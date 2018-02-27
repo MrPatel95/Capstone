@@ -87,6 +87,11 @@ def _traverse(root_reply):
 
 	return s
 
+'''
+API Endpoints will be csrf_exempt
+Authenticity will be ensured by user session
+'''
+
 @csrf_exempt
 def login_user(request):
 	'''
@@ -145,6 +150,29 @@ def register_user(request):
 
 	except Exception as e:
 		return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+
+@csrf_exempt
+def change_password_from_profile(request):
+	'''
+	Change users password
+	This endpoint is accessed from the profile page for users already logged in
+	'''
+
+	if request.user.is_authenticated:
+		body = json.loads(request.body.decode('utf-8'))
+		try:
+			old_password = body['old_password']
+			new_password = body['new_password']
+			request_user = request.user
+			db_user = authenticate(username=request_user.username, password=old_password)
+			if db_user is not None and request_user == db_user:
+				db_user.set_password(new_password)
+				db_user.save()
+			return HttpResponse('{"response":"pass"}')
+		except Exception as e:
+			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
 
 @csrf_exempt
 def add_forum_post(request):
