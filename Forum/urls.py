@@ -8,5 +8,6 @@ urlpatterns = [
     path('addForumPost', views.add_forum_post, name='add_forum_post'),
     path('addReply', views.add_reply, name='add_reply'),
     path('getNRecentForumPosts', views.get_n_recent_forum_posts, name='get_n_recent_forum_posts'),
+    path('getForumPostsByUsername', views.get_forum_posts_by_username, name='get_forum_posts_by_username'),
     path('getPostAndRepliesByPostID', views.get_post_and_replies_by_post_id, name='get_post_and_replies_by_post_id'),
 ]
