@@ -231,6 +231,25 @@ def get_forum_posts_by_username(request):
 		return HttpResponse('{"response":"unauthenticated"}')
 
 @csrf_exempt
+def increment_connect_by_post_id(request):
+	'''
+	Increments connect count of post by 1
+	'''
+
+	if request.user.is_authenticated:
+		body = json.loads(request.body.decode('utf-8'))
+		try:
+			post_id = body['post_id']
+			post = ForumPost.objects.get(post_id=post_id)
+			post.connect_count += 1
+			post.save()
+			return HttpResponse('{"response":"pass","connect_count":"' + str(post.connect_count) + '"}')
+		except Exception as e:
+			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
+
+@csrf_exempt
 def get_post_and_replies_by_post_id(request):
 	'''
 	Return's the post and replies pertaining to the post in nested fasion
