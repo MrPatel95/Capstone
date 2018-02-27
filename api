@@ -211,3 +211,25 @@ response:
 "response":"pass"
 "exception", "error":"<traceback>"
 "unauthenticated"
+
+----------------------------------------------
+
+getEmail
+body:
+<empty>
+response:
+"email":"email@email.com"
+"exception", "error":"<traceback>"
+"unauthenticated"
+
+----------------------------------------------
+
+getReplyCountByPostId
+body:
+{
+  "post_id":"1"
+}
+response:
+"reply_count":"13"
+"exception", "error":"<traceback>"
+"unauthenticated"

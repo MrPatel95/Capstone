@@ -222,6 +222,37 @@ def add_reply(request):
 		return HttpResponse('{"response":"unauthenticated"}')
 
 @csrf_exempt
+def get_email(request):
+	'''
+	Returns email of user in current session
+	'''
+
+	if request.user.is_authenticated:
+		try:
+			return HttpResponse('{"email":"%s"}' % request.user.email)
+		except Exception as e:
+			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
+
+@csrf_exempt
+def get_reply_count_by_post_id(request):
+	'''
+	Returns email of user in current session
+	'''
+
+	if request.user.is_authenticated:
+		body = json.loads(request.body.decode('utf-8'))
+		try:
+			post_id = body['post_id']
+			reply_count = ReplyPost.objects.filter(post_id=post_id).count()
+			return HttpResponse('{"reply_count":"%s"}' % reply_count)
+		except Exception as e:
+			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
+
+@csrf_exempt
 def get_n_recent_forum_posts(request):
 	'''
 	Returns json of top n forum posts
