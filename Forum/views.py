@@ -25,7 +25,13 @@ import yaml
 logger = logging.getLogger(__name__)
 
 def _date_handler(obj):
-    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
+	'''
+	Return datetime as string when dumping to JSON
+	'''
+	
+	if hasattr(obj, 'isoformat'):
+		return obj.isoformat()
+	return obj
 
 def _get_does_username_exist(username):
 	'''
@@ -119,7 +125,7 @@ def login_user(request):
 		else:
 			return HttpResponse('{"response":"username not found"}')
 	except Exception as e:
-		return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+		return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 
 @csrf_exempt
 def logout_user(request):
@@ -154,7 +160,7 @@ def register_user(request):
 			return HttpResponse('{"response":"username in use"}')
 
 	except Exception as e:
-		return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+		return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 
 @csrf_exempt
 def change_password_from_profile(request):
@@ -175,7 +181,7 @@ def change_password_from_profile(request):
 				db_user.save()
 			return HttpResponse('{"response":"pass"}')
 		except Exception as e:
-			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
 
@@ -196,7 +202,7 @@ def add_forum_post(request):
 			post.save()
 			return HttpResponse('{"response":"pass"}')
 		except Exception as e:
-			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
 
@@ -222,7 +228,7 @@ def add_reply(request):
 			reply.save()
 			return HttpResponse('{"response":"pass"}')
 		except Exception as e:
-			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
 
@@ -236,7 +242,7 @@ def get_email(request):
 		try:
 			return HttpResponse('{"email":"%s"}' % request.user.email)
 		except Exception as e:
-			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
 
@@ -253,7 +259,7 @@ def get_reply_count_by_post_id(request):
 			reply_count = ReplyPost.objects.filter(post_id=post_id).count()
 			return HttpResponse('{"reply_count":"%s"}' % reply_count)
 		except Exception as e:
-			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
 
@@ -272,7 +278,7 @@ def get_n_recent_forum_posts(request):
 			serialized = serializers.serialize('json', posts, use_natural_foreign_keys=True)
 			return HttpResponse(serialized)
 		except Exception as e:
-			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
 
@@ -292,7 +298,7 @@ def get_forum_posts_by_username(request):
 			#serialized = serializers.serialize('json', posts, use_natural_foreign_keys=True)
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
-			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
 
@@ -311,7 +317,7 @@ def increment_connect_by_post_id(request):
 			post.save()
 			return HttpResponse('{"response":"pass","connect_count":"' + str(post.connect_count) + '"}')
 		except Exception as e:
-			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
 
@@ -367,6 +373,6 @@ def get_post_and_replies_by_post_id(request):
 
 			return HttpResponse(s)
 		except Exception as e:
-			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
