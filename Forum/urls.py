@@ -5,6 +5,7 @@ urlpatterns = [
     path('registerUser', views.register_user, name='register_user'),
     path('loginUser', views.login_user, name='login_user'),
     path('logoutUser', views.logout_user, name='logout_user'),
+    path('isUserAuthenticated', views.is_user_authenticated, name='is_user_authenticated'),
     path('changePasswordFromProfile', views.change_password_from_profile, name='change_password_from_profile'),
     path('addForumPost', views.add_forum_post, name='add_forum_post'),
     path('addReply', views.add_reply, name='add_reply'),

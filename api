@@ -248,3 +248,13 @@ response:
 "reply_count":"13"
 "exception", "error":"<traceback>"
 "unauthenticated"
+
+----------------------------------------------
+
+isUserAuthenticated
+body:
+<empty>
+response:
+"response":"pass"
+"exception", "error":"<traceback>"
+"unauthenticated"

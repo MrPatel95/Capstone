@@ -137,6 +137,17 @@ def logout_user(request):
 	return HttpResponse('{"response":"pass"}')
 
 @csrf_exempt
+def is_user_authenticated(request):
+	'''
+	Check to see if the session of the request is valid
+	'''
+
+	if request.user.is_authenticated:
+		return HttpResponse('{"response":"pass"}')
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
+
+@csrf_exempt
 def register_user(request):
 	'''
 	Create new user
