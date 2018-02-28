@@ -14,6 +14,8 @@ from django.contrib.auth.models import User
 from Forum.models import ForumPost
 from Forum.models import ReplyPost
 
+from django.db.models import Count
+
 import json
 import logging
 import time
@@ -21,6 +23,9 @@ import traceback
 import yaml
 
 logger = logging.getLogger(__name__)
+
+def _date_handler(obj):
+    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
 def _get_does_username_exist(username):
 	'''
@@ -281,9 +286,11 @@ def get_forum_posts_by_username(request):
 		body = json.loads(request.body.decode('utf-8'))
 		try:
 			username = body['username']
-			posts = ForumPost.objects.filter(user=request.user)
-			serialized = serializers.serialize('json', posts, use_natural_foreign_keys=True)
-			return HttpResponse(serialized)
+			posts = ForumPost.objects.filter(user=request.user).values(
+				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count'
+				).annotate(reply_count=Count('replypost__post_id_id'))
+			#serialized = serializers.serialize('json', posts, use_natural_foreign_keys=True)
+			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"' + traceback.format_exc() + '"}')
 	else:
