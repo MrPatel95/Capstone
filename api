@@ -67,29 +67,41 @@ responses:
 
 ----------------------------------------------
 
-getTopNForumPosts
+getNRecentForumPosts
 body:
 {
 	"n":<int>
 }
 response:
-	[
-		{
-			"model"
-			"pk"
-			"fields": {
-				"user"
-				"post_title"
-				"post_body"
-				"post_image"
-				"post_datetime"
-				"connect_count"
-			}
-		},
-		{
-			...
-		}
-	]
+[
+  {
+    "post_id": 1,
+    "user__username": "ali",
+    "post_title": "There will be an event tomorrow",
+    "post_image": "",
+    "post_datetime": "2018-02-22T22:22:22.350197+00:00",
+    "connect_count": 3,
+    "reply_count": 7
+  },
+  {
+    "post_id": 2,
+    "user__username": "ali",
+    "post_title": "my second forum post",
+    "post_image": "",
+    "post_datetime": "2018-02-22T22:56:36.772572+00:00",
+    "connect_count": 0,
+    "reply_count": 1
+  },
+  {
+    "post_id": 3,
+    "user__username": "ali",
+    "post_title": "Who hates the capstone class?",
+    "post_image": "",
+    "post_datetime": "2018-02-24T19:10:09.980698+00:00",
+    "connect_count": 0,
+    "reply_count": 0
+  }
+]
 	"exception", "error":"<traceback>"
 	"unauthenticated"
 
@@ -156,28 +168,31 @@ body:
 response:
 [
   {
-    "model": "Forum.forumpost",
-    "pk": 3,
-    "fields": {
-      "user": "ali",
-      "post_title": "Who hates the capstone class?",
-      "post_body": "It's kind of annoying to be honest",
-      "post_image": "",
-      "post_datetime": "2018-02-24T19:10:09.980Z",
-      "connect_count": 0
-    }
+    "post_id": 1,
+    "user__username": "ali",
+    "post_title": "There will be an event tomorrow",
+    "post_image": "",
+    "post_datetime": "2018-02-22T22:22:22.350197+00:00",
+    "connect_count": 3,
+    "reply_count": 7
   },
   {
-    "model": "Forum.forumpost",
-    "pk": 2,
-    "fields": {
-      "user": "ali",
-      "post_title": "my second forum post",
-      "post_body": "my second forum post body",
-      "post_image": "",
-      "post_datetime": "2018-02-22T22:56:36.772Z",
-      "connect_count": 0
-    }
+    "post_id": 2,
+    "user__username": "ali",
+    "post_title": "my second forum post",
+    "post_image": "",
+    "post_datetime": "2018-02-22T22:56:36.772572+00:00",
+    "connect_count": 0,
+    "reply_count": 1
+  },
+  {
+    "post_id": 3,
+    "user__username": "ali",
+    "post_title": "Who hates the capstone class?",
+    "post_image": "",
+    "post_datetime": "2018-02-24T19:10:09.980698+00:00",
+    "connect_count": 0,
+    "reply_count": 0
   }
 ]
 "exception", "error":"<traceback>"

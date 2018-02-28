@@ -28,7 +28,7 @@ def _date_handler(obj):
 	'''
 	Return datetime as string when dumping to JSON
 	'''
-	
+
 	if hasattr(obj, 'isoformat'):
 		return obj.isoformat()
 	return obj
@@ -273,10 +273,10 @@ def get_n_recent_forum_posts(request):
 		body = json.loads(request.body.decode('utf-8'))
 		try:
 			n = body['n']
-			posts = ForumPost.objects.filter().order_by('post_datetime')[:n]
-			#Querying User model with use_natural_foreign_keys=True returns username instead of key
-			serialized = serializers.serialize('json', posts, use_natural_foreign_keys=True)
-			return HttpResponse(serialized)
+			posts = ForumPost.objects.filter().values(
+				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count'
+				).order_by('post_datetime').annotate(reply_count=Count('replypost__post_id_id'))[:n]
+			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
@@ -295,7 +295,6 @@ def get_forum_posts_by_username(request):
 			posts = ForumPost.objects.filter(user=request.user).values(
 				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count'
 				).annotate(reply_count=Count('replypost__post_id_id'))
-			#serialized = serializers.serialize('json', posts, use_natural_foreign_keys=True)
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
@@ -315,7 +314,7 @@ def increment_connect_by_post_id(request):
 			post = ForumPost.objects.get(post_id=post_id)
 			post.connect_count += 1
 			post.save()
-			return HttpResponse('{"response":"pass","connect_count":"' + str(post.connect_count) + '"}')
+			return HttpResponse('{"response":"pass","connect_count":"%s"}' % str(post.connect_count))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
