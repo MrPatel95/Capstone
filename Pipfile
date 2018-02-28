@@ -11,7 +11,7 @@ gunicorn = "*"
 django-heroku = "*"
 "psycopg2-binary" = "*"
 pyyaml = "*"
-django-cors-headers
+django-cors-headers = "*"
 
 
 [requires]
