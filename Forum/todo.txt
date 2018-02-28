@@ -1,0 +1,2 @@
+string format instead of concatenation
+reply count with forum post
