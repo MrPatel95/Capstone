@@ -26,15 +26,15 @@ function checkLoginCredentials() {
             var myObj = JSON.parse(this.responseText);
             if (myObj["response"] == "pass") {
                 //console.log(this.responseText.getHeader("Cookie"));
-                //window.location = "forum.html";
-                console.log(xmlhttp.getResponseHeader("Content-Type"));
-                console.log(xmlhttp.getResponseHeader("Set-Cookie"));
-                console.log(xmlhttp.getResponseHeader("Content-Type"));
+                window.location = "forum.html";
+                // console.log(xmlhttp.getResponseHeader("Content-Type"));
+                // console.log(xmlhttp.getResponseHeader("Set-Cookie"));
+                // console.log(xmlhttp.getResponseHeader("Content-Type"));
             } else {
                 alert("User is not authenticated");
             }
 
-            
+
 
         }
     };
@@ -109,7 +109,7 @@ function onLoadFunctionForForumPosts() {
     xmlhttp.open("POST", "https://infinite-reef-90129.herokuapp.com/getNRecentForumPosts", true);
     xmlhttp.setRequestHeader("Content-Type", "application/json");
     xmlhttp.send(JSON.stringify(loadNPosts));
-} 
+}
 
 //  This function is called when the user clicks logout button
 function onClickOfLogout(){
@@ -125,13 +125,13 @@ function onClickOfLogout(){
         if (this.readyState == 4 && this.status == 200) {
             //console.log(this.responseText)
             var myObj = JSON.parse(this.responseText);
-            
+
             if (myObj["response"] == "pass") {
                 window.location = "loginRegister.html";
             } else {
                 console.log("Logout error");
             }
-            
+
 
         }
     };

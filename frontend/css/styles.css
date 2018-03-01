@@ -46,6 +46,10 @@ body{
     display: none;
 }
 
+#searchButtonOutsideNavbar{
+    display: none;
+}
+
 /*
     Media query starts here
 */
@@ -69,10 +73,24 @@ body{
     #searchOnNavbar{
         display: none;
     }
-    
+
     #searchOutsideNavbar{
         display: block;
+        height: 40px;
+        margin-top: 8px;
+        margin-right: 10px;
     }
+
+    #searchAndButtonOutsideNav{
+        margin-top: 15px;
+    }
+
+    #searchButtonOutsideNavbar{
+        height: 40px;
+        display: block;
+    }
+
+
 }
 
 /*
