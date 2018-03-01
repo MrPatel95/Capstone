@@ -42,6 +42,10 @@ body{
     font-size: 17px;
 }
 
+#searchOutsideNavbar{
+    display: none;
+}
+
 /*
     Media query starts here
 */
@@ -60,6 +64,14 @@ body{
 
     #main-holder{
         margin-top: 35%;
+    }
+
+    #searchOnNavbar{
+        display: none;
+    }
+    
+    #searchOutsideNavbar{
+        display: block;
     }
 }
 
