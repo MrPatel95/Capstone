@@ -2,7 +2,39 @@
 
 
 //  This function logs in a new user
+function checkLoginCredentials() {
 
+    //  Login Information
+    var loginUsername = document.getElementById('username_login').value;
+    var loginPassword = document.getElementById('password_login').value;
+
+    //  Preparing JSON request object
+    var loginRequestData = {
+        "username": loginUsername,
+        "password": loginPassword
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "https://infinite-reef-90129.herokuapp.com/loginUser",
+        data: JSON.stringify(loginRequestData),
+        datatype: "json",
+        //xhrFields: {withCredentials: true},
+        async: true,
+        "Access-Control-Allow-Origin": "*",
+        contentType: "application/json; charset=utf-8",
+        success: function processData(r) {
+            var myObj = JSON.parse(r);
+            if (myObj["response"] == "pass") {
+                //window.location = "forum.html";
+                console.log(r);
+
+            } else {
+                alert("User is not authenticated");
+            }
+        }
+    });
+}
 
 //  This function will register new users
 function registerNewUser() {
