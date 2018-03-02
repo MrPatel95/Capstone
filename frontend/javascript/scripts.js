@@ -1,48 +1,8 @@
 // http://promincproductions.com/blog/cross-domain-ajax-request-cookies-cors/
 
+
 //  This function logs in a new user
-function checkLoginCredentials() {
 
-    //  Login Information
-    var loginUsername = document.getElementById('username_login').value;
-    var loginPassword = document.getElementById('password_login').value;
-
-    //  Preparing JSON request object
-    var loginRequestData = {
-        "username": loginUsername,
-        "password": loginPassword
-    }
-
-    if (window.XMLHttpRequest) {
-        // code for modern browsers
-        xmlhttp = new XMLHttpRequest();
-    } else {
-        // code for old IE browsers
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var myObj = JSON.parse(this.responseText);
-            if (myObj["response"] == "pass") {
-                //console.log(this.responseText.getHeader("Cookie"));
-                window.location = "forum.html";
-                // console.log(xmlhttp.getResponseHeader("Content-Type"));
-                // console.log(xmlhttp.getResponseHeader("Set-Cookie"));
-                // console.log(xmlhttp.getResponseHeader("Content-Type"));
-            } else {
-                alert("User is not authenticated");
-            }
-
-
-
-        }
-    };
-    xmlhttp.open("POST", "https://infinite-reef-90129.herokuapp.com/loginUser", true);
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(JSON.stringify(loginRequestData));
-
-}
 
 //  This function will register new users
 function registerNewUser() {
@@ -91,24 +51,18 @@ function onLoadFunctionForForumPosts() {
         "n": 50
     }
 
-    if (window.XMLHttpRequest) {
-        // code for modern browsers
-        xmlhttp = new XMLHttpRequest();
-    } else {
-        // code for old IE browsers
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log("response for getting posts");
-            console.log(this.responseText);
-            console.log(this.responseText.getHeader("Cookie"));
+    $.ajax({
+        type: "POST",
+        url: "https://infinite-reef-90129.herokuapp.com/getNRecentForumPosts",
+        data: JSON.stringify(loadNPosts),
+        datatype: "json",
+        xhrFields: {withCredentials: true},
+        async: true,
+        contentType: "application/json; charset=utf-8",
+        success: function processData(r) {
+            alert(r);
         }
-    };
-    xmlhttp.open("POST", "https://infinite-reef-90129.herokuapp.com/getNRecentForumPosts", true);
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(JSON.stringify(loadNPosts));
+    });
 }
 
 //  This function is called when the user clicks logout button
