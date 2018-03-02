@@ -31,6 +31,7 @@ function checkLoginCredentials() {
 
             } else {
                 alert("User is not authenticated");
+                alert ("hi");
             }
         }
     });
