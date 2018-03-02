@@ -11,7 +11,7 @@ SECRET_KEY = '#v8en*1-hd0vq^!%kap7pa++0$_ma_jnjlyrkh9gb!@^a^4fr='
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = False
 DEBUG = True
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://infinite-reef-90129.herokuapp.com']
 
 # Application definition
 INSTALLED_APPS = [
