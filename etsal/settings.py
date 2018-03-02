@@ -10,7 +10,7 @@ DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#v8en*1-hd0vq^!%kap7pa++0$_ma_jnjlyrkh9gb!@^a^4fr='
 CORS_ORIGIN_WHITELIST = (
-    'infinite-reef-90129.herokuapp.com',
+    'https://infinite-reef-90129.herokuapp.com',
 )
 
 # Application definition
