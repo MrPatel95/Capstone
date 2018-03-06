@@ -285,7 +285,7 @@ def get_n_recent_forum_posts(request):
 		try:
 			n = body['n']
 			posts = ForumPost.objects.filter().values(
-				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count'
+				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count', 'post_body'
 				).order_by('post_datetime').annotate(reply_count=Count('replypost__post_id_id'))[:n]
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
@@ -304,7 +304,7 @@ def get_forum_posts_by_username(request):
 		try:
 			username = body['username']
 			posts = ForumPost.objects.filter(user=request.user).values(
-				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count'
+				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count', 'post_body'
 				).annotate(reply_count=Count('replypost__post_id_id'))
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
