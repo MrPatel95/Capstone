@@ -21,7 +21,7 @@ function checkLoginCredentials() {
         datatype: "json",
         xhrFields: {withCredentials: true},
         async: true,
-        "Access-Control-Allow-Origin": "*",
+        //"Access-Control-Allow-Origin": "*",
         contentType: "application/json; charset=utf-8",
         success: function processData(r) {
             var myObj = JSON.parse(r);
@@ -91,7 +91,7 @@ function onLoadFunctionForForumPosts() {
         datatype: "json",
         xhrFields: {withCredentials: true},
         async: true,
-        contentType: "application/json; charset=utf-8",
+        contentType: "application/json",
         success: function processData(r) {
             var json_data = JSON.parse(r);
             generatePostCards(json_data);
