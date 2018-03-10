@@ -62,21 +62,21 @@
             <div class="col-12" id = "cards-container">
 
                 <!-- Post -->
-                <div class="row custom-card">
-                    <div class = "col-12 card-padding">
+                <div class="row custom-card" id="card">
+                    <div class = "col-12 card-padding" id="cardColumn">
                         <!-- Thumbnail, Title and time -->
-                        <div class="row">
+                        <div class="row" id="thumbnailRow">
                             <div class="col-2 col-lg-1 col-md-1">
                                 <img src="../assets/batman.jpg" alt="IMG" class = "thumbnail">
                             </div>
-                            <div class="col-10 col-lg-11 col-md-11">
-                                <div class="row">
-                                    <div class="col-12 post-title">
+                            <div class="col-10 col-lg-11 col-md-11" id="titleTime">
+                                <div class="row" id="titleRow">
+                                    <div class="col-12 post-title" id="title">
                                         There is still a lot of snow on campus.
                                     </div>
                                 <!-- </div> -->
                                 <!-- <div class="row"> -->
-                                    <div class="col-12 time-username">
+                                    <div class="col-12 time-username" id="timeUsername">
                                         2 days ago by Username
                                     </div>
                                 </div>
@@ -84,10 +84,10 @@
                         </div>
 
                         <!-- Blank space and Description -->
-                        <div class="row">
-                            <div class="col-12 col-sm-2 col-lg-1 col-md-1">
-                                <div class="row reply-connect">
-                                    <div class="col-6 col-sm-12 col-lg-12 col-md-12 icon_count">
+                        <div class="row" id="conRepDes">
+                            <div class="col-12 col-sm-2 col-lg-1 col-md-1" id="desColumn">
+                                <div class="row reply-connect" id="contentReply">
+                                    <div class="col-6 col-sm-12 col-lg-12 col-md-12 icon_count" id="connect">
                                         <a onclick="testAlert()">
                                             <i class="material-icons connect-icon">
                                                 compare_arrows
@@ -95,8 +95,8 @@
                                         </a>
                                         300
                                     </div>
-                                    <div class="col-6 col-sm-12 col-lg-12 col-md-12 reply_count">
-                                        <a onclick="testAlert()">
+                                    <div class="col-6 col-sm-12 col-lg-12 col-md-12 reply_count" id="reply">
+                                        <a onclick="testAlert()" id="replyIconLink">
                                             <i class="material-icons reply-icon">
                                                 reply
                                             </i>
@@ -105,7 +105,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-10 col-lg-11 col-md-11 description">
+                            <div class="col-12 col-sm-10 col-lg-11 col-md-11 description" id="desc">
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                             </div>
                         </div>
@@ -277,8 +277,7 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script
-    src="h
-    ttps://code.jquery.com/jquery-3.3.1.js"
+    src="https://code.jquery.com/jquery-3.3.1.js"
     integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous"></script>
 

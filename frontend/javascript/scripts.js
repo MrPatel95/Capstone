@@ -135,87 +135,137 @@ function onClickOfLogout(){
 // This function creates post cards
 function generatePostCards(posts){
 
+    var cardsContainer = document.getElementById("cards-container");
+    cardsContainer.innerHTML = "";
+
     for (i = 0; i < posts.length; i++){
-        generatePostData(posts[i]);
+        var card = document.createElement("div");
+        card.classList.add("row");
+        card.classList.add("custom-card");
+        cardsContainer.appendChild(card);
+
+        var cardColumn = document.createElement("div");
+        cardColumn.classList.add("col");
+        cardColumn.classList.add("card-padding");
+        card.appendChild(cardColumn);
+
+        var thumbnailRow = document.createElement("div");
+        thumbnailRow.classList.add("row");
+        cardColumn.appendChild(thumbnailRow);
+
+        var thumbnail = document.createElement("div");
+        thumbnail.classList.add("col-2");
+        thumbnail.classList.add("col-md-1");
+        thumbnail.classList.add("col-lg-1");
+        thumbnailRow.appendChild(thumbnail);
+
+        var thumbnailTag = document.createElement("img");
+        thumbnailTag.classList.add("thumbnail");
+        thumbnailTag.setAttribute("src", posts[i].post_image);
+        thumbnailTag.setAttribute("alt", "IMG");
+        thumbnail.appendChild(thumbnailTag);
+
+        var titleTime = document.createElement("div");
+        titleTime.classList.add("col-10");
+        titleTime.classList.add("col-md-11");
+        titleTime.classList.add("col-lg-11");
+        thumbnailRow.appendChild(titleTime);
+
+        var titleRow = document.createElement("div");
+        titleRow.classList.add("row");
+        titleTime.appendChild(titleRow);
+
+        var title = document.createElement("div");
+        title.classList.add("col-10");
+        title.classList.add("post-title");
+        var titleText = document.createTextNode(posts[i].post_title);
+        title.appendChild(titleText);
+        titleRow.appendChild(title);
+
+        var timeUsername = document.createElement("div");
+        timeUsername.classList.add("col-12");
+        timeUsername.classList.add("time-username");
+        var timeUser = document.createTextNode(posts[i].post_datetime + " by " + posts[i].user__username);
+        timeUsername.appendChild(timeUser);
+        titleRow.appendChild(timeUsername);
+
+        var conRepDes = document.createElement("div");
+        conRepDes.classList.add("row");
+        cardColumn.appendChild(conRepDes);
+
+        var desColumn = document.createElement("div");
+        desColumn.classList.add("col-12");
+        desColumn.classList.add("col-md-1");
+        desColumn.classList.add("col-lg-1");
+        conRepDes.appendChild(desColumn);
+
+        var contentReply = document.createElement("div");
+        contentReply.classList.add("row");
+        contentReply.classList.add("reply-connect");
+        desColumn.appendChild(contentReply);
+
+        var connect = document.createElement("div");
+        connect.classList.add("col-6");
+        connect.classList.add("col-sm-12", "col-md-12", "col-lg-12", "icon_count");
+        contentReply.appendChild(connect);
+
+        var connectIconLink = document.createElement("a");
+        connectIconLink.setAttribute("onclick", "testAlert()");
+        connect.appendChild(connectIconLink);
+
+        var connectIcon = document.createElement("i");
+        connectIcon.classList.add("material-icons", "connect-icon");
+        connectIconLink.appendChild(connectIcon);
+        var icon = document.createTextNode("compare_arrows");
+        connectIcon.appendChild(icon);
+
+        var connectCount = document.createTextNode(posts[i].connect_count);
+        connect.appendChild(connectCount);
+
+        //REPLY COUNT AND ICON
+        var reply = document.createElement("div");
+        reply.classList.add("col-6", "col-sm-12", "col-md-12", "col-lg-12", "reply_count");
+        contentReply.appendChild(reply);
+
+        var replyIconLink = document.createElement("a");
+        replyIconLink.setAttribute("onclick", "testAlert()");
+        reply.appendChild(replyIconLink);
+
+        var replyIcon = document.createElement("i");
+        replyIcon.classList.add("material-icons", "reply-icon");
+        replyIconLink.appendChild(replyIcon);
+        var icon2 = document.createTextNode("reply");
+        replyIcon.appendChild(icon2);
+
+        var replyCount = document.createTextNode(posts[i].reply_count);
+        reply.appendChild(replyCount);
+
+        var description = document.createElement("div");
+        description.classList.add("col-12", "col-sm-10", "col-md-11", "col-lg-11", "description");
+        conRepDes.appendChild(description);
+
+        var postBody = document.createTextNode(posts[i].post_body);
+        description.appendChild(postBody);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
-}
-
-// This function enters data in posts
-function generatePostData(post_data){
-
-    var sample = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim, impedit beatae, est reiciendis expedita deserunt id in odio quam laudantium veritatis excepturi distinctio voluptates eos sit, placeat laboriosam nam porro!';
-    var post_append = document.getElementById('main-holder');
-
-    var mainDiv = document.createElement('div');
-    mainDiv.classList.add("row");
-
-    //ROW1- Image and Title
-    var row1 = document.createElement('div');
-    row1.classList.add("row");
-    mainDiv.appendChild(row1);
-
-    var row1_col1 = document.createElement('div');
-    row1_col1.classList.add("col-sm-2");
-    row1.appendChild(row1_col1);
-
-    var row1_col2 = document.createElement('div');
-    row1_col2.classList.add("col-sm-10");
-    row1.appendChild(row1_col2);
-
-    //ROW2- Post Description
-    var row2 = document.createElement('div');
-    row2.classList.add("row");
-    mainDiv.appendChild(row2);
-
-    var row2_col1 = document.createElement('div');
-    row2_col1.classList.add("col-sm-2");
-    row2.appendChild(row2_col1);
-
-    var row2_col2 = document.createElement('div');
-    row2_col2.classList.add("col-sm-10");
-    row2.appendChild(row2_col2);
-
-    //ROW3- Connects, Replies, Time, Name
-    var row3 = document.createElement('div');
-    row3.classList.add("row");
-    mainDiv.appendChild(row3);
-
-    var row3_col1 = document.createElement('div');
-    row3_col1.classList.add("col-sm-3");
-    row3.appendChild(row3_col1);
-
-    var row3_col2 = document.createElement('div');
-    row3_col2.classList.add("col-sm-3");
-    row3.appendChild(row3_col2);
-
-    var row3_col3 = document.createElement('div');
-    row3_col3.classList.add("col-sm-3");
-    row3.appendChild(row3_col3);
-
-    var row3_col4 = document.createElement('div');
-    row3_col4.classList.add("col-sm-3");
-    row3.appendChild(row3_col4);
-
-    //Post data appending on rows and columns
-
-    var post_title = document.createTextNode(post_data['post_title']);
-    row1_col2.appendChild(post_title);
-
-    var sample_data = document.createTextNode(sample);
-    row2_col2.appendChild(sample_data);
-
-    var connect_count = document.createTextNode(post_data['connect_count']);
-    row3_col1.appendChild(connects);
-
-    var reply_count = document.createTextNode(post_data['reply_count']);
-    row3_col2.appendChild(reply_count);
-
-    var post_date = document.createTextNode(post_data['post_datetime']);
-    row3_col3.appendChild(post_date);
-
-    var username = document.createTextNode(post_data['user__username']);
-    row3_col4.appendChild(username);
-
-    post_append.appendChild(mainDiv);
 
 }
