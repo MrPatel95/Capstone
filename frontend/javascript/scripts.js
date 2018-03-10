@@ -1,5 +1,8 @@
 // http://promincproductions.com/blog/cross-domain-ajax-request-cookies-cors/
 
+function testAlert(){
+    alert("liked");
+}
 
 //  This function logs in a new user
 function checkLoginCredentials() {

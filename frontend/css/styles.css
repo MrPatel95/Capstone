@@ -7,6 +7,68 @@ body{
 }
 
 
+.custom-card {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  background-color: white;
+  margin: 15px;
+  margin-left: 40px;
+  margin-right: 40px;
+
+}
+
+.thumbnail{
+    border-radius: 10%;
+    height: 70px;
+    width: 70px;
+    margin-top: 7px;
+}
+
+.card-padding{
+    padding: 20px;
+
+}
+
+.time-username{
+    font-size: 15px;
+    padding-top: 3px;
+    margin-top: 0px;
+    font-style: italic;
+}
+
+.post-title{
+    font-weight: bold;
+    font-size: 35px;
+    line-height: 100%;
+}
+
+.reply-connect{
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.icon_count{
+    text-align: center;
+    font-size: 15px;
+}
+
+.reply_count{
+    text-align: center;
+    font-size: 15px;
+}
+.connect-icon{
+    color: blue;
+}
+
+.reply-icon{
+    color: blue;
+}
+
+.description{
+    font-size: 17px;
+}
+
+
 
 /*
     CSS for testing ends
@@ -78,6 +140,28 @@ body{
 */
 
 @media only screen and (max-width: 500px) {
+
+    .description{
+        font-size: default;
+    }
+
+    .time-username{
+        font-size: 12px;
+    }
+
+    .post-title{
+        font-size: 25px;
+    }
+
+    .reply_count{
+        text-align: left;
+    }
+
+    .thumbnail{
+        height: 45px;
+        width: 45px;
+    }
+
     #welcome-message{
         text-align: center;
         font-weight: normal;
@@ -111,6 +195,12 @@ body{
     #searchButtonOutsideNavbar{
         height: 40px;
         display: block;
+    }
+
+    .custom-card{
+        margin-right: 0px;
+        margin-left: 0px;
+        margin-top: 20px;
     }
 
 }
