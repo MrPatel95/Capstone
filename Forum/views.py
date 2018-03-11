@@ -82,19 +82,20 @@ def _traverse(root_reply):
 		if len(reply_list) > 0:
 			counter += 1
 			reply_stack = list(ReplyPost.objects.filter(parent_id=reply.reply_id).order_by('reply_datetime')) + reply_stack
-			s += '","replies":'
+			s += '","replies":['
 
 		#This comment does not have a reply, we can end this chain
 		else:
 			if len(reply_stack) > 0:
 				counter -= 1
-				s += '"}},'
+				s += '"}]},'
 			else:
 				if counter == 0:
 					s += '"}'
 				else:
-					s += '"}}'
-	s += ']'
+					s += '"}]'
+					for i in range(counter):
+						s += '}'
 
 	return s
 
@@ -352,7 +353,7 @@ def get_post_and_replies_by_post_id(request):
 				+ '","post_image":"' + post.post_image
 				+ '","post_datetime":"' + str(post.post_datetime)
 				+ '","connect_count":"' + str(post.connect_count)
-				+ '"},"replies":{'
+				+ '"},"replies":['
 			)
 
 			root_replies = list(ReplyPost.objects.filter(post_id=post_id, parent_id=None).order_by('reply_datetime'))
@@ -361,8 +362,7 @@ def get_post_and_replies_by_post_id(request):
 				counter = 0
 				for reply in root_replies:
 					s += (
-						'"' + str(counter) + '":{'
-						+ '"reply_id":"' + str(reply.reply_id) + '",'
+						'{"reply_id":"' + str(reply.reply_id) + '",'
 						+ '"user":"' + reply.user.username + '",'
 						+ '"post_id":"' + str(reply.post_id) + '",'
 						+ '"parent_id":"' + str(reply.parent_id) + '",'
@@ -372,14 +372,14 @@ def get_post_and_replies_by_post_id(request):
 						+ '"replies":'
 					)
 
-					s += _traverse(reply) + '},'
+					s += _traverse(reply) + ']},'
 					counter += 1
 
 				s = s[:-1]
-				s += '}}'
+				s += ']}'
 
 			else:
-				s += '}}'
+				s += ']}'
 
 			return HttpResponse(s)
 		except Exception as e:
