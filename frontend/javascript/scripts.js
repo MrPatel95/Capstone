@@ -101,6 +101,15 @@ function onLoadFunctionForForumPosts() {
         }
     });
 
+    $(document).ready(function(){
+        $('#page-body').ajaxStart(function() {
+            alert("AJAX sent");
+            $('#posts-loading').show();
+        }).ajaxStop(function() {
+            $('#posts-loading').hide();
+        });
+    });
+
 }
 
 //  This function is called when the user clicks logout button
@@ -176,7 +185,7 @@ function generatePostCards(posts){
         titleTime.appendChild(titleRow);
 
         var title = document.createElement("div");
-        title.classList.add("col-10");
+        title.classList.add("col-12");
         title.classList.add("post-title");
         var titleText = document.createTextNode(posts[i].post_title);
         title.appendChild(titleText);
