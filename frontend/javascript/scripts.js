@@ -206,7 +206,13 @@ function generatePostCards(posts){
 
         // call function to create the post time variable
         var time = createDate(todaysDate, posts[i].post_datetime);
+        postImage = "";
 
+        if(posts[i].post_image === ""){
+            postImage = "../assets/batman.jpg";
+        }else{
+            postImage = posts[i].post_image;
+        }
 
 
         var card = document.createElement("div");
@@ -231,7 +237,7 @@ function generatePostCards(posts){
 
         var thumbnailTag = document.createElement("img");
         thumbnailTag.classList.add("thumbnail");
-        thumbnailTag.setAttribute("src", posts[i].post_image);
+        thumbnailTag.setAttribute("src", postImage);
         thumbnailTag.setAttribute("alt", "IMG");
         thumbnail.appendChild(thumbnailTag);
 
@@ -263,76 +269,73 @@ function generatePostCards(posts){
         conRepDes.classList.add("row");
         cardColumn.appendChild(conRepDes);
 
-        var desColumn = document.createElement("div");
-        desColumn.classList.add("col-12");
-        desColumn.classList.add("col-md-1");
-        desColumn.classList.add("col-lg-1");
-        conRepDes.appendChild(desColumn);
+        var conReplyColumn = document.createElement("div");
+        conReplyColumn.classList.add("col-12");
+        conReplyColumn.classList.add("col-md-1");
+        conReplyColumn.classList.add("col-lg-1");
+        conRepDes.appendChild(conReplyColumn);
 
+        //  Row for Connect and Reply
         var contentReply = document.createElement("div");
         contentReply.classList.add("row");
         contentReply.classList.add("reply-connect");
-        desColumn.appendChild(contentReply);
+        conReplyColumn.appendChild(contentReply);
 
+        //  Column for Connect
         var connect = document.createElement("div");
         connect.classList.add("col-6");
         connect.classList.add("col-sm-12", "col-md-12", "col-lg-12", "icon_count");
         contentReply.appendChild(connect);
 
-        var connectIconLink = document.createElement("a");
-        connectIconLink.setAttribute("onclick", "testAlert()");
-        connect.appendChild(connectIconLink);
+        var buttonForConnect = document.createElement("button");
+        buttonForConnect.classList.add("mdl-button", "mdl-js-button", "mdl-button--icon", "mdl-button--colored", "buttonForConnect");
+        connect.appendChild(buttonForConnect);
 
         var connectIcon = document.createElement("i");
         connectIcon.classList.add("material-icons", "connect-icon");
-        connectIconLink.appendChild(connectIcon);
+        buttonForConnect.appendChild(connectIcon);
         var icon = document.createTextNode("compare_arrows");
         connectIcon.appendChild(icon);
 
-        var connectCount = document.createTextNode(posts[i].connect_count);
-        connect.appendChild(connectCount);
+        var spanForConnectCount = document.createElement("span");
+        spanForConnectCount.classList.add("connectCountSpan");
+        connect.appendChild(spanForConnectCount);
 
-        //REPLY COUNT AND ICON
+        var connectCount = document.createTextNode(posts[i].connect_count);
+        spanForConnectCount.appendChild(connectCount);
+
+
+        //  Column for Reply
         var reply = document.createElement("div");
         reply.classList.add("col-6", "col-sm-12", "col-md-12", "col-lg-12", "reply_count");
         contentReply.appendChild(reply);
 
-        var replyIconLink = document.createElement("a");
-        replyIconLink.setAttribute("onclick", "testAlert()");
-        reply.appendChild(replyIconLink);
+
+        var buttonForReply = document.createElement("button");
+        buttonForReply.classList.add("mdl-button", "mdl-js-button", "mdl-button--icon", "mdl-button--colored", "mdl-button--colored", "buttonForReply");
+        reply.appendChild(buttonForReply);
 
         var replyIcon = document.createElement("i");
         replyIcon.classList.add("material-icons", "reply-icon");
-        replyIconLink.appendChild(replyIcon);
-        var icon2 = document.createTextNode("reply");
-        replyIcon.appendChild(icon2);
+        buttonForReply.appendChild(replyIcon);
+
+        var replyIconText = document.createTextNode("reply");
+        replyIcon.appendChild(replyIconText);
+
+        var spanForReplyCount = document.createElement("span");
+        spanForReplyCount.classList.add("replyCountSpan");
+        reply.appendChild(spanForReplyCount);
 
         var replyCount = document.createTextNode(posts[i].reply_count);
-        reply.appendChild(replyCount);
+        spanForReplyCount.appendChild(replyCount);
 
+        //  Description column
         var description = document.createElement("div");
         description.classList.add("col-12", "col-sm-10", "col-md-11", "col-lg-11", "description");
         conRepDes.appendChild(description);
 
         var postBody = document.createTextNode(posts[i].post_body);
         description.appendChild(postBody);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
