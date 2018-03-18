@@ -29,14 +29,14 @@ body{
 }
 
 .time-username{
-    font-size: 15px;
+    font-size: 90%;
     padding-top: 3px;
     margin-top: 0px;
-    font-style: italic;
+    /* font-style: italic; */
 }
 
 .post-title{
-    font-weight: bold;
+    font-weight: 200;
     font-size: 35px;
     line-height: 100%;
 }
@@ -79,6 +79,18 @@ body{
 #posts-sortby{
     margin-top: 20px;
 }
+
+#addpost {
+    display: block; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 10px; /* Place the button at the bottom of the page */
+    right: 10px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+
+}
+
+#addpost:hover {
+}
 /*
     CSS for testing ends
 */
@@ -98,7 +110,7 @@ body{
 }
 
 body{
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Lato', serif;
 }
 
 #welcome-heading{

@@ -79,6 +79,55 @@ function turnFieldToRedColorBorder(elementName) {
     elementName.classList.add("is-invalid");
 }
 
+//  Create Date variable
+function createDate(todaysDate, postDate){
+
+    var newPostDate = new Date(postDate);
+    var diff = todaysDate - newPostDate;
+    var time = "";
+
+    if(diff < 5999){
+        time = "Just now";
+        return time;
+    }else{
+        var seconds = diff/1000;
+        if(seconds < 60){
+            return Math.floor(seconds) + " seconds ago";
+        }else{
+            var mins = seconds/60;
+            if(mins<60){
+                if(mins < 2){
+                    return Math.floor(mins) + " minute ago";
+                }
+                return Math.floor(mins) + " minutes ago";
+            }else{
+                var hours = mins/60;
+                if(hours < 25){
+                    if(hours < 2){
+                        return Math.floor(hours) + " hour ago";
+                    }
+                    return Math.floor(hours) + " hours ago";
+                }else{
+                    var days = hours/24;
+                    if(days < 366){
+                        if(days < 2){
+                            return Math.floor(days) + " day ago";
+                        }
+                        return Math.floor(days) + " days ago"
+                    }else{
+                        var year = days/365;
+                        if(year < 2){
+                            return Math.floor(year) + " year ago";
+                        }
+                        return Math.floor(year) + " years ago";
+                    }
+                }
+            }
+        }
+    }
+
+}
+
 //  This function is called when the Forum page is fully loaded
 function onLoadFunctionForForumPosts() {
 
@@ -147,7 +196,19 @@ function generatePostCards(posts){
     var cardsContainer = document.getElementById("cards-container");
     cardsContainer.innerHTML = "";
 
+    var  todaysDate = new Date();
+
+    // var  todaysDate1 = new Date("2018-03-17T23:04:13.781205+00:00");
+    // alert(todaysDate - todaysDate1);
+
     for (i = 0; i < posts.length; i++){
+
+
+        // call function to create the post time variable
+        var time = createDate(todaysDate, posts[i].post_datetime);
+
+
+
         var card = document.createElement("div");
         card.classList.add("row");
         card.classList.add("custom-card");
@@ -194,7 +255,7 @@ function generatePostCards(posts){
         var timeUsername = document.createElement("div");
         timeUsername.classList.add("col-12");
         timeUsername.classList.add("time-username");
-        var timeUser = document.createTextNode(posts[i].post_datetime + " by " + posts[i].user__username);
+        var timeUser = document.createTextNode(time + " by " + posts[i].user__username);
         timeUsername.appendChild(timeUser);
         titleRow.appendChild(timeUsername);
 
