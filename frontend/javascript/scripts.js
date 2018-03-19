@@ -270,9 +270,7 @@ function generatePostCards(posts){
         cardColumn.appendChild(conRepDes);
 
         var conReplyColumn = document.createElement("div");
-        conReplyColumn.classList.add("col-12");
-        conReplyColumn.classList.add("col-md-1");
-        conReplyColumn.classList.add("col-lg-1");
+        conReplyColumn.classList.add("col-12", "col-md-1", "col-lg-1");
         conRepDes.appendChild(conReplyColumn);
 
         //  Row for Connect and Reply
@@ -283,19 +281,28 @@ function generatePostCards(posts){
 
         //  Column for Connect
         var connect = document.createElement("div");
-        connect.classList.add("col-6");
-        connect.classList.add("col-sm-12", "col-md-12", "col-lg-12", "icon_count");
+        connect.classList.add("col-6", "col-sm-12", "col-md-12", "col-lg-12", "icon_count");
         contentReply.appendChild(connect);
 
         var buttonForConnect = document.createElement("button");
         buttonForConnect.classList.add("mdl-button", "mdl-js-button", "mdl-button--icon", "mdl-button--colored", "buttonForConnect");
+        buttonForConnect.setAttribute("id", posts[i].post_id);
         connect.appendChild(buttonForConnect);
 
-        var connectIcon = document.createElement("i");
+        var connectIcon = document.createElement("div");
         connectIcon.classList.add("material-icons", "connect-icon");
+        connectIcon.setAttribute("id", "connectIcon");
         buttonForConnect.appendChild(connectIcon);
         var icon = document.createTextNode("compare_arrows");
         connectIcon.appendChild(icon);
+
+        var connectToolTip = document.createElement("div");
+        connectToolTip.classList.add("mdl-tooltip");
+        connectToolTip.setAttribute("data-mdl-for", posts[i].post_id);
+        connect.appendChild(connectToolTip);
+
+        var connectToolTipText = document.createTextNode("Connect");
+        connectToolTip.appendChild(connectToolTipText);
 
         var spanForConnectCount = document.createElement("span");
         spanForConnectCount.classList.add("connectCountSpan");
