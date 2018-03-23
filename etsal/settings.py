@@ -10,7 +10,8 @@ DEBUG = True
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#v8en*1-hd0vq^!%kap7pa++0$_ma_jnjlyrkh9gb!@^a^4fr='
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_REGEX_WHITELIST = (r'*', )
 
 # Application definition
 INSTALLED_APPS = [
@@ -81,22 +82,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
-
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 django_heroku.settings(locals())
-
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
