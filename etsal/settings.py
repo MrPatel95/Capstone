@@ -11,12 +11,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '#v8en*1-hd0vq^!%kap7pa++0$_ma_jnjlyrkh9gb!@^a^4fr='
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    'localhost',
-)
-CORS_ORIGIN_REGEX_WHITELIST = (
-    'localhost',
-)
 
 # Application definition
 INSTALLED_APPS = [
@@ -96,7 +90,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 django_heroku.settings(locals())
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
