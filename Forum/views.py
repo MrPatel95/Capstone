@@ -122,7 +122,8 @@ def login_user(request):
 				login(request, user)
 				response = HttpResponse('{"response":"pass"}')
 				response['Access-Control-Allow-Origin'] = '*'
-				return HttpResponse('{"response":"pass"}')
+				return response
+				#return HttpResponse('{"response":"pass"}')
 			else:
 				return HttpResponse('{"response":"invalid password"}')
 		else:
