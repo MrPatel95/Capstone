@@ -120,6 +120,8 @@ def login_user(request):
 			user = authenticate(request, username=username, password=password)
 			if user is not None:
 				login(request, user)
+				response = HttpResponse('{"response":"pass"}')
+				response['Access-Control-Allow-Origin'] = '*'
 				return HttpResponse('{"response":"pass"}')
 			else:
 				return HttpResponse('{"response":"invalid password"}')
