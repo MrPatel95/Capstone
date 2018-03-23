@@ -146,6 +146,7 @@ function onLoadFunctionForForumPosts() {
         contentType: "application/json",
         success: function processData(r) {
             var json_data = JSON.parse(r);
+            //alert(JSON.stringify(json_data));
             generatePostCards(json_data);
         }
     });
@@ -193,8 +194,15 @@ function onClickOfLogout(){
 // This function creates post cards
 function generatePostCards(posts){
 
+    //  addNewPost
+    //  displayAllPosts
+
     var cardsContainer = document.getElementById("cards-container");
     cardsContainer.innerHTML = "";
+    // if (postType == "displayAllPosts"){
+    //     cardsContainer.innerHTML = "";
+    // }
+
 
     var  todaysDate = new Date();
 
@@ -219,6 +227,13 @@ function generatePostCards(posts){
         card.classList.add("row");
         card.classList.add("custom-card");
         cardsContainer.appendChild(card);
+        // if (postType == "displayAllPosts"){
+        //     cardsContainer.appendChild(card);
+        // }else if (postType == "addNewPost"){
+        //     cardsContainer.insertBefore(card, cardsContainer.firstChild);
+        // }
+
+
 
         var cardColumn = document.createElement("div");
         cardColumn.classList.add("col");
@@ -347,5 +362,51 @@ function generatePostCards(posts){
 
 
     }
+
+}
+
+// This function adds a new post_title
+function addNewPost(){
+  alert("addNewPost called");
+
+  //  Login Information
+  var newPostTitle = document.getElementById('newPostTitle').value;
+  var newPostDesc = document.getElementById('newPostDesc').value;
+  var newImageURL = document.getElementById('newImageURL').value;
+
+  //  Preparing JSON request object
+  var newPost = {
+      "post_title": newPostTitle,
+      "post_body": newPostDesc,
+      "post_image": newImageURL,
+  }
+
+  $.ajax({
+      type: "POST",
+      url: "https://infinite-reef-90129.herokuapp.com/addForumPost",
+      data: JSON.stringify(newPost),
+      datatype: "json",
+      xhrFields: {withCredentials: true},
+      async: true,
+      //"Access-Control-Allow-Origin": "*",
+      contentType: "application/json; charset=utf-8",
+      success: function processData(r) {
+          var myObj = JSON.parse(r);
+          if (myObj["response"] == "pass") {
+              //
+              //addNewPostOnTop(newPostTitle, newPostDesc, newImageURL);
+              console.log(r);
+
+          } else {
+              alert("User is not authenticated");
+
+          }
+      }
+  });
+}
+
+// This function will add a new post on the top of the displayed posts when a new post is added
+function addNewPostOnTop(newPostTitle, newPostDesc, newImageURL){
+
 
 }
