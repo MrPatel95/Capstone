@@ -287,7 +287,7 @@ def get_n_recent_forum_posts(request):
 			n = body['n']
 			posts = ForumPost.objects.filter().values(
 				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count', 'post_body'
-				).order_by('post_datetime').annotate(reply_count=Count('replypost__post_id_id'))[:n]
+				).order_by('-post_datetime').annotate(reply_count=Count('replypost__post_id_id'))
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
