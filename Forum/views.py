@@ -318,16 +318,15 @@ def get_post_and_replies_by_post_id(request):
 				s += (
 					'{"reply_id":"' + str(reply.reply_id) + '",'
 					+ '"user":"' + reply.user.username + '",'
-					+ '"post_id":"' + str(reply.post_id) + '",'
 					+ '"parent_id":"' + str(reply.parent_id) + '",'
 					+ '"reply_body":"' + reply.reply_body + '",'
 					+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
 					+ '"connect_count":"' + str(reply.connect_count) + '"'
 					+ '},'
 				)
-
-			s = s[:-1] + ']}'
-
+			if len(replies) > 0:
+				s = s[:-1]
+			s += ']}'
 			return HttpResponse(s)
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
