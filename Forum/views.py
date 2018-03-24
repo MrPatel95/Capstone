@@ -326,7 +326,7 @@ def get_post_and_replies_by_post_id(request):
 					+ '},'
 				)
 
-			s = s[:-1] + ']}]}'
+			s = s[:-1] + ']}'
 
 			return HttpResponse(s)
 		except Exception as e:
