@@ -55,29 +55,7 @@ def _get_does_email_exist(email):
 	except ObjectDoesNotExist:
 		return False
 
-def _traverse(root_reply):
-	'''
-	Travserse root replies and build nested comment tree
-	'''
-
-	reply_stack = list(ReplyPost.objects.filter(parent_id=root_reply.reply_id).order_by('reply_datetime'))
-	counter = 0
-	s = '['
-
-	while reply_stack:
-		reply = reply_stack.pop(0)
-		reply_list = list(ReplyPost.objects.filter(parent_id=reply.reply_id).order_by('reply_datetime'))
-
-		s += (
-			'{"reply_id":"' + str(reply.reply_id) + '",'
-			+ '"user":"' + reply.user.username + '",'
-			+ '"post_id":"' + str(reply.post_id) + '",'
-			+ '"parent_id":"' + str(reply.parent_id) + '",'
-			+ '"reply_body":"' + reply.reply_body + '",'
-			+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
-			+ '"connect_count":"' + str(reply.connect_count)
-		)
-
+'''
 		#This comment has a reply
 		if len(reply_list) > 0:
 			counter += 1
@@ -86,18 +64,16 @@ def _traverse(root_reply):
 
 		#This comment does not have a reply, we can end this chain
 		else:
-			if len(reply_stack) > 0:
+			s += '"'
+			if counter == 0 and len(reply_stack) == 0:
+				s += '}'
+			elif len(reply_stack) > 0:
 				counter -= 1
-				s += '"}]},'
+				s += '},'
 			else:
-				if counter == 0:
-					s += '"}'
-				else:
-					s += '"}]'
-					for i in range(counter):
-						s += '}'
-
-	return s
+				for i in range(counter):
+					s += '}]'
+'''
 
 '''
 API Endpoints will be csrf_exempt
@@ -285,6 +261,7 @@ def get_n_recent_forum_posts(request):
 		body = json.loads(request.body.decode('utf-8'))
 		try:
 			n = body['n']
+
 			posts = ForumPost.objects.filter().values(
 				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count', 'post_body'
 				).order_by('-post_datetime').annotate(reply_count=Count('replypost__post_id_id'))
@@ -356,30 +333,20 @@ def get_post_and_replies_by_post_id(request):
 				+ '"},"replies":['
 			)
 
-			root_replies = list(ReplyPost.objects.filter(post_id=post_id, parent_id=None).order_by('reply_datetime'))
+			replies = list(ReplyPost.objects.filter(post_id=post_id))
+			for reply in replies:
+				s += (
+					'{"reply_id":"' + str(reply.reply_id) + '",'
+					+ '"user":"' + reply.user.username + '",'
+					+ '"post_id":"' + str(reply.post_id) + '",'
+					+ '"parent_id":"' + str(reply.parent_id) + '",'
+					+ '"reply_body":"' + reply.reply_body + '",'
+					+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
+					+ '"connect_count":"' + str(reply.connect_count) + '"'
+					+ '},'
+				)
 
-			if len(root_replies) > 0:
-				counter = 0
-				for reply in root_replies:
-					s += (
-						'{"reply_id":"' + str(reply.reply_id) + '",'
-						+ '"user":"' + reply.user.username + '",'
-						+ '"post_id":"' + str(reply.post_id) + '",'
-						+ '"parent_id":"' + str(reply.parent_id) + '",'
-						+ '"reply_body":"' + reply.reply_body + '",'
-						+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
-						+ '"connect_count":"' + str(reply.connect_count) + '",'
-						+ '"replies":'
-					)
-
-					s += _traverse(reply) + ']},'
-					counter += 1
-
-				s = s[:-1]
-				s += ']}'
-
-			else:
-				s += ']}'
+			s += s[:-1] + ']}]}'
 
 			return HttpResponse(s)
 		except Exception as e:
