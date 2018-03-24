@@ -56,26 +56,6 @@ def _get_does_email_exist(email):
 		return False
 
 '''
-		#This comment has a reply
-		if len(reply_list) > 0:
-			counter += 1
-			reply_stack = list(ReplyPost.objects.filter(parent_id=reply.reply_id).order_by('reply_datetime')) + reply_stack
-			s += '","replies":['
-
-		#This comment does not have a reply, we can end this chain
-		else:
-			s += '"'
-			if counter == 0 and len(reply_stack) == 0:
-				s += '}'
-			elif len(reply_stack) > 0:
-				counter -= 1
-				s += '},'
-			else:
-				for i in range(counter):
-					s += '}]'
-'''
-
-'''
 API Endpoints will be csrf_exempt
 Authenticity will be ensured by user session
 '''
@@ -346,7 +326,7 @@ def get_post_and_replies_by_post_id(request):
 					+ '},'
 				)
 
-			s += s[:-1] + ']}]}'
+			s = s[:-1] + ']}]}'
 
 			return HttpResponse(s)
 		except Exception as e:
