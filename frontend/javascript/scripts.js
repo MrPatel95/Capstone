@@ -38,6 +38,8 @@ function checkLoginCredentials() {
             }
         }
     });
+
+
 }
 
 //  This function will register new users
@@ -233,8 +235,6 @@ function generatePostCards(posts){
         //     cardsContainer.insertBefore(card, cardsContainer.firstChild);
         // }
 
-
-
         var cardColumn = document.createElement("div");
         cardColumn.classList.add("col");
         cardColumn.classList.add("card-padding");
@@ -267,8 +267,8 @@ function generatePostCards(posts){
         titleTime.appendChild(titleRow);
 
         var title = document.createElement("div");
-        title.classList.add("col-12");
-        title.classList.add("post-title");
+        title.classList.add("col-12", "post-title");
+
         var titleText = document.createTextNode(posts[i].post_title);
         title.appendChild(titleText);
         titleRow.appendChild(title);
@@ -282,6 +282,7 @@ function generatePostCards(posts){
 
         var conRepDes = document.createElement("div");
         conRepDes.classList.add("row");
+        conRepDes.setAttribute("id", "conRepDes" + posts[i].post_id);
         cardColumn.appendChild(conRepDes);
 
         var conReplyColumn = document.createElement("div");
@@ -361,6 +362,44 @@ function generatePostCards(posts){
 
 
 
+        //  add a row for replies
+        var replyRow = document.createElement("div");
+        replyRow.classList.add("row");
+        replyRow.setAttribute("style","transition: max-height 0.15s ease-out");
+        replyRow.style.display = "none";
+        replyRow.setAttribute("id","replyRow"+ posts[i].post_id);
+        cardColumn.appendChild(replyRow);
+
+
+        var sampleText = document.createTextNode("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam");
+        replyRow.appendChild(sampleText);
+
+        //Button for expanding the post
+        var postExpandRow = document.createElement("div");
+        postExpandRow.classList.add("row");
+        postExpandRow.setAttribute("style","display: block");
+        cardColumn.appendChild(postExpandRow);
+
+        var postExpandCol = document.createElement("div");
+        postExpandCol.classList.add("offset-11", "offset-sm-11", "offset-md-11", "offset-lg-11");
+        postExpandCol.classList.add("col-1", "col-sm-1", "col-md-1", "col-lg-1", "postExpandCol");
+        postExpandRow.appendChild(postExpandCol);
+
+        //  button to hold the image
+        var downButton = document.createElement("button");
+        downButton.classList.add("downButton");
+        downButton.setAttribute("onclick", "onClickOfShowPost("+ posts[i].post_id +")");
+        downButton.setAttribute("id", "button"+ posts[i].post_id);
+        postExpandCol.appendChild(downButton);
+
+        //  Down image
+        var showMore = document.createElement("img");
+        showMore.classList.add("showMore");
+        showMore.setAttribute("src", "../assets/down-arrow.svg");
+        showMore.setAttribute("id", "buttonImg" + posts[i].post_id);
+        showMore.setAttribute("alt", "show more");
+        downButton.appendChild(showMore);
+
     }
 
 }
@@ -407,6 +446,158 @@ function addNewPost(){
 
 // This function will add a new post on the top of the displayed posts when a new post is added
 function addNewPostOnTop(newPostTitle, newPostDesc, newImageURL){
+
+
+}
+
+//  This function is called when show Post/Replies is clicked
+function onClickOfShowPost(post_id){
+
+    var rowId = "replyRow" + post_id;
+    var buttonId = "button" + post_id;
+    var icon = "buttonImg" + post_id;
+    var conRepDes = "conRepDes" + post_id;
+
+    var buttonIcon = document.getElementById(icon);
+    var replyRow = document.getElementById(rowId);
+    var crdRow = document.getElementById(conRepDes);
+
+    if(replyRow.style.display === "none"){
+        buttonIcon.setAttribute("src", "../assets/up-arrow.svg");
+        replyRow.style.display = "block";
+        crdRow.style.display = "none";
+    }else if(replyRow.style.display === "block"){
+        replyRow.style.display = "none";
+        buttonIcon.setAttribute("src", "../assets/down-arrow.svg");
+        crdRow.style.display = "block";
+    }
+
+    //Preparing JSON request object
+    var loadPostAndReplies = {
+        "post_id": post_id
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "https://infinite-reef-90129.herokuapp.com/getPostAndRepliesByPostId",
+        data: JSON.stringify(loadPostAndReplies),
+        datatype: "json",
+        xhrFields: {withCredentials: true},
+        async: true,
+        contentType: "application/json",
+        success: function processData(r) {
+            //console.log(r);
+            //var json_data = JSON.parse(r);
+            //  console.log(JSON.stringify(json_data));
+
+            showReplies(r, rowId);
+
+        }
+    });
+
+}
+
+//  This function will show all the replies
+function showReplies(allReplies, rowId){
+
+    var obj = JSON.parse(allReplies);
+
+    var imageColumn = documen.createElement("div");
+    imageColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    imageColumn.setAttribute("id", "imageColumn");
+    imageColumn.style.display = "none";
+    replyRow.appendChild(imageColumn);
+
+    var postImage = document.createElement("img");
+    postImage.classList.add("postImage");
+    postImage.setAttribute("src", allReplies.post.post_image);
+    imageColumn.appendChild(postImage);
+
+    if(obj.replies.length == 0){
+        var addReplyColumn = document.createElement("div");
+        addReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+        addReplyColumn.setAttribute("id", "addReplyColumn");
+        replyRow.appendChild(addReplyColumn);
+    }
+
+    /*
+        check if the JSON is empty
+        if empty
+            Add reply form
+        if not empty
+            Add reply form
+            All replies
+            Add reply
+
+    */
+
+    //  var obj = JSON.parse(allReplies);
+    // console.log(obj.post);
+    // allReply = {
+    //   "post": {
+    //     "post_id": "6",
+    //     "user": "ali",
+    //     "post_title": "my first forum post",
+    //     "post_body": "my first forum post body",
+    //     "post_image": "",
+    //     "post_datetime": "2018-03-11 01:55:08.061589+00:00",
+    //     "connect_count": "0"
+    //   },
+    //   "replies":
+    //     [
+    //         {
+    //           "reply_id": "22",
+    //           "user": "hrishi",
+    //           "post_id": "6",
+    //           "parent_id": "None",
+    //           "reply_body": "This is a reply to the main post",
+    //           "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
+    //           "connect_count": "0"
+    //         },
+    //         {
+    //           "reply_id": "23",
+    //           "user": "jeet",
+    //           "post_id": "6",
+    //           "parent_id": "None",
+    //           "reply_body": "This reply is to the main post",
+    //           "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
+    //           "connect_count": "0"
+    //         },
+    //         {
+    //           "reply_id": "24",
+    //           "user": "ali",
+    //           "post_id": "6",
+    //           "parent_id": "22",
+    //           "reply_body": "This reply is to Hrishi",
+    //           "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
+    //           "connect_count": "0"
+    //         },
+    //         {
+    //           "reply_id": "25",
+    //           "user": "Manahil",
+    //           "post_id": "6",
+    //           "parent_id": "24",
+    //           "reply_body": "This reply is to ali's reply",
+    //           "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
+    //           "connect_count": "0"
+    //         },
+    //         {
+    //           "reply_id": "26",
+    //           "user": "hrishi",
+    //           "post_id": "6",
+    //           "parent_id": "23",
+    //           "reply_body": "This reply is to Jeet's reply",
+    //           "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
+    //           "connect_count": "0"
+    //         }
+    //     ]
+    // }
+    //console.log(obj.replies);
+
+    alert(allReply.replies.length)
+
+
+
 
 
 }
