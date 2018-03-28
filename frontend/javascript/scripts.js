@@ -285,76 +285,11 @@ function generatePostCards(posts){
         conRepDes.setAttribute("id", "conRepDes" + posts[i].post_id);
         cardColumn.appendChild(conRepDes);
 
-        var conReplyColumn = document.createElement("div");
-        conReplyColumn.classList.add("col-12", "col-md-1", "col-lg-1");
-        conRepDes.appendChild(conReplyColumn);
-
-        //  Row for Connect and Reply
-        var contentReply = document.createElement("div");
-        contentReply.classList.add("row");
-        contentReply.classList.add("reply-connect");
-        conReplyColumn.appendChild(contentReply);
-
-        //  Column for Connect
-        var connect = document.createElement("div");
-        connect.classList.add("col-6", "col-sm-12", "col-md-12", "col-lg-12", "icon_count");
-        contentReply.appendChild(connect);
-
-        var buttonForConnect = document.createElement("button");
-        buttonForConnect.classList.add("mdl-button", "mdl-js-button", "mdl-button--icon", "mdl-button--colored", "buttonForConnect");
-        buttonForConnect.setAttribute("id", posts[i].post_id);
-        connect.appendChild(buttonForConnect);
-
-        var connectIcon = document.createElement("div");
-        connectIcon.classList.add("material-icons", "connect-icon");
-        connectIcon.setAttribute("id", "connectIcon");
-        buttonForConnect.appendChild(connectIcon);
-        var icon = document.createTextNode("compare_arrows");
-        connectIcon.appendChild(icon);
-
-        var connectToolTip = document.createElement("div");
-        connectToolTip.classList.add("mdl-tooltip");
-        connectToolTip.setAttribute("data-mdl-for", posts[i].post_id);
-        connect.appendChild(connectToolTip);
-
-        var connectToolTipText = document.createTextNode("Connect");
-        connectToolTip.appendChild(connectToolTipText);
-
-        var spanForConnectCount = document.createElement("span");
-        spanForConnectCount.classList.add("connectCountSpan");
-        connect.appendChild(spanForConnectCount);
-
-        var connectCount = document.createTextNode(posts[i].connect_count);
-        spanForConnectCount.appendChild(connectCount);
-
-
-        //  Column for Reply
-        var reply = document.createElement("div");
-        reply.classList.add("col-6", "col-sm-12", "col-md-12", "col-lg-12", "reply_count");
-        contentReply.appendChild(reply);
-
-
-        var buttonForReply = document.createElement("button");
-        buttonForReply.classList.add("mdl-button", "mdl-js-button", "mdl-button--icon", "mdl-button--colored", "mdl-button--colored", "buttonForReply");
-        reply.appendChild(buttonForReply);
-
-        var replyIcon = document.createElement("i");
-        replyIcon.classList.add("material-icons", "reply-icon");
-        buttonForReply.appendChild(replyIcon);
-
-        var replyIconText = document.createTextNode("reply");
-        replyIcon.appendChild(replyIconText);
-
-        var spanForReplyCount = document.createElement("span");
-        spanForReplyCount.classList.add("replyCountSpan");
-        reply.appendChild(spanForReplyCount);
-
-        var replyCount = document.createTextNode(posts[i].reply_count);
-        spanForReplyCount.appendChild(replyCount);
-
+       
         //  Description column
         var description = document.createElement("div");
         description.classList.add("col-12", "col-sm-10", "col-md-11", "col-lg-11", "description");
+        description.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1");
         conRepDes.appendChild(description);
 
         var postBody = document.createTextNode(posts[i].post_body);
@@ -371,10 +306,78 @@ function generatePostCards(posts){
         cardColumn.appendChild(replyRow);
 
 
-        var sampleText = document.createTextNode("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam");
-        replyRow.appendChild(sampleText);
+       
 
-        //Button for expanding the post
+        //  Row for Connect and Reply
+        var contentReply = document.createElement("div");
+        contentReply.classList.add("row");
+        contentReply.classList.add("reply-connect");
+        cardColumn.appendChild(contentReply);
+
+        //  Column for Connect
+        var connect = document.createElement("div");
+        connect.classList.add("col-6", "col-sm-2", "col-md-2", "col-lg-2", "icon_count");
+        connect.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1");
+        contentReply.appendChild(connect);
+
+        var buttonForConnect = document.createElement("button");
+        //buttonForConnect.classList.add("mdl-button", "mdl-js-button", "mdl-button--icon", "mdl-button--colored", "buttonForConnect");
+        buttonForConnect.classList.add("button", "btn", "btn-primary", "buttonForConnect");
+        buttonForConnect.setAttribute("id", posts[i].post_id);
+        connect.appendChild(buttonForConnect);
+
+        var connectIcon = document.createElement("div");
+        connectIcon.classList.add("material-icons", "connect-icon");
+        connectIcon.setAttribute("id", "connectIcon");
+        buttonForConnect.appendChild(connectIcon);
+        
+        var icon = document.createTextNode("compare_arrows");
+        connectIcon.appendChild(icon);
+
+        var connectToolTip = document.createElement("div");
+        connectToolTip.classList.add("mdl-tooltip");
+        connectToolTip.setAttribute("data-mdl-for", posts[i].post_id);
+        connect.appendChild(connectToolTip);
+
+        var connectToolTipText = document.createTextNode("Connect");
+        connectToolTip.appendChild(connectToolTipText);
+
+        var connectsText = document.createTextNode(posts[i].connect_count + " Connects");
+        buttonForConnect.appendChild(connectsText);
+
+        //  Column for Reply
+        var reply = document.createElement("div");
+        reply.classList.add("col-6", "col-sm-2", "col-md-2", "col-lg-2", "reply_count");
+        contentReply.appendChild(reply);
+
+        var buttonForReply = document.createElement("button");
+        buttonForReply.classList.add("button", "btn", "btn-primary", "buttonForReply");
+        buttonForReply.setAttribute("id", posts[i].post_id);
+        reply.appendChild(buttonForReply);
+
+        var replyIcon = document.createElement("div");
+        replyIcon.classList.add("material-icons", "reply-icon");
+        connectIcon.setAttribute("id", "replyIcon");
+        buttonForReply.appendChild(replyIcon);
+
+        var icon2 = document.createTextNode("reply");
+        replyIcon.appendChild(icon2);
+
+        var replyText = document.createTextNode(posts[i].reply_count + " Replies");
+        buttonForReply.appendChild(replyText);
+
+
+
+        //  Column for Connect
+        // //Row for connect and resply
+        // var conRepRow = document.createElement("div");
+        // conRepRow.classList.add("row");
+        // conRepRow.setAttribute("style","display: block");
+        // cardColumn.appendChild(postExpandRow);
+
+
+
+        //Button for expanding the post's ROW
         var postExpandRow = document.createElement("div");
         postExpandRow.classList.add("row");
         postExpandRow.setAttribute("style","display: block");
@@ -447,7 +450,6 @@ function addNewPost(){
 // This function will add a new post on the top of the displayed posts when a new post is added
 function addNewPostOnTop(newPostTitle, newPostDesc, newImageURL){
 
-
 }
 
 //  This function is called when show Post/Replies is clicked
@@ -486,10 +488,6 @@ function onClickOfShowPost(post_id){
         async: true,
         contentType: "application/json",
         success: function processData(r) {
-            //console.log(r);
-            //var json_data = JSON.parse(r);
-            //  console.log(JSON.stringify(json_data));
-
             showReplies(r, rowId);
 
         }
@@ -500,25 +498,45 @@ function onClickOfShowPost(post_id){
 //  This function will show all the replies
 function showReplies(allReplies, rowId){
 
+    var rowReply = document.getElementById(rowId);
+    rowReply.innerHTML = "";
+
     var obj = JSON.parse(allReplies);
 
-    var imageColumn = documen.createElement("div");
-    imageColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
-    imageColumn.setAttribute("id", "imageColumn");
-    imageColumn.style.display = "none";
-    replyRow.appendChild(imageColumn);
+    // var text = document.createTextNode("Test");
+    // rowReply.appendChild(text);
 
-    var postImage = document.createElement("img");
-    postImage.classList.add("postImage");
-    postImage.setAttribute("src", allReplies.post.post_image);
-    imageColumn.appendChild(postImage);
+    //alert(obj.post.post_image);
 
-    if(obj.replies.length == 0){
-        var addReplyColumn = document.createElement("div");
-        addReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
-        addReplyColumn.setAttribute("id", "addReplyColumn");
-        replyRow.appendChild(addReplyColumn);
+    if(obj.post.post_image != ""){
+
+        //  Column for Image
+        var imageColumn = document.createElement("div");
+        imageColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+        imageColumn.setAttribute("id", "imageColumn");
+        rowReply.appendChild(imageColumn);
+    
+        var postImage = document.createElement("img");
+        postImage.classList.add("postImage");
+        postImage.setAttribute("id", "postImage");
+        postImage.setAttribute("src", obj.post.post_image);
+        imageColumn.appendChild(postImage);     
     }
+
+    //  Column for description
+    var descColumn = document.createElement("div");
+    descColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    descColumn.setAttribute("id", "descColumn");
+    rowReply.appendChild(descColumn);
+
+    var postDesc = document.createTextNode(obj.post.post_body);
+    descColumn.appendChild(postDesc);
+    
+    //  Add a new reply to this column
+    var addReplyColumn = document.createElement("div");
+    addReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    addReplyColumn.setAttribute("id", "addReplyColumn");
+    replyRow.appendChild(addReplyColumn);  
 
     /*
         check if the JSON is empty
@@ -594,7 +612,6 @@ function showReplies(allReplies, rowId){
     // }
     //console.log(obj.replies);
 
-    alert(allReply.replies.length)
 
 
 

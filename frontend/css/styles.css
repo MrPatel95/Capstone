@@ -17,25 +17,52 @@
 }
 
 .downButton:hover{
-    background-color: #f9f9f9;
+    background-color: #c9c9c9;
 }
 /* BUTTON FOR EXPANDING POST */
+
+/* Expanded post columns */
+#postImage{
+    max-width:30%;
+    max-height:30%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#descColumn{
+    padding-top: 20px;
+    padding-right: 50px;
+    padding-left: 50px;
+    font-size: 17px;
+    line-height: 1.5;
+}
+
+/* Expanded post columns ends*/
 /* Connect and Reply Button css */
 
 .buttonForConnect{
-    background-color: grey;
-    border-radius: 10%;
-    height: 28px;
-    width: 28px;
+    background-color: white;
+    color: #5A6268;
     min-width: initial;
+    border: none;
+}
+.buttonForConnect:hover{
+    background-color: #EEEEEE;
+    /* color: white; */
+    color: #5A6268;
 }
 
 .buttonForReply{
-    background-color: grey;
-    border-radius: 10%;
-    height: 28px;
-    width: 28px;
+    background-color: white;
+    color: #5A6268;
     min-width: initial;
+    border: none;
+}
+.buttonForReply:hover{
+    background-color: #EEEEEE;
+    /* color: white; */
+    color: #5A6268;
 }
 
 .connectCountSpan{
@@ -117,17 +144,19 @@ body{
     margin-top: 6px;
 }
 .connect-icon{
-    color: white;
+    color: #5A6268;
+
 }
 
 .reply-icon{
-    color: white;
+    color: #5A6268;
 
 }
 
 
 .description{
     font-size: 17px;
+    line-height: 1.5;
 }
 
 #posts{
@@ -226,8 +255,26 @@ body{
 
 @media only screen and (max-width: 500px) {
 
+    #descColumn{
+        padding-top: 20px;
+        padding-right: 10px;
+        padding-left: 10px;
+        font-size: 17px;
+        line-height: 1.5;
+    }
+
+    #postImage{
+        max-width:100%;
+        max-height:100%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 10px;
+    }
+
     .description{
         font-size: default;
+        padding-top: 10px;
     }
 
     .time-username{
