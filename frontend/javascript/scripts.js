@@ -685,35 +685,35 @@ function addReply(postId) {
 
     alert(reply);
 
-    // if (reply != "") {
+    if (reply != "") {
 
-    //     //  Preparing JSON request object
-    //     var addAReply = {
-    //         "post_id": postId,
-    //         "parent_id": "None",
-    //         "reply_body": reply
-    //     }
+        //  Preparing JSON request object
+        var addAReply = {
+            "post_id": postId,
+            "parent_id": null,
+            "reply_body": reply
+        }
 
-    //     $.ajax({
-    //         type: "POST",
-    //         url: "https://infinite-reef-90129.herokuapp.com/addReply",
-    //         data: JSON.stringify(addAReply),
-    //         datatype: "json",
-    //         xhrFields: { withCredentials: true },
-    //         async: true,
-    //         //"Access-Control-Allow-Origin": "*",
-    //         contentType: "application/json; charset=utf-8",
-    //         success: function processData(r) {
-    //             var myObj = JSON.parse(r);
-    //             if (myObj["response"] == "pass") {
-    //                // window.location = "forum.html";
-    //                 console.log(r);
+        $.ajax({
+            type: "POST",
+            url: "https://infinite-reef-90129.herokuapp.com/addReply",
+            data: JSON.stringify(addAReply),
+            datatype: "json",
+            xhrFields: { withCredentials: true },
+            async: true,
+            //"Access-Control-Allow-Origin": "*",
+            contentType: "application/json; charset=utf-8",
+            success: function processData(r) {
+                var myObj = JSON.parse(r);
+                if (myObj["response"] == "pass") {
+                   // window.location = "forum.html";
+                    console.log(r);
 
-    //             } else {
-    //                 alert("Error while adding a reply");
+                } else {
+                    alert("Error while adding a reply");
 
-    //             }
-    //         }
-    //     });
-    // }
+                }
+            }
+        });
+    }
 }
