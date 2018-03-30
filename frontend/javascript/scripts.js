@@ -1,6 +1,6 @@
 // http://promincproductions.com/blog/cross-domain-ajax-request-cookies-cors/
 
-function testAlert(){
+function testAlert() {
     alert("liked");
 }
 
@@ -22,7 +22,7 @@ function checkLoginCredentials() {
         url: "https://infinite-reef-90129.herokuapp.com/loginUser",
         data: JSON.stringify(loginRequestData),
         datatype: "json",
-        xhrFields: {withCredentials: true},
+        xhrFields: { withCredentials: true },
         async: true,
         //"Access-Control-Allow-Origin": "*",
         contentType: "application/json; charset=utf-8",
@@ -82,43 +82,43 @@ function turnFieldToRedColorBorder(elementName) {
 }
 
 //  Create Date variable
-function createDate(todaysDate, postDate){
+function createDate(todaysDate, postDate) {
 
     var newPostDate = new Date(postDate);
     var diff = todaysDate - newPostDate;
     var time = "";
 
-    if(diff < 5999){
+    if (diff < 5999) {
         time = "Just now";
         return time;
-    }else{
-        var seconds = diff/1000;
-        if(seconds < 60){
+    } else {
+        var seconds = diff / 1000;
+        if (seconds < 60) {
             return Math.floor(seconds) + " seconds ago";
-        }else{
-            var mins = seconds/60;
-            if(mins<60){
-                if(mins < 2){
+        } else {
+            var mins = seconds / 60;
+            if (mins < 60) {
+                if (mins < 2) {
                     return Math.floor(mins) + " minute ago";
                 }
                 return Math.floor(mins) + " minutes ago";
-            }else{
-                var hours = mins/60;
-                if(hours < 25){
-                    if(hours < 2){
+            } else {
+                var hours = mins / 60;
+                if (hours < 25) {
+                    if (hours < 2) {
                         return Math.floor(hours) + " hour ago";
                     }
                     return Math.floor(hours) + " hours ago";
-                }else{
-                    var days = hours/24;
-                    if(days < 366){
-                        if(days < 2){
+                } else {
+                    var days = hours / 24;
+                    if (days < 366) {
+                        if (days < 2) {
                             return Math.floor(days) + " day ago";
                         }
                         return Math.floor(days) + " days ago"
-                    }else{
-                        var year = days/365;
-                        if(year < 2){
+                    } else {
+                        var year = days / 365;
+                        if (year < 2) {
                             return Math.floor(year) + " year ago";
                         }
                         return Math.floor(year) + " years ago";
@@ -143,7 +143,7 @@ function onLoadFunctionForForumPosts() {
         url: "https://infinite-reef-90129.herokuapp.com/getNRecentForumPosts",
         data: JSON.stringify(loadNPosts),
         datatype: "json",
-        xhrFields: {withCredentials: true},
+        xhrFields: { withCredentials: true },
         async: true,
         contentType: "application/json",
         success: function processData(r) {
@@ -153,11 +153,11 @@ function onLoadFunctionForForumPosts() {
         }
     });
 
-    $(document).ready(function(){
-        $('#page-body').ajaxStart(function() {
+    $(document).ready(function () {
+        $('#page-body').ajaxStart(function () {
             alert("AJAX sent");
             $('#posts-loading').show();
-        }).ajaxStop(function() {
+        }).ajaxStop(function () {
             $('#posts-loading').hide();
         });
     });
@@ -165,7 +165,7 @@ function onLoadFunctionForForumPosts() {
 }
 
 //  This function is called when the user clicks logout button
-function onClickOfLogout(){
+function onClickOfLogout() {
     if (window.XMLHttpRequest) {
         // code for modern browsers
         xmlhttp = new XMLHttpRequest();
@@ -194,7 +194,7 @@ function onClickOfLogout(){
 }
 
 // This function creates post cards
-function generatePostCards(posts){
+function generatePostCards(posts) {
 
     //  addNewPost
     //  displayAllPosts
@@ -206,21 +206,21 @@ function generatePostCards(posts){
     // }
 
 
-    var  todaysDate = new Date();
+    var todaysDate = new Date();
 
     // var  todaysDate1 = new Date("2018-03-17T23:04:13.781205+00:00");
     // alert(todaysDate - todaysDate1);
 
-    for (i = 0; i < posts.length; i++){
+    for (i = 0; i < posts.length; i++) {
 
 
         // call function to create the post time variable
         var time = createDate(todaysDate, posts[i].post_datetime);
         postImage = "";
 
-        if(posts[i].post_image === ""){
+        if (posts[i].post_image === "") {
             postImage = "../assets/batman.jpg";
-        }else{
+        } else {
             postImage = posts[i].post_image;
         }
 
@@ -285,7 +285,7 @@ function generatePostCards(posts){
         conRepDes.setAttribute("id", "conRepDes" + posts[i].post_id);
         cardColumn.appendChild(conRepDes);
 
-       
+
         //  Description column
         var description = document.createElement("div");
         description.classList.add("col-12", "col-sm-10", "col-md-11", "col-lg-11", "description");
@@ -300,13 +300,13 @@ function generatePostCards(posts){
         //  add a row for replies
         var replyRow = document.createElement("div");
         replyRow.classList.add("row");
-        replyRow.setAttribute("style","transition: max-height 0.15s ease-out");
+        replyRow.setAttribute("style", "transition: max-height 0.15s ease-out");
         replyRow.style.display = "none";
-        replyRow.setAttribute("id","replyRow"+ posts[i].post_id);
+        replyRow.setAttribute("id", "replyRow" + posts[i].post_id);
         cardColumn.appendChild(replyRow);
 
 
-       
+
 
         //  Row for Connect and Reply
         var contentReply = document.createElement("div");
@@ -330,7 +330,7 @@ function generatePostCards(posts){
         connectIcon.classList.add("material-icons", "connect-icon");
         connectIcon.setAttribute("id", "connectIcon");
         buttonForConnect.appendChild(connectIcon);
-        
+
         var icon = document.createTextNode("compare_arrows");
         connectIcon.appendChild(icon);
 
@@ -380,7 +380,7 @@ function generatePostCards(posts){
         //Button for expanding the post's ROW
         var postExpandRow = document.createElement("div");
         postExpandRow.classList.add("row");
-        postExpandRow.setAttribute("style","display: block");
+        postExpandRow.setAttribute("style", "display: block");
         cardColumn.appendChild(postExpandRow);
 
         var postExpandCol = document.createElement("div");
@@ -391,8 +391,8 @@ function generatePostCards(posts){
         //  button to hold the image
         var downButton = document.createElement("button");
         downButton.classList.add("downButton");
-        downButton.setAttribute("onclick", "onClickOfShowPost("+ posts[i].post_id +")");
-        downButton.setAttribute("id", "button"+ posts[i].post_id);
+        downButton.setAttribute("onclick", "onClickOfShowPost(" + posts[i].post_id + ")");
+        downButton.setAttribute("id", "button" + posts[i].post_id);
         postExpandCol.appendChild(downButton);
 
         //  Down image
@@ -408,52 +408,52 @@ function generatePostCards(posts){
 }
 
 // This function adds a new post_title
-function addNewPost(){
-  alert("addNewPost called");
+function addNewPost() {
+    alert("addNewPost called");
 
-  //  Login Information
-  var newPostTitle = document.getElementById('newPostTitle').value;
-  var newPostDesc = document.getElementById('newPostDesc').value;
-  var newImageURL = document.getElementById('newImageURL').value;
+    //  Login Information
+    var newPostTitle = document.getElementById('newPostTitle').value;
+    var newPostDesc = document.getElementById('newPostDesc').value;
+    var newImageURL = document.getElementById('newImageURL').value;
 
-  //  Preparing JSON request object
-  var newPost = {
-      "post_title": newPostTitle,
-      "post_body": newPostDesc,
-      "post_image": newImageURL,
-  }
+    //  Preparing JSON request object
+    var newPost = {
+        "post_title": newPostTitle,
+        "post_body": newPostDesc,
+        "post_image": newImageURL,
+    }
 
-  $.ajax({
-      type: "POST",
-      url: "https://infinite-reef-90129.herokuapp.com/addForumPost",
-      data: JSON.stringify(newPost),
-      datatype: "json",
-      xhrFields: {withCredentials: true},
-      async: true,
-      //"Access-Control-Allow-Origin": "*",
-      contentType: "application/json; charset=utf-8",
-      success: function processData(r) {
-          var myObj = JSON.parse(r);
-          if (myObj["response"] == "pass") {
-              //
-              //addNewPostOnTop(newPostTitle, newPostDesc, newImageURL);
-              console.log(r);
+    $.ajax({
+        type: "POST",
+        url: "https://infinite-reef-90129.herokuapp.com/addForumPost",
+        data: JSON.stringify(newPost),
+        datatype: "json",
+        xhrFields: { withCredentials: true },
+        async: true,
+        //"Access-Control-Allow-Origin": "*",
+        contentType: "application/json; charset=utf-8",
+        success: function processData(r) {
+            var myObj = JSON.parse(r);
+            if (myObj["response"] == "pass") {
+                //
+                //addNewPostOnTop(newPostTitle, newPostDesc, newImageURL);
+                console.log(r);
 
-          } else {
-              alert("User is not authenticated");
+            } else {
+                alert("User is not authenticated");
 
-          }
-      }
-  });
+            }
+        }
+    });
 }
 
 // This function will add a new post on the top of the displayed posts when a new post is added
-function addNewPostOnTop(newPostTitle, newPostDesc, newImageURL){
+function addNewPostOnTop(newPostTitle, newPostDesc, newImageURL) {
 
 }
 
 //  This function is called when show Post/Replies is clicked
-function onClickOfShowPost(post_id){
+function onClickOfShowPost(post_id) {
 
     var rowId = "replyRow" + post_id;
     var buttonId = "button" + post_id;
@@ -464,11 +464,11 @@ function onClickOfShowPost(post_id){
     var replyRow = document.getElementById(rowId);
     var crdRow = document.getElementById(conRepDes);
 
-    if(replyRow.style.display === "none"){
+    if (replyRow.style.display === "none") {
         buttonIcon.setAttribute("src", "../assets/up-arrow.svg");
         replyRow.style.display = "block";
         crdRow.style.display = "none";
-    }else if(replyRow.style.display === "block"){
+    } else if (replyRow.style.display === "block") {
         replyRow.style.display = "none";
         buttonIcon.setAttribute("src", "../assets/down-arrow.svg");
         crdRow.style.display = "block";
@@ -484,7 +484,7 @@ function onClickOfShowPost(post_id){
         url: "https://infinite-reef-90129.herokuapp.com/getPostAndRepliesByPostId",
         data: JSON.stringify(loadPostAndReplies),
         datatype: "json",
-        xhrFields: {withCredentials: true},
+        xhrFields: { withCredentials: true },
         async: true,
         contentType: "application/json",
         success: function processData(r) {
@@ -496,7 +496,7 @@ function onClickOfShowPost(post_id){
 }
 
 //  This function will show all the replies
-function showReplies(allReplies, rowId){
+function showReplies(allReplies, rowId) {
 
     var rowReply = document.getElementById(rowId);
     rowReply.innerHTML = "";
@@ -508,19 +508,19 @@ function showReplies(allReplies, rowId){
 
     //alert(obj.post.post_image);
 
-    if(obj.post.post_image != ""){
+    if (obj.post.post_image != "") {
 
         //  Column for Image
         var imageColumn = document.createElement("div");
         imageColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
         imageColumn.setAttribute("id", "imageColumn");
         rowReply.appendChild(imageColumn);
-    
+
         var postImage = document.createElement("img");
         postImage.classList.add("postImage");
         postImage.setAttribute("id", "postImage");
         postImage.setAttribute("src", obj.post.post_image);
-        imageColumn.appendChild(postImage);     
+        imageColumn.appendChild(postImage);
     }
 
     //  Column for description
@@ -531,13 +531,60 @@ function showReplies(allReplies, rowId){
 
     var postDesc = document.createTextNode(obj.post.post_body);
     descColumn.appendChild(postDesc);
-    
+
     //  Add a new reply to this column
     var addReplyColumn = document.createElement("div");
     addReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
     addReplyColumn.setAttribute("id", "addReplyColumn");
-    replyRow.appendChild(addReplyColumn);  
+    rowReply.appendChild(addReplyColumn);
 
+    // Text area and submit row
+    var textSubmitRow = document.createElement("div");
+    textSubmitRow.classList.add("row");
+    textSubmitRow.setAttribute("id", "textSubmitRow");
+    addReplyColumn.appendChild(textSubmitRow);
+
+    // A new reply text column
+    var replyTextColumn = document.createElement("div");
+    replyTextColumn.classList.add("col-12", "col-sm-10", "col-md-10", "col-lg-10");
+    replyTextColumn.setAttribute("id", "replyTextColumn");
+    textSubmitRow.appendChild(replyTextColumn);
+
+
+    var textAreaandLableHolder = document.createElement("div");
+    textAreaandLableHolder.classList.add("form-group"); 1
+    replyTextColumn.appendChild(textAreaandLableHolder);
+
+    var labelForReply = document.createElement("label");
+    textAreaandLableHolder.appendChild(labelForReply);
+
+    // Text area for a new reply
+    var replyTextArea = document.createElement("textarea");
+    replyTextArea.setAttribute("rows", "4");
+    replyTextArea.classList.add("form-control");
+    replyTextArea.setAttribute("id", "replyTextArea" + obj.post.post_id);
+    textAreaandLableHolder.appendChild(replyTextArea);
+
+    // Submit button column for a new reply
+    var replySubmitColumn = document.createElement("div");
+    replySubmitColumn.classList.add("col-12", "col-sm-2", "col-md-2", "col-lg-2");
+    replySubmitColumn.setAttribute("id", "replySubmitColumn");
+    textSubmitRow.appendChild(replySubmitColumn);
+
+    // Submit button for a new reply
+    var submitReply = document.createElement("button");
+    submitReply.classList.add("btn", "btn-secondary", "btn-block");
+    submitReply.setAttribute("id", "submitReply");
+    submitReply.setAttribute("onclick", "addReply(" + obj.post.post_id + ")");
+    replySubmitColumn.appendChild(submitReply);
+
+    var submitReplyText = document.createTextNode("Reply");
+    submitReply.appendChild(submitReplyText);
+
+    //     <div class="form-group">
+    //     <label for="exampleFormControlTextarea1">Example textarea</label>
+    //     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    //   </div>
     /*
         check if the JSON is empty
         if empty
@@ -617,4 +664,56 @@ function showReplies(allReplies, rowId){
 
 
 
+}
+
+
+
+// {
+//     "post_id":"6",
+//     "parent_id":"25",
+//     "reply_body":"Second reply added for testing purposes"
+// }
+
+// https://infinite-reef-90129.herokuapp.com/addReply
+
+
+//  Add a reply to a post
+function addReply(postId) {
+    var postIdTag = "replyTextArea" + postId;
+
+    var reply = document.getElementById(postIdTag).value;
+
+    alert(reply);
+
+    // if (reply != "") {
+
+    //     //  Preparing JSON request object
+    //     var addAReply = {
+    //         "post_id": postId,
+    //         "parent_id": "None",
+    //         "reply_body": reply
+    //     }
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "https://infinite-reef-90129.herokuapp.com/addReply",
+    //         data: JSON.stringify(addAReply),
+    //         datatype: "json",
+    //         xhrFields: { withCredentials: true },
+    //         async: true,
+    //         //"Access-Control-Allow-Origin": "*",
+    //         contentType: "application/json; charset=utf-8",
+    //         success: function processData(r) {
+    //             var myObj = JSON.parse(r);
+    //             if (myObj["response"] == "pass") {
+    //                // window.location = "forum.html";
+    //                 console.log(r);
+
+    //             } else {
+    //                 alert("Error while adding a reply");
+
+    //             }
+    //         }
+    //     });
+    // }
 }

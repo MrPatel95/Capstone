@@ -1,3 +1,7 @@
+.textAreaForReply{
+    box-sizing:auto;
+}
+
 /* BUTTON FOR EXPANDING POST */
 .postExpandCol{
     text-align: right;
@@ -36,6 +40,32 @@
     padding-left: 50px;
     font-size: 17px;
     line-height: 1.5;
+}
+
+#textSubmitRow{
+    border: #cdcdcd medium solid;
+    border-width: 0.5px;
+    border-radius: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#submitReply{
+    height: 100%;
+}
+
+#replySubmitColumn{
+    padding: 0%;
+    padding-top: 20px;
+    padding-bottom: 14px;
+}
+#addReplyColumn{
+    padding: 0px;
+}
+#replyTextColumn{
+    padding: 0%;
 }
 
 /* Expanded post columns ends*/
@@ -254,6 +284,18 @@ body{
 */
 
 @media only screen and (max-width: 500px) {
+
+    #textSubmitRow{
+        margin: 7px;
+        margin-top: 7px;
+        margin-bottom: 7px;
+    }
+
+    #replySubmitColumn{
+        padding: 0%;
+        padding-top: 0px;
+        padding-bottom: 7px;
+    }
 
     #descColumn{
         padding-top: 20px;
