@@ -323,6 +323,8 @@ def get_post_and_replies_by_post_id(request):
 
 				if reply.parent_id != None:
 					s += ('"parent_user":"' + str(reply.parent_id.user) + '",')
+				else:
+					s += ('"parent_user":"' + str(post.user.username) + '",')
 				
 				s += (
 					'"reply_body":"' + reply.reply_body + '",'
