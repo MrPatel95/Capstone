@@ -109,9 +109,9 @@ All Replies
 }
 
 #textSubmitRow{
-    border: #cdcdcd medium solid;
+    /* border: #cdcdcd medium solid;
     border-width: 0.5px;
-    border-radius: 5px;
+    border-radius: 5px; */
     padding: 10px;
     margin: 50px;
     margin-top: 10px;

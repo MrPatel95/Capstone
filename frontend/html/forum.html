@@ -43,8 +43,8 @@
         </div>
 
       <div class="btn-group">
-          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Jeet Patel
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id = "usernameDropdown">
+              
           </button>
           <div class="dropdown-menu dropdown-menu-left">
               <button class="dropdown-item" type="button">My Account</button>
@@ -76,10 +76,10 @@
                 <span id = "sorted-by-label">Sorted by</span>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary active">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Connect
+                        <input type="radio" name="options" id="option1" autocomplete="off" checked onchange="sortByTime()"> Time
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="option2" autocomplete="off"> Time
+                        <input type="radio" name="options" id="option2" autocomplete="off" onchange="sortByConnect()"> Connect
                     </label>
                 </div>
             </div>
