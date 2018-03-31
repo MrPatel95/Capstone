@@ -60,6 +60,13 @@ API Endpoints will be csrf_exempt
 Authenticity will be ensured by user session
 '''
 
+def _get_reply_count_by_reply_id(reply_id):
+	'''
+	Returns count of replies given reply_id
+	'''
+
+	return ReplyPost.objects.filter(parent_id=reply_id).count()
+
 @csrf_exempt
 def login_user(request):
 	'''
@@ -290,6 +297,25 @@ def increment_connect_by_post_id(request):
 		return HttpResponse('{"response":"unauthenticated"}')
 
 @csrf_exempt
+def increment_connect_by_reply_id(request):
+	'''
+	Increments connect count of reply by 1
+	'''
+
+	if request.user.is_authenticated:
+		body = json.loads(request.body.decode('utf-8'))
+		try:
+			reply_id = body['reply_id']
+			reply = ReplyPost.objects.get(reply_id=reply_id)
+			reply.connect_count += 1
+			reply.save()
+			return HttpResponse('{"response":"pass","connect_count":"%s"}' % str(reply.connect_count))
+		except Exception as e:
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
+
+@csrf_exempt
 def get_post_and_replies_by_post_id(request):
 	'''
 	Return's the post and replies pertaining to the post
@@ -329,6 +355,7 @@ def get_post_and_replies_by_post_id(request):
 				s += (
 					'"reply_body":"' + reply.reply_body + '",'
 					+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
+					+ '"reply_count":"' + str(_get_reply_count_by_reply_id(reply.reply_id)) + '",'
 					+ '"connect_count":"' + str(reply.connect_count) + '"'
 					+ '},'
 				)
