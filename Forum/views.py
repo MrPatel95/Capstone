@@ -259,6 +259,26 @@ def get_n_recent_forum_posts(request):
 		return HttpResponse('{"response":"unauthenticated"}')
 
 @csrf_exempt
+def get_n_recent_forum_posts_by_connect_count(request):
+	'''
+	Returns json of top n forum posts ordered by connect count
+	'''
+
+	if request.user.is_authenticated:
+		body = json.loads(request.body.decode('utf-8'))
+		try:
+			n = body['n']
+
+			posts = ForumPost.objects.filter().values(
+				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count', 'post_body'
+				).order_by('connect_count').annotate(reply_count=Count('replypost__post_id_id'))
+			return HttpResponse(json.dumps(list(posts), default=_date_handler))
+		except Exception as e:
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
+
+@csrf_exempt
 def get_forum_posts_by_username(request):
 	'''
 	Returns all forum posts created by user

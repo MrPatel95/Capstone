@@ -16,4 +16,5 @@ urlpatterns = [
     path('getPostAndRepliesByPostId', views.get_post_and_replies_by_post_id, name='get_post_and_replies_by_post_id'),
     path('incrementConnectByPostId', views.increment_connect_by_post_id, name='increment_connect_by_post_id'),
     path('incrementConnectByReplyId', views.increment_connect_by_reply_id, name='increment_connect_by_reply_id'),
+    path('getNRecentForumPostsByConnectCount', views.get_n_recent_forum_posts_by_connect_count, name='get_n_recent_forum_posts_by_connect_count'),
 ]
