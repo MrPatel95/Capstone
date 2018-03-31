@@ -1,7 +1,73 @@
+/*
+All Replies
+*/
+.replyBorder{
+    border-bottom: solid;
+    border-left: solid;
+    border-top: solid;
+    border-width: 0.05px;
+    border-color: #e5e5e5;
+    padding-top : 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+}
+
+#postByTimeColumn{
+    padding: 0px;
+}
+#mainReplyRow{
+    margin-right: 35px;
+    margin-left: 35px;
+}
+
+.individualMainReply{
+    padding-top: 5px;
+}
+
 .textAreaForReply{
     box-sizing:auto;
 }
 
+#replyBodyColumn{
+    margin-left: 10px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+#replyColumn{
+    text-align: right;
+    /* padding-top:5px; */
+    padding-bottom: 10px;
+}
+#connectColumn{
+    text-align: right;
+    padding-top:5px;
+    padding-bottom: 5px;
+}
+
+.replyButtons{
+    background-color: white;    
+    color: #848484;
+    min-width: initial;
+    border: none;
+    height: 35px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.replyButtons:hover{
+    background-color: #EEEEEE;
+    /* color: white; */
+    color: #5A6268;
+}
+
+#replyIcon1{
+    font-size: 12px;
+}
+
+#connectIcon1{
+    font-size: 12px;    
+}
 /* BUTTON FOR EXPANDING POST */
 .postExpandCol{
     text-align: right;
@@ -45,9 +111,8 @@
 #textSubmitRow{
     border: #cdcdcd medium solid;
     border-width: 0.5px;
-    border-radius: 10px;
-    padding-right: 20px;
-    padding-left: 20px;
+    border-radius: 5px;
+    padding: 10px;
     margin: 50px;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -58,8 +123,8 @@
 
 #replySubmitColumn{
     padding: 0%;
-    padding-top: 20px;
-    padding-bottom: 14px;
+    /* padding-top: 20px;
+    padding-bottom: 14px; */
 }
 #addReplyColumn{
     padding: 0px;

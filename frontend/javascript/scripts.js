@@ -29,6 +29,7 @@ function checkLoginCredentials() {
         success: function processData(r) {
             var myObj = JSON.parse(r);
             if (myObj["response"] == "pass") {
+
                 window.location = "forum.html";
                 console.log(r);
 
@@ -320,10 +321,13 @@ function generatePostCards(posts) {
         connect.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1");
         contentReply.appendChild(connect);
 
+        var connectIncrementLabel = "post";
+
         var buttonForConnect = document.createElement("button");
-        //buttonForConnect.classList.add("mdl-button", "mdl-js-button", "mdl-button--icon", "mdl-button--colored", "buttonForConnect");
         buttonForConnect.classList.add("button", "btn", "btn-primary", "buttonForConnect");
-        buttonForConnect.setAttribute("id", posts[i].post_id);
+        buttonForConnect.setAttribute("id", "postConnectButton" + posts[i].post_id);
+        buttonForConnect.setAttribute("value", "connect");
+        buttonForConnect.setAttribute("onclick", "connectIncrement(" + posts[i].post_id + ", '" + connectIncrementLabel + "')");
         connect.appendChild(buttonForConnect);
 
         var connectIcon = document.createElement("div");
@@ -350,9 +354,12 @@ function generatePostCards(posts) {
         reply.classList.add("col-6", "col-sm-2", "col-md-2", "col-lg-2", "reply_count");
         contentReply.appendChild(reply);
 
+        var replyButtonId = "replyToPostButton" + posts[i].post_id;
+
         var buttonForReply = document.createElement("button");
         buttonForReply.classList.add("button", "btn", "btn-primary", "buttonForReply");
-        buttonForReply.setAttribute("id", posts[i].post_id);
+        buttonForReply.setAttribute("id", replyButtonId);
+        buttonForReply.setAttribute("onclick", "replyToPostFun(" + posts[i].post_id + ")");
         reply.appendChild(buttonForReply);
 
         var replyIcon = document.createElement("div");
@@ -402,7 +409,6 @@ function generatePostCards(posts) {
         showMore.setAttribute("id", "buttonImg" + posts[i].post_id);
         showMore.setAttribute("alt", "show more");
         downButton.appendChild(showMore);
-
     }
 
 }
@@ -550,20 +556,12 @@ function showReplies(allReplies, rowId) {
     replyTextColumn.setAttribute("id", "replyTextColumn");
     textSubmitRow.appendChild(replyTextColumn);
 
-
-    var textAreaandLableHolder = document.createElement("div");
-    textAreaandLableHolder.classList.add("form-group"); 1
-    replyTextColumn.appendChild(textAreaandLableHolder);
-
-    var labelForReply = document.createElement("label");
-    textAreaandLableHolder.appendChild(labelForReply);
-
     // Text area for a new reply
     var replyTextArea = document.createElement("textarea");
-    replyTextArea.setAttribute("rows", "4");
+    replyTextArea.setAttribute("rows", "3");
     replyTextArea.classList.add("form-control");
     replyTextArea.setAttribute("id", "replyTextArea" + obj.post.post_id);
-    textAreaandLableHolder.appendChild(replyTextArea);
+    replyTextColumn.appendChild(replyTextArea);
 
     // Submit button column for a new reply
     var replySubmitColumn = document.createElement("div");
@@ -581,84 +579,248 @@ function showReplies(allReplies, rowId) {
     var submitReplyText = document.createTextNode("Reply");
     submitReply.appendChild(submitReplyText);
 
-    //     <div class="form-group">
-    //     <label for="exampleFormControlTextarea1">Example textarea</label>
-    //     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-    //   </div>
+    // All replies column
+    var allReplyColumn = document.createElement("div");
+    allReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    allReplyColumn.setAttribute("id", "allReplyColumn");
+    rowReply.appendChild(allReplyColumn);
+
+    // All replies row
+    var allReplyRow = document.createElement("div");
+    allReplyRow.classList.add("row");
+    allReplyRow.setAttribute("id", "allReplyRow");
+    allReplyColumn.appendChild(allReplyRow);
+
+    if (obj.replies.length == 0) {
+        var noRepliesColumn = document.createElement("div");
+        noRepliesColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "alert", "alert-info");
+        noRepliesColumn.setAttribute("id", "noRepliesColumn");
+        noRepliesColumn.setAttribute("role", "alert");
+        allReplyRow.appendChild(noRepliesColumn);
+
+        var noReplyText = document.createTextNode("No reply yet");
+        noRepliesColumn.appendChild(noReplyText);
+
+    } else {
+        //console.log(allReplies);
+        for (var i = obj.replies.length-1; i >= 0; i--) {
+        //for (var i = 0; i < obj.replies.length; i++) {
+
+           if (obj.replies[i].parent_id == "None") {
+
+                //  All reply id
+                var allRepliesIdHolder = document.getElementById("allReplyRow");
+
+                // Add a main reply to post
+                var mainReplyColumn = document.createElement("div");
+                mainReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "individualMainReply");
+                mainReplyColumn.setAttribute("id", "mainReplyColumn" + obj.replies[i].reply_id);
+                //allReplyRow.appendChild(mainReplyColumn);
+                allRepliesIdHolder.insertBefore(mainReplyColumn, allRepliesIdHolder.childNodes[0]);
+
+                // var mainReplyText = document.createTextNode(obj.replies[i].reply_body);
+                // mainReplyColumn.appendChild(mainReplyText);
+
+           }else if(obj.replies[i].parent_id != "None"){
+                var parentReplyId = document.getElementById("mainReplyColumn" + obj.replies[i].parent_id);
+
+                // Add a main reply to post
+                var mainReplyColumn = document.createElement("div");
+                mainReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "individualMainReply");
+                mainReplyColumn.setAttribute("style", "padding-left: 30px;");
+                mainReplyColumn.setAttribute("id", "mainReplyColumn" + obj.replies[i].reply_id);
+                parentReplyId.appendChild(mainReplyColumn);
+
+                // var replyToReplyText = document.createTextNode(obj.replies[i].reply_body);
+                // mainReplyColumn.appendChild(replyToReplyText);
+
+           }
+
+                // Main reply card row for main reply
+                var mainReplyRow = document.createElement("div");
+                mainReplyRow.classList.add("row", "replyBorder");
+                mainReplyRow.setAttribute("id", "mainReplyRow");
+                mainReplyColumn.appendChild(mainReplyRow);
+
+                // Posted by and body column for main reply
+                var postByBodyColumn = document.createElement("div");
+
+                postByBodyColumn.classList.add("col-10", "col-sm-10", "col-md-10", "col-lg-10");
+                postByBodyColumn.setAttribute("id", "postByBodyColumn");
+                mainReplyRow.appendChild(postByBodyColumn);
+
+                // Posted by and body row for main reply
+                var postByBodyRow = document.createElement("div");
+                postByBodyRow.classList.add("row");
+                postByBodyRow.setAttribute("id", "postByBodyRow");
+                postByBodyColumn.appendChild(postByBodyRow);
+
+                // Posted by and time column for main reply
+                var postByTimeColumn = document.createElement("div");
+                postByTimeColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+                postByTimeColumn.setAttribute("id", "postByTimeColumn");
+                postByBodyRow.appendChild(postByTimeColumn);
+
+                //  Span for posted by user
+                var spanByUser = document.createElement("span");
+                spanByUser.setAttribute("style", "font-weight: bold; font-size: 15px;");
+                postByTimeColumn.appendChild(spanByUser);
+
+                //  Posted by user
+                var postedByText = document.createTextNode(obj.replies[i].user + " replied to " + obj.replies[i].parent_user);
+                spanByUser.appendChild(postedByText);
+
+                //  creating time string
+                var todaysDate = new Date();
+                var replyDate = createDate(todaysDate, obj.replies[i].reply_datetime);
+
+                //  Span for reply time 
+                var spanForReplyTime = document.createElement("span");
+                spanForReplyTime.setAttribute("style", "font-size: 10px; font-color: grey; margin-left: 10px;");
+                postByTimeColumn.appendChild(spanForReplyTime);
+
+                //  Posted by user
+                var postedByTimeText = document.createTextNode(" " + replyDate);
+                spanForReplyTime.appendChild(postedByTimeText);
+
+                // Post body column for main reply
+                var replyBodyColumn = document.createElement("div");
+                replyBodyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+                replyBodyColumn.setAttribute("id", "replyBodyColumn");
+                postByBodyRow.appendChild(replyBodyColumn);
+
+                //  Reply body/description
+                var replyBodyText = document.createTextNode(obj.replies[i].reply_body);
+                replyBodyColumn.appendChild(replyBodyText);
+
+                // Connect and reply column for main reply
+                var connectReplyColumn = document.createElement("div");
+                connectReplyColumn.classList.add("col-2", "col-sm-2", "col-md-2", "col-lg-2");
+                connectReplyColumn.setAttribute("id", "connectReplyColumn");
+                mainReplyRow.appendChild(connectReplyColumn);
+
+                // Connect and reply row for main reply
+                var connectReplyRow = document.createElement("div");
+                connectReplyRow.classList.add("row");
+                connectReplyRow.setAttribute("id", "connectReplyRow");
+                connectReplyColumn.appendChild(connectReplyRow);
+
+                // Connect column for main reply
+                var connectColumn = document.createElement("div");
+                connectColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+                connectColumn.setAttribute("id", "connectColumn");
+                connectReplyRow.appendChild(connectColumn);
+
+                //  Connect Button for main reply
+                var buttonForMainReplyConnect = document.createElement("button");
+                buttonForMainReplyConnect.classList.add("button", "btn", "btn-primary", "replyButtons");
+                buttonForMainReplyConnect.setAttribute("id", obj.replies[i].reply_id);
+                connectColumn.appendChild(buttonForMainReplyConnect);
+
+                // var mainReplyConnectIcon = document.createElement("div");
+                // mainReplyConnectIcon.classList.add("material-icons", "connect-icon");
+                // mainReplyConnectIcon.setAttribute("id", "connectIcon1");
+                // buttonForMainReplyConnect.appendChild(mainReplyConnectIcon);
+
+                // var icon = document.createTextNode("compare_arrows");
+                // mainReplyConnectIcon.appendChild(icon);
+
+                var mianReplyConnectsText = document.createTextNode(obj.replies[i].connect_count + " Connects");
+                buttonForMainReplyConnect.appendChild(mianReplyConnectsText);
+
+                // Reply column for main reply
+                var replyColumn = document.createElement("div");
+                replyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+                replyColumn.setAttribute("id", "replyColumn");
+                connectReplyRow.appendChild(replyColumn);
+
+                //  Reply button for main reply
+                var buttonForMainReplyToReply = document.createElement("button");
+                buttonForMainReplyToReply.classList.add("button", "btn", "btn-primary", "replyButtons");
+                //buttonForMainReplyToReply.setAttribute("id", replyButtonId);
+                //buttonForMainReplyToReply.setAttribute("onclick", "replyToPostFun(" + posts[i].post_id + ")");
+                replyColumn.appendChild(buttonForMainReplyToReply);
+
+                // var mianReplyToReplyIcon = document.createElement("div");
+                // mianReplyToReplyIcon.classList.add("material-icons", "reply-icon");
+                // mianReplyToReplyIcon.setAttribute("id", "replyIcon1");
+                // buttonForMainReplyToReply.appendChild(mianReplyToReplyIcon);
+
+                // var icon2 = document.createTextNode("reply");
+                // mianReplyToReplyIcon.appendChild(icon2);
+
+                var mainReplyToReplyText = document.createTextNode("Reply");
+                buttonForMainReplyToReply.appendChild(mainReplyToReplyText);
+
+        }
+    }
+
+
+
     /*
-        check if the JSON is empty
-        if empty
-            Add reply form
-        if not empty
-            Add reply form
-            All replies
-            Add reply
-
+         var obj = JSON.parse(allReplies);
+        console.log(obj.post);
+        allReply = {
+          "post": {
+            "post_id": "6",
+            "user": "ali",
+            "post_title": "my first forum post",
+            "post_body": "my first forum post body",
+            "post_image": "",
+            "post_datetime": "2018-03-11 01:55:08.061589+00:00",
+            "connect_count": "0"
+          },
+          "replies":
+            [
+                {
+                  "reply_id": "22",
+                  "user": "hrishi",
+                  "post_id": "6",
+                  "parent_id": "None",
+                  "reply_body": "This is a reply to the main post",
+                  "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
+                  "connect_count": "0"
+                },
+                {
+                  "reply_id": "23",
+                  "user": "jeet",
+                  "post_id": "6",
+                  "parent_id": "None",
+                  "reply_body": "This reply is to the main post",
+                  "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
+                  "connect_count": "0"
+                },
+                {
+                  "reply_id": "24",
+                  "user": "ali",
+                  "post_id": "6",
+                  "parent_id": "22",
+                  "reply_body": "This reply is to Hrishi",
+                  "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
+                  "connect_count": "0"
+                },
+                {
+                  "reply_id": "25",
+                  "user": "Manahil",
+                  "post_id": "6",
+                  "parent_id": "24",
+                  "reply_body": "This reply is to ali's reply",
+                  "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
+                  "connect_count": "0"
+                },
+                {
+                  "reply_id": "26",
+                  "user": "hrishi",
+                  "post_id": "6",
+                  "parent_id": "23",
+                  "reply_body": "This reply is to Jeet's reply",
+                  "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
+                  "connect_count": "0"
+                }
+            ]
+        }
+        console.log(obj.replies);
     */
-
-    //  var obj = JSON.parse(allReplies);
-    // console.log(obj.post);
-    // allReply = {
-    //   "post": {
-    //     "post_id": "6",
-    //     "user": "ali",
-    //     "post_title": "my first forum post",
-    //     "post_body": "my first forum post body",
-    //     "post_image": "",
-    //     "post_datetime": "2018-03-11 01:55:08.061589+00:00",
-    //     "connect_count": "0"
-    //   },
-    //   "replies":
-    //     [
-    //         {
-    //           "reply_id": "22",
-    //           "user": "hrishi",
-    //           "post_id": "6",
-    //           "parent_id": "None",
-    //           "reply_body": "This is a reply to the main post",
-    //           "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
-    //           "connect_count": "0"
-    //         },
-    //         {
-    //           "reply_id": "23",
-    //           "user": "jeet",
-    //           "post_id": "6",
-    //           "parent_id": "None",
-    //           "reply_body": "This reply is to the main post",
-    //           "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
-    //           "connect_count": "0"
-    //         },
-    //         {
-    //           "reply_id": "24",
-    //           "user": "ali",
-    //           "post_id": "6",
-    //           "parent_id": "22",
-    //           "reply_body": "This reply is to Hrishi",
-    //           "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
-    //           "connect_count": "0"
-    //         },
-    //         {
-    //           "reply_id": "25",
-    //           "user": "Manahil",
-    //           "post_id": "6",
-    //           "parent_id": "24",
-    //           "reply_body": "This reply is to ali's reply",
-    //           "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
-    //           "connect_count": "0"
-    //         },
-    //         {
-    //           "reply_id": "26",
-    //           "user": "hrishi",
-    //           "post_id": "6",
-    //           "parent_id": "23",
-    //           "reply_body": "This reply is to Jeet's reply",
-    //           "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
-    //           "connect_count": "0"
-    //         }
-    //     ]
-    // }
-    //console.log(obj.replies);
-
 
 
 
@@ -667,30 +829,17 @@ function showReplies(allReplies, rowId) {
 }
 
 
-
-// {
-//     "post_id":"6",
-//     "parent_id":"25",
-//     "reply_body":"Second reply added for testing purposes"
-// }
-
-// https://infinite-reef-90129.herokuapp.com/addReply
-
-
 //  Add a reply to a post
 function addReply(postId) {
     var postIdTag = "replyTextArea" + postId;
 
     var reply = document.getElementById(postIdTag).value;
 
-    alert(reply);
-
     if (reply != "") {
 
         //  Preparing JSON request object
         var addAReply = {
             "post_id": postId,
-            "parent_id": null,
             "reply_body": reply
         }
 
@@ -706,9 +855,7 @@ function addReply(postId) {
             success: function processData(r) {
                 var myObj = JSON.parse(r);
                 if (myObj["response"] == "pass") {
-                   // window.location = "forum.html";
-                    console.log(r);
-
+                    document.getElementById(postIdTag).value = "";
                 } else {
                     alert("Error while adding a reply");
 
@@ -716,4 +863,43 @@ function addReply(postId) {
             }
         });
     }
+}
+
+
+function replyToPostFun(postId) {
+
+    $('html, body').animate({
+        scrollTop: $("#replyTextArea" + postId).offset().top - ($(window).height() - $("#replyTextArea" + postId).outerHeight(true)) / 3
+    }, 500);
+    //alert(postId);
+
+}
+
+function connectIncrement(id, label){
+    // alert(id);
+    // alert(label);
+
+    var connectButtion = document.getElementById("postConnectButton" + id);
+    alert(connectButtion.value);
+
+    if(label == "post"){
+        var connectIncrement = {
+            "post_id": id
+        };
+    }
+    
+
+    $.ajax({
+        type: "POST",
+        url: "https://infinite-reef-90129.herokuapp.com/incrementConnectByPostId",
+        data: JSON.stringify(loadPostAndReplies),
+        datatype: "json",
+        xhrFields: { withCredentials: true },
+        async: true,
+        contentType: "application/json",
+        success: function processData(r) {
+            showReplies(r, rowId);
+        }
+    });
+
 }
