@@ -271,7 +271,7 @@ def get_n_recent_forum_posts_by_connect_count(request):
 
 			posts = ForumPost.objects.filter().values(
 				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count', 'post_body'
-				).order_by('connect_count').annotate(reply_count=Count('replypost__post_id_id'))
+				).order_by('-connect_count').annotate(reply_count=Count('replypost__post_id_id'))
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
