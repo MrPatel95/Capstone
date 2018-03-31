@@ -322,10 +322,10 @@ def get_post_and_replies_by_post_id(request):
 				)
 
 				if reply.parent_id != None:
-					s += + '"parent_user":"' + reply.parent_id.user.username + '",'
+					s += ('"parent_user":"' + str(reply.parent_id.user) + '",')
 				
 				s += (
-					+ '"reply_body":"' + reply.reply_body + '",'
+					'"reply_body":"' + reply.reply_body + '",'
 					+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
 					+ '"connect_count":"' + str(reply.connect_count) + '"'
 					+ '},'
