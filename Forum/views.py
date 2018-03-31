@@ -359,7 +359,7 @@ def get_post_and_replies_by_post_id(request):
 				+ '"},"replies":['
 			)
 
-			replies = list(ReplyPost.objects.filter(post_id=post_id))
+			replies = list(ReplyPost.objects.filter(post_id=post_id).order_by('-reply_datetime'))
 			for reply in replies:
 				s += (
 					'{"reply_id":"' + str(reply.reply_id) + '",'
