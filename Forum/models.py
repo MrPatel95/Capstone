@@ -30,3 +30,5 @@ class ReplyPost(models.Model):
 
 	def __str__(self):
 		return str(self.reply_id)
+
+#class Connectors(models.Model):
