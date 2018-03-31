@@ -319,6 +319,7 @@ def get_post_and_replies_by_post_id(request):
 					'{"reply_id":"' + str(reply.reply_id) + '",'
 					+ '"user":"' + reply.user.username + '",'
 					+ '"parent_id":"' + str(reply.parent_id) + '",'
+					+ '"parent_user":"' + post.user.username + '",'
 					+ '"reply_body":"' + reply.reply_body + '",'
 					+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
 					+ '"connect_count":"' + str(reply.connect_count) + '"'
