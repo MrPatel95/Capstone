@@ -33,7 +33,9 @@ function checkLoginCredentials() {
             if (myObj["response"] == "pass") {
 
                 localStorage.setItem("username", loginUsername);
-                
+
+                $(".loginButtonModalClass").html("Legit Thing!");
+
                 window.location = "forum.html";
                 console.log(r);
 
@@ -43,6 +45,21 @@ function checkLoginCredentials() {
             }
         }
     });
+
+
+    $(".loginButtonModalClass").click(function(){
+        $(".loginButtonModalClass").html("Confirming your existence...");
+    });
+
+
+    // $(document).ready(function () {
+    //     $('#loginButtonModalId').ajaxStart(function () {
+    //         alert("AJAX Sent for login");
+    //         
+    //     }).ajaxStop(function () {
+    //         $('#posts-loading').hide();
+    //     });
+    // });
 
 
 }
@@ -139,10 +156,12 @@ function createDate(todaysDate, postDate) {
 function onLoadFunctionForForumPosts() {
 
     var usernameId = document.getElementById("usernameDropdown");
+    var clearUserName = document.createTextNode("");
     var usernameText = document.createTextNode(localStorage.username);
+
+    usernameId.appendChild(clearUserName);
     usernameId.appendChild(usernameText);
     // usernameId.innerHTML(localStorage.username);
-    alert(localStorage.username);
 
     //Preparing JSON request object
     var loadNPosts = {
@@ -470,7 +489,7 @@ function addNewPost() {
 
 // This function will add a new post on the top of the displayed posts when a new post is added
 function addNewPostOnTop(newPostTitle, newPostDesc, newImageURL) {
-
+    
 }
 
 //  This function is called when show Post/Replies is clicked
@@ -633,7 +652,7 @@ function showReplies(allReplies, rowId) {
                 mainReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "individualMainReply");
                 mainReplyColumn.setAttribute("id", "mainReplyColumn" + obj.replies[i].reply_id);
                 //allReplyRow.appendChild(mainReplyColumn);
-                allRepliesIdHolder.insertBefore(mainReplyColumn, allRepliesIdHolder.childNodes[0]);
+                allReplyRow.insertBefore(mainReplyColumn, allReplyRow.childNodes[0]);
 
                 // var mainReplyText = document.createTextNode(obj.replies[i].reply_body);
                 // mainReplyColumn.appendChild(mainReplyText);
