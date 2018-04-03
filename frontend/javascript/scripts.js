@@ -6,7 +6,9 @@ function testAlert() {
 
 //  This function logs in a new user
 function checkLoginCredentials() {
-
+    
+    $(".loginButtonModalClass").html("Confirming your existence...");
+    
     //  Login Information
     var loginUsername = document.getElementById('username_login').value;
     var loginPassword = document.getElementById('password_login').value;
@@ -46,10 +48,6 @@ function checkLoginCredentials() {
         }
     });
 
-
-    $(".loginButtonModalClass").click(function () {
-        $(".loginButtonModalClass").html("Confirming your existence...");
-    });
 
 
     // $(document).ready(function () {
