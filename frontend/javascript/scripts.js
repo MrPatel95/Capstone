@@ -47,7 +47,7 @@ function checkLoginCredentials() {
     });
 
 
-    $(".loginButtonModalClass").click(function(){
+    $(".loginButtonModalClass").click(function () {
         $(".loginButtonModalClass").html("Confirming your existence...");
     });
 
@@ -155,15 +155,8 @@ function createDate(todaysDate, postDate) {
 //  This function is called when the Forum page is fully loaded
 function onLoadFunctionForForumPosts() {
 
-    var usernameId = document.getElementById("usernameDropdown");
-    var clearUserName = document.createTextNode("");
-    var usernameText = document.createTextNode(localStorage.username);
+    $("#usernameDropdown").html(localStorage.username);
 
-    usernameId.appendChild(clearUserName);
-    usernameId.appendChild(usernameText);
-    // usernameId.innerHTML(localStorage.username);
-
-    //Preparing JSON request object
     var loadNPosts = {
         "n": 50
     }
@@ -489,7 +482,7 @@ function addNewPost() {
 
 // This function will add a new post on the top of the displayed posts when a new post is added
 function addNewPostOnTop(newPostTitle, newPostDesc, newImageURL) {
-    
+
 }
 
 //  This function is called when show Post/Replies is clicked
@@ -702,9 +695,19 @@ function showReplies(allReplies, rowId) {
             spanByUser.setAttribute("style", "font-weight: bold; font-size: 15px;");
             postByTimeColumn.appendChild(spanByUser);
 
-            //  Posted by user
-            var postedByText = document.createTextNode(obj.replies[i].user + " replied to " + obj.replies[i].parent_user);
-            spanByUser.appendChild(postedByText);
+            if (obj.replies[i].parent_id == "None") {
+
+                //  Posted by user
+                var postedByText = document.createTextNode(obj.replies[i].user + " replied to post");
+                spanByUser.appendChild(postedByText);
+            } else {
+
+                //  Posted by user
+                var postedByText = document.createTextNode(obj.replies[i].user + " replied to " + obj.replies[i].parent_user);
+                spanByUser.appendChild(postedByText);
+            }
+
+
 
             //  creating time string
             var todaysDate = new Date();
