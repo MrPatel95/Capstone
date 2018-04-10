@@ -1,66 +1,106 @@
 // http://promincproductions.com/blog/cross-domain-ajax-request-cookies-cors/
 
-function testAlert() {
-    alert("liked");
+//  This function is called on  blur of any input field
+function onBlurFormValidation(id){
+    
+    var textField = document.getElementById(id);
+
+    if(textField.value != ""){
+        textField.style.borderColor  = '#CED4DA';
+    }else{
+        textField.style.borderColor  = 'red';
+    }
 }
 
 //  This function logs in a new user
 function checkLoginCredentials() {
-    
-    $(".loginButtonModalClass").html("Confirming your existence...");
-    
-    //  Login Information
-    var loginUsername = document.getElementById('username_login').value;
-    var loginPassword = document.getElementById('password_login').value;
 
-    //  Preparing JSON request object
-    var loginRequestData = {
-        "username": loginUsername,
-        "password": loginPassword
+    //  Login Information
+    var loginUsername = document.getElementById('username_login').value.trim();
+    var loginPassword = document.getElementById('password_login').value.trim();
+
+    //  Login Form validation
+    var loginFormValidationResult = loginFormValidation();
+
+    if (loginFormValidationResult == true) {
+        $(".loginButtonModalClass").html("Confirming your existence...");
+
+        //  Preparing JSON request object
+        var loginRequestData = {
+            "username": loginUsername,
+            "password": loginPassword
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "https://infinite-reef-90129.herokuapp.com/loginUser",
+            data: JSON.stringify(loginRequestData),
+            datatype: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            async: true,
+            //"Access-Control-Allow-Origin": "*",
+            contentType: "application/json; charset=utf-8",
+            success: function processData(r) {
+                var myObj = JSON.parse(r);
+                if (myObj["response"] == "pass") {
+
+                    localStorage.setItem("username", loginUsername);
+
+                    $(".loginButtonModalClass").html("Legit User!");
+
+                    window.location = "forum.html";
+                    console.log(r);
+
+                } else {
+
+                    var invalidUserSection = document.getElementById("invalidUserSectionId");
+                    invalidUserSection.style.display = "block";
+
+                    $(".loginButtonModalClass").html("Login");
+
+                }
+            }
+        });
     }
 
-    $.ajax({
-        type: "POST",
-        url: "https://infinite-reef-90129.herokuapp.com/loginUser",
-        data: JSON.stringify(loginRequestData),
-        datatype: "json",
-        xhrFields: {
-            withCredentials: true
-        },
-        async: true,
-        //"Access-Control-Allow-Origin": "*",
-        contentType: "application/json; charset=utf-8",
-        success: function processData(r) {
-            var myObj = JSON.parse(r);
-            if (myObj["response"] == "pass") {
+}
 
-                localStorage.setItem("username", loginUsername);
+//  Login Form Validation 
+function loginFormValidation(){
+    
+    //  Login Information
+    var user = document.getElementById('username_login');
+    var pass = document.getElementById('password_login');
 
-                $(".loginButtonModalClass").html("Legit Thing!");
-
-                window.location = "forum.html";
-                console.log(r);
-
-            } else {
-                alert("User is not authenticated");
-
-            }
-        }
-    });
-
-
-
-    // $(document).ready(function () {
-    //     $('#loginButtonModalId').ajaxStart(function () {
-    //         alert("AJAX Sent for login");
-    //         
-    //     }).ajaxStop(function () {
-    //         $('#posts-loading').hide();
-    //     });
-    // });
-
+    if (user.value == "" && pass.value == ""){
+        user.style.borderColor  = 'red';
+        pass.style.borderColor  = 'red';
+    }else if(user.value == ""){
+        user.style.borderColor  = 'red';
+    }else if(pass.value == ""){
+        pass.style.borderColor  = 'red';
+    }else{
+        return true;
+    }
 
 }
+
+//  This will submit the login form on enter key press event 
+function loginSubmitButtonEvent(e){
+    if (e.keyCode == 13) {
+        checkLoginCredentials();
+    }
+}
+
+
+
+//    
+
+
+
+
 
 //  This function will register new users
 function registerNewUser() {
