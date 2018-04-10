@@ -12,6 +12,8 @@ function onBlurFormValidation(id){
     }
 }
 
+
+
 //  This function logs in a new user
 function checkLoginCredentials() {
 
@@ -96,7 +98,33 @@ function loginSubmitButtonEvent(e){
 
 
 
-//    
+//  Register Form validation function
+function registerFormValidation(){
+    
+    //  Login Information
+    var user = document.getElementById('register_username');
+    var email = document.getElementById('register_email');
+    var pass = document.getElementById('register_password');
+    var repass = document.getElementById('register_re_password');
+
+    if (email.value == "" && user.value == "" && pass.value == "" && repass.value == ""){
+        email.style.borderColor  = 'red';
+        pass.style.borderColor  = 'red';
+        user.style.borderColor  = 'red';
+        repass.style.borderColor  = 'red';
+    }else if(email.value == ""){
+        email.style.borderColor  = 'red';
+    }else if(user.value == ""){
+        user.style.borderColor  = 'red';
+    }else if(pass.value == ""){
+        pass.style.borderColor  = 'red';
+    }else if(repass.value == ""){
+        repass.style.borderColor  = 'red';
+    }else{
+        return true;
+    }
+
+}   
 
 
 
@@ -109,30 +137,37 @@ function registerNewUser() {
     var registerUsername = document.getElementById('register_username').value;
     var registerEmail = document.getElementById('register_email').value;
     var registerPassword = document.getElementById('register_password').value;
+    var registerRepass = document.getElementById('register_re_password').value;
 
-    var registerNewUserRequestData = {
-        "username": registerUsername,
-        "password": registerPassword,
-        "email": registerEmail
-    }
+    var registerFormValidationResult = registerFormValidation();
 
-    if (window.XMLHttpRequest) {
-        // code for modern browsers
-        xmlhttp = new XMLHttpRequest();
-    } else {
-        // code for old IE browsers
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-
-    xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
+    if(registerFormValidationResult == true){
+        var registerNewUserRequestData = {
+            "username": registerUsername,
+            "password": registerPassword,
+            "email": registerEmail
         }
-    };
-    xmlhttp.open("POST", "https://infinite-reef-90129.herokuapp.com/registerUser", true);
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    //xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
-    xmlhttp.send(JSON.stringify(registerNewUserRequestData));
+    
+        if (window.XMLHttpRequest) {
+            // code for modern browsers
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for old IE browsers
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+    
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+            }
+        };
+        xmlhttp.open("POST", "https://infinite-reef-90129.herokuapp.com/registerUser", true);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        //xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
+        xmlhttp.send(JSON.stringify(registerNewUserRequestData));
+    }
+
+    
 
 }
 
