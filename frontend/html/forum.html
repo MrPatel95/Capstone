@@ -39,16 +39,27 @@
             <b>Etsal</b>
         </a>
 
-        
+
+
         <div id="searchOnNavbar">
+
             <form class="form-inline my-2 my-lg-0">
+
+
+                <select class="form-control mr-sm-2 custom-select" id="searchby">
+                    <option selected>Search by</option>
+                    <option value="1">Post</option>
+                    <option value="2">Username</option>
+                </select>
+
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="testSubmit()">Search</button>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="searchby()">Search</button>
             </form>
         </div>
 
         <div class="btn-group">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="usernameDropdown">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                id="usernameDropdown">
             </button>
             <div class="dropdown-menu dropdown-menu-right">
                 <button class="dropdown-item" type="button">My Account</button>
@@ -69,10 +80,38 @@
             <strong>Add a new post</strong>
         </div>
 
-        <div class="input-group" id="searchAndButtonOutsideNav">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchOutsideNavbar">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="testSubmit()" id="searchButtonOutsideNavbar">Search</button>
-        </div>
+
+        <!-- Search section for mobile -->
+
+        <!-- <div class="row" id="searchAndButtonOutsideNav">
+            <div class="col-3" id="searchbycol">
+                <select class="form-control custom-select" id="mobilesearchby">
+                    <option selected>By</option>
+                    <option value="1">Post</option>
+                    <option value="2">Username</option>
+                </select>
+            </div>
+            <div class="col-9 input-group" id="searchbygroup">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchOutsideNavbar">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="testSubmit()" id="searchButtonOutsideNavbar">Search</button>
+            </div>
+        </div> -->
+
+
+        <div class="row" id="mobilesearchrow">
+                <div class="col-3" id="">
+                    <select class="form-control custom-select" id="">
+                        <option selected>By</option>
+                        <option value="1">Post</option>
+                        <option value="2">Username</option>
+                    </select>
+                </div>
+                <div class="col-9 input-group" id="">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="testSubmit()" id="">Search</button>
+                </div>
+            </div>
+
 
 
 

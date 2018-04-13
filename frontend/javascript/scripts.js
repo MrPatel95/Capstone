@@ -1,8 +1,3 @@
-// {"response":"username in use"}
-// {"response":"pass"}
-
-
-
 // http://promincproductions.com/blog/cross-domain-ajax-request-cookies-cors/
 
 //  This function is called on  blur of any input field
@@ -113,8 +108,6 @@ function registerSubmitButtonEvent(e){
     }
 }
 
-
-
 //  Register Form validation function
 function registerFormValidation(){
     
@@ -139,7 +132,6 @@ function registerFormValidation(){
     }
 
 }   
-
 
 //  This function will register new users
 function registerNewUser() {
@@ -210,13 +202,6 @@ function registerNewUser() {
         }   
     }
 }
-
-// responses:
-// 	"pass"
-// 	"email in use"
-// 	"username in use"
-//     "exception", "error":"<traceback>"
-    
 
 //  This function will add is-invalid to the division
 function turnFieldToRedColorBorder(elementName) {
@@ -987,7 +972,6 @@ function showReplies(allReplies, rowId) {
 
 }
 
-
 //  Add a reply to a post
 function addReply(postId) {
     var postIdTag = "replyTextArea" + postId;
@@ -1133,4 +1117,9 @@ function sortByConnect() {
 //  This function is called when sort by time is clicked
 function sortByTime() {
     onLoadFunctionForForumPosts();
+}
+
+// This function searches for post and post by username
+function searchby(){
+    
 }

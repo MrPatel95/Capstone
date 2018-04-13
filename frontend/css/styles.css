@@ -347,19 +347,29 @@ body{
     font-size: 17px;
 }
 
-#searchOutsideNavbar{
+#mobilesearchrow{
     display: none;
 }
 
-#searchButtonOutsideNavbar{
-    display: none;
-}
 
 /*
     Media query starts here
 */
 
 @media only screen and (max-width: 500px) {
+
+    #searchbycol{
+        padding-right: 0px;
+        margin-top: 8px;
+    }
+
+    #searchbygroup{
+        padding-left: 0px;
+    }
+
+    #mobilesearchby{
+        height: 40px;
+    }
 
     #textSubmitRow{
         margin: 7px;
@@ -431,6 +441,8 @@ body{
         display: none;
     }
 
+    
+
     #searchOutsideNavbar{
         display: block;
         height: 40px;
@@ -444,6 +456,10 @@ body{
 
     #searchButtonOutsideNavbar{
         height: 40px;
+        display: block;
+    }
+
+    #mobilesearchrow{
         display: block;
     }
 
