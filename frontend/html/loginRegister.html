@@ -95,13 +95,15 @@
 
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <input type="text" class="form-control  margin-top-for-form-elements" id="username_login" placeholder="Username" name="username" onblur="onBlurFormValidation('username_login')" onkeypress="return loginSubmitButtonEvent(event)">
+                                        <input type="text" class="form-control  margin-top-for-form-elements" id="username_login" placeholder="Username" name="username"
+                                            onblur="onBlurFormValidation('username_login')" onkeypress="return loginSubmitButtonEvent(event)">
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <input type="password" class="form-control margin-top-for-form-elements" id="password_login" placeholder="Password" name="password" onblur="onBlurFormValidation('password_login')" onkeypress="return loginSubmitButtonEvent(event)">
+                                        <input type="password" class="form-control margin-top-for-form-elements" id="password_login" placeholder="Password" name="password"
+                                            onblur="onBlurFormValidation('password_login')" onkeypress="return loginSubmitButtonEvent(event)">
                                     </div>
                                 </div>
 
@@ -112,8 +114,8 @@
                                     </div>
                                 </div>
 
-                                <div class="row margin-top-for-form-elements" id = "invalidUserSectionId" style = "display: none;">
-                                    <div class="col-sm-12" style = "color:#E14938;">
+                                <div class="row margin-top-for-form-elements" id="invalidUserSectionId" style="display: none;">
+                                    <div class="col-sm-12" style="color:#E14938;">
                                         Invalid username or password
                                     </div>
                                 </div>
@@ -124,7 +126,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                    <button type="submit" id = "loginButtonModalId" class="btn btn-primary loginButtonModalClass" onclick="checkLoginCredentials()">Login</button>
+                    <button type="submit" id="loginButtonModalId" class="btn btn-primary loginButtonModalClass" onclick="checkLoginCredentials()">Login</button>
                 </div>
             </div>
         </div>
@@ -150,28 +152,38 @@
                                 <!-- email and username -->
                                 <div class="row margin-top-for-form-elements">
                                     <div class="col-sm-6">
-                                        <input type="email" class="form-control " id="register_email" placeholder="Email" required>
+                                        <input type="email" class="form-control " id="register_email" placeholder="UCID" onblur="onBlurFormValidation('register_email')"
+                                            onkeypress="return registerSubmitButtonEvent(event)" onkeyup="ucidCheck(this)" required>
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control " id="register_username" placeholder="Username" required>
+                                        <input type="text" class="form-control " id="register_username" placeholder="Username" onblur="onBlurFormValidation('register_username')"
+                                            onkeypress="return registerSubmitButtonEvent(event)" required>
                                     </div>
                                 </div>
 
                                 <!-- Password and Re enter password -->
                                 <div class="row margin-top-for-form-elements">
                                     <div class="col-sm-6">
-                                        <input type="password" class="form-control" id="register_password" placeholder="Password" required>
+                                        <input type="password" class="form-control" id="register_password" placeholder="Password" onblur="onBlurFormValidation('register_password')"
+                                            onkeypress="return registerSubmitButtonEvent(event)" required>
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <input type="password" class="form-control" id="register_re_password" placeholder="Re-enter Password" required>
+                                        <input type="password" class="form-control" id="register_re_password" placeholder="Re-enter Password" onblur="onBlurFormValidation('register_re_password')"
+                                            onkeypress="return registerSubmitButtonEvent(event)" required>
                                     </div>
                                 </div>
 
-                                <div class="row margin-top-for-form-elements" id = "invalidRegister" style = "display: none;">
-                                    <div class="col-sm-12" style = "color:#E14938;">
-                                        Invalid username or password
+                                <div class="row margin-top-for-form-elements" id="invalidRegister" style="display: none;">
+                                    <div class="col-sm-12" style="color:#E14938;">
+                                        Passwords don't match
+                                    </div>
+                                </div>
+
+                                <div class="row margin-top-for-form-elements"  style="display: none;" id="registerResponseHolder">
+                                    <div class="col-sm-12" id="registerResponseId">
+                                        
                                     </div>
                                 </div>
 
@@ -179,6 +191,7 @@
                         </div>
                     </div>
                     <div class="modal-footer margin-top-for-form-elements">
+
                         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
                         <button type="button" class="btn btn-primary" onclick="registerNewUser()">Register</button>
                     </div>
@@ -199,12 +212,12 @@
             crossorigin="anonymous"></script>
 
 
-        <script src = "../javascript/scripts.js">
+        <script src="../javascript/scripts.js">
 
 
         </script>
 
-        <script src = "../javascript/scripts.js"></script>
+        <script src="../javascript/scripts.js"></script>
 
 
 </body>

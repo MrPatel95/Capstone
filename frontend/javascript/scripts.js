@@ -1,3 +1,8 @@
+// {"response":"username in use"}
+// {"response":"pass"}
+
+
+
 // http://promincproductions.com/blog/cross-domain-ajax-request-cookies-cors/
 
 //  This function is called on  blur of any input field
@@ -12,7 +17,12 @@ function onBlurFormValidation(id){
     }
 }
 
-
+// This function checks valid UCID
+function ucidCheck(input){
+    
+    var letters = /[^0-9a-z]/gi;
+    input.value = input.value.replace(letters, "");
+}
 
 //  This function logs in a new user
 function checkLoginCredentials() {
@@ -76,12 +86,12 @@ function loginFormValidation(){
     var user = document.getElementById('username_login');
     var pass = document.getElementById('password_login');
 
-    if (user.value == "" && pass.value == ""){
+    if (user.value.trim() == "" && pass.value.trim() == ""){
         user.style.borderColor  = 'red';
         pass.style.borderColor  = 'red';
-    }else if(user.value == ""){
+    }else if(user.value.trim() == ""){
         user.style.borderColor  = 'red';
-    }else if(pass.value == ""){
+    }else if(pass.value.trim() == ""){
         pass.style.borderColor  = 'red';
     }else{
         return true;
@@ -96,6 +106,13 @@ function loginSubmitButtonEvent(e){
     }
 }
 
+//  This will submit the login form on enter key press event 
+function registerSubmitButtonEvent(e){
+    if (e.keyCode == 13) {
+        registerNewUser();
+    }
+}
+
 
 
 //  Register Form validation function
@@ -107,19 +124,16 @@ function registerFormValidation(){
     var pass = document.getElementById('register_password');
     var repass = document.getElementById('register_re_password');
 
-    if (email.value == "" && user.value == "" && pass.value == "" && repass.value == ""){
-        email.style.borderColor  = 'red';
-        pass.style.borderColor  = 'red';
-        user.style.borderColor  = 'red';
-        repass.style.borderColor  = 'red';
-    }else if(email.value == ""){
-        email.style.borderColor  = 'red';
-    }else if(user.value == ""){
-        user.style.borderColor  = 'red';
-    }else if(pass.value == ""){
-        pass.style.borderColor  = 'red';
-    }else if(repass.value == ""){
-        repass.style.borderColor  = 'red';
+    if (email.value.trim() == "" || user.value.trim() == "" || pass.value.trim() == "" || repass.value.trim() == ""){
+        if(email.value.trim() == ""){
+            email.style.borderColor  = 'red';
+        }if(user.value.trim() == ""){
+            user.style.borderColor  = 'red';
+        }if(pass.value.trim() == ""){
+            pass.style.borderColor  = 'red';
+        }if(repass.value.trim() == ""){
+            repass.style.borderColor  = 'red';
+        }
     }else{
         return true;
     }
@@ -127,49 +141,82 @@ function registerFormValidation(){
 }   
 
 
-
-
-
 //  This function will register new users
 function registerNewUser() {
 
     //  Register Information
-    var registerUsername = document.getElementById('register_username').value;
-    var registerEmail = document.getElementById('register_email').value;
-    var registerPassword = document.getElementById('register_password').value;
-    var registerRepass = document.getElementById('register_re_password').value;
+    var registerUsername = document.getElementById('register_username').value.trim();
+    var registerEmail = document.getElementById('register_email').value.trim();
+    var registerPassword = document.getElementById('register_password').value.trim();
+    var registerRepass = document.getElementById('register_re_password').value.trim();
+    var invalidRegister = document.getElementById('invalidRegister');
+
+    var registerEmail = registerEmail + "@njit.edu";
 
     var registerFormValidationResult = registerFormValidation();
 
+
     if(registerFormValidationResult == true){
-        var registerNewUserRequestData = {
-            "username": registerUsername,
-            "password": registerPassword,
-            "email": registerEmail
-        }
-    
-        if (window.XMLHttpRequest) {
-            // code for modern browsers
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for old IE browsers
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-    
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                console.log(this.responseText);
+
+        if(registerPassword == registerRepass){
+
+            document.getElementById("invalidRegister").style.display = "none";
+
+            var registerNewUserRequestData = {
+                "username": registerUsername,
+                "password": registerPassword,
+                "email": registerEmail 
             }
-        };
-        xmlhttp.open("POST", "https://infinite-reef-90129.herokuapp.com/registerUser", true);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        //xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
-        xmlhttp.send(JSON.stringify(registerNewUserRequestData));
+
+            //  Creating HTTP object
+            if (window.XMLHttpRequest) {
+                // code for modern browsers
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // code for old IE browsers
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+             //  Preparing and send request
+             xmlhttp.open("POST", "https://infinite-reef-90129.herokuapp.com/registerUser", true);
+             xmlhttp.setRequestHeader("Content-Type", "application/json");
+             //xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
+             xmlhttp.send(JSON.stringify(registerNewUserRequestData));
+        
+            //  Checking for response
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                    var result = JSON.parse(this.responseText);
+                    if(result.response == "pass"){
+                        document.getElementById("registerResponseHolder").style.display = "block";
+                        document.getElementById("registerResponseHolder").style.color = "#27ae60";
+                        $('#registerResponseId').text("Confirmation email has been sent to " + registerEmail);
+                    }else if(result.response == "email in use"){
+                        document.getElementById("registerResponseHolder").style.display = "block";
+                        document.getElementById("registerResponseHolder").style.color = "#E14938";
+                        $('#registerResponseId').text("Email already in use. Please log in.");
+                    }else if(result.response == "username in use"){
+                        document.getElementById("registerResponseHolder").style.display = "block";
+                        document.getElementById("registerResponseHolder").style.color = "#E14938";
+                        $('#registerResponseId').text("Username in use. Try another username.");
+                    }
+                }
+            };
+
+        }else{
+            var invalidRegister = document.getElementById("invalidRegister");
+            invalidRegister.style.display = "block";
+        }   
     }
-
-    
-
 }
+
+// responses:
+// 	"pass"
+// 	"email in use"
+// 	"username in use"
+//     "exception", "error":"<traceback>"
+    
 
 //  This function will add is-invalid to the division
 function turnFieldToRedColorBorder(elementName) {
