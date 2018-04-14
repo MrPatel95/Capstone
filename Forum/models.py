@@ -31,4 +31,10 @@ class ReplyPost(models.Model):
 	def __str__(self):
 		return str(self.reply_id)
 
-#class Connectors(models.Model):
+class ForumConnector(models.Model):
+	post_id = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class ReplyConnector(models.Model):
+	reply_id = models.ForeignKey(ReplyPost, on_delete=models.CASCADE)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)

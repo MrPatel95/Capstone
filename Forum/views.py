@@ -1,5 +1,5 @@
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
 from django.contrib.auth import authenticate
@@ -13,8 +13,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from Forum.models import ForumPost
 from Forum.models import ReplyPost
+from Forum.models import ForumConnector
+from Forum.models import ReplyConnector
 
-from django.db.models import Count
+from django.db.models import Count, When, Case, CharField
+
+from django.forms.models import model_to_dict
 
 import json
 import logging
@@ -175,7 +179,7 @@ def add_forum_post(request):
 			post_image = body['post_image']
 			post = ForumPost(user=user, post_title=post_title, post_body=post_body, post_image=post_image)
 			post.save()
-			return HttpResponse('{"response":"pass"}')
+			return HttpResponse(json.dumps(model_to_dict(post)))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
@@ -224,7 +228,7 @@ def get_email(request):
 @csrf_exempt
 def get_reply_count_by_post_id(request):
 	'''
-	Returns email of user in current session
+	Returns reply count post
 	'''
 
 	if request.user.is_authenticated:
@@ -248,10 +252,10 @@ def get_n_recent_forum_posts(request):
 		body = json.loads(request.body.decode('utf-8'))
 		try:
 			n = body['n']
-
 			posts = ForumPost.objects.filter().values(
-				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count', 'post_body'
-				).order_by('-post_datetime').annotate(reply_count=Count('replypost__post_id_id'))[:n]
+				'post_id', 'user__username', 'post_title', 'post_image', 
+				'post_datetime', 'connect_count', 'post_body', 'forumconnector__user'
+				).order_by('-post_datetime').annotate(reply_count=Count('replypost__post_id_id')).annotate(connected=Case(When(forumconnector__user=request.user, then=1), output_field=CharField()))[:n]
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
@@ -270,8 +274,9 @@ def get_n_recent_forum_posts_by_connect_count(request):
 			n = body['n']
 
 			posts = ForumPost.objects.filter().values(
-				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count', 'post_body'
-				).order_by('-connect_count').annotate(reply_count=Count('replypost__post_id_id'))[:n]
+				'post_id', 'user__username', 'post_title', 'post_image',
+				'post_datetime', 'connect_count', 'post_body', 'forumconnector__post_id'
+				).order_by('-connect_count').annotate(reply_count=Count('replypost__post_id_id')).annotate(connected=Case(When(forumconnector__user=request.user, then=1), output_field=CharField()))[:n]
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
@@ -289,9 +294,27 @@ def get_forum_posts_by_username(request):
 		try:
 			username = body['username']
 			posts = ForumPost.objects.filter(user=request.user).values(
-				'post_id', 'user__username', 'post_title', 'post_image', 'post_datetime', 'connect_count', 'post_body'
-				).annotate(reply_count=Count('replypost__post_id_id'))
+				'post_id', 'user__username', 'post_title', 'post_image',
+				'post_datetime', 'connect_count', 'post_body', 'forumconnector__post_id'
+				).annotate(reply_count=Count('replypost__post_id_id')).annotate(connected=Case(When(forumconnector__user=request.user, then=1), output_field=CharField()))
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
+		except Exception as e:
+			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
+	else:
+		return HttpResponse('{"response":"unauthenticated"}')
+
+@csrf_exempt
+def search_posts_by_title(request):
+	'''
+	Returns posts that match keywords 
+	'''
+
+	if request.user.is_authenticated:
+		body = json.loads(request.body.decode('utf-8'))
+		try:
+			keywords = body['keywords']
+			posts = ForumPost.objects.filter(post_title__icontains=keywords)
+			return HttpResponse(serializers.serialize('json', posts), content_type='application/json')
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
@@ -309,6 +332,8 @@ def increment_connect_by_post_id(request):
 			post_id = body['post_id']
 			post = ForumPost.objects.get(post_id=post_id)
 			post.connect_count += 1
+			connector = ForumConnector(user=request.user, post_id=post)
+			connector.save()
 			post.save()
 			return HttpResponse('{"response":"pass","connect_count":"%s"}' % str(post.connect_count))
 		except Exception as e:
@@ -328,6 +353,8 @@ def increment_connect_by_reply_id(request):
 			reply_id = body['reply_id']
 			reply = ReplyPost.objects.get(reply_id=reply_id)
 			reply.connect_count += 1
+			connector = ReplyConnector(user=request.user, reply_id=reply)
+			connector.save()
 			reply.save()
 			return HttpResponse('{"response":"pass","connect_count":"%s"}' % str(reply.connect_count))
 		except Exception as e:
@@ -359,24 +386,33 @@ def get_post_and_replies_by_post_id(request):
 				+ '"},"replies":['
 			)
 
-			replies = list(ReplyPost.objects.filter(post_id=post_id).order_by('-reply_datetime'))
+			replies = list(ReplyPost.objects.filter(post_id=post_id).values(
+				'reply_id', 'user__username', 'parent_id', 'reply_body', 'reply_datetime', 
+				'connect_count', 'replyconnector__user',
+				).order_by('-reply_datetime'))
+
 			for reply in replies:
 				s += (
-					'{"reply_id":"' + str(reply.reply_id) + '",'
-					+ '"user":"' + reply.user.username + '",'
-					+ '"parent_id":"' + str(reply.parent_id) + '",'
+					'{"reply__reply_id":"' + str(reply['reply_id']) + '",'
+					+ '"user":"' + str(reply['user__username']) + '",'
+					+ '"parent_id":"' + str(reply['parent_id']) + '",'
 				)
+				print(request.user.id, reply['replyconnector__user'])
+				if request.user.id == reply['replyconnector__user']:
+					s += ('"replyconnector__user":"' + str(reply['replyconnector__user']) + '",')
+				else:
+					s += ('"replyconnector__user":"None",')
 
-				if reply.parent_id != None:
-					s += ('"parent_user":"' + str(reply.parent_id.user) + '",')
+				if reply['parent_id'] != None:
+					s += ('"parent_user":"' + str(ReplyPost.objects.filter(reply_id=reply['reply_id']).values('parent_id')[0]['parent_id']) + '",')
 				else:
 					s += ('"parent_user":"' + str(post.user.username) + '",')
 				
 				s += (
-					'"reply_body":"' + reply.reply_body + '",'
-					+ '"reply_datetime":"' + str(reply.reply_datetime) + '",'
-					+ '"reply_count":"' + str(_get_reply_count_by_reply_id(reply.reply_id)) + '",'
-					+ '"connect_count":"' + str(reply.connect_count) + '"'
+					'"reply_body":"' + reply['reply_body'] + '",'
+					+ '"reply_datetime":"' + str(reply['reply_datetime']) + '",'
+					+ '"reply_count":"' + str(_get_reply_count_by_reply_id(reply['reply_id'])) + '",'
+					+ '"connect_count":"' + str(reply['connect_count']) + '"'
 					+ '},'
 				)
 			if len(replies) > 0:
