@@ -1,20 +1,20 @@
 // http://promincproductions.com/blog/cross-domain-ajax-request-cookies-cors/
 
 //  This function is called on  blur of any input field
-function onBlurFormValidation(id){
-    
+function onBlurFormValidation(id) {
+
     var textField = document.getElementById(id);
 
-    if(textField.value != ""){
-        textField.style.borderColor  = '#CED4DA';
-    }else{
-        textField.style.borderColor  = 'red';
+    if (textField.value != "") {
+        textField.style.borderColor = '#CED4DA';
+    } else {
+        textField.style.borderColor = 'red';
     }
 }
 
 // This function checks valid UCID
-function ucidCheck(input){
-    
+function ucidCheck(input) {
+
     var letters = /[^0-9a-z]/gi;
     input.value = input.value.replace(letters, "");
 }
@@ -75,63 +75,63 @@ function checkLoginCredentials() {
 }
 
 //  Login Form Validation 
-function loginFormValidation(){
-    
+function loginFormValidation() {
+
     //  Login Information
     var user = document.getElementById('username_login');
     var pass = document.getElementById('password_login');
 
-    if (user.value.trim() == "" && pass.value.trim() == ""){
-        user.style.borderColor  = 'red';
-        pass.style.borderColor  = 'red';
-    }else if(user.value.trim() == ""){
-        user.style.borderColor  = 'red';
-    }else if(pass.value.trim() == ""){
-        pass.style.borderColor  = 'red';
-    }else{
+    if (user.value.trim() == "" && pass.value.trim() == "") {
+        user.style.borderColor = 'red';
+        pass.style.borderColor = 'red';
+    } else if (user.value.trim() == "") {
+        user.style.borderColor = 'red';
+    } else if (pass.value.trim() == "") {
+        pass.style.borderColor = 'red';
+    } else {
         return true;
     }
 
 }
 
 //  This will submit the login form on enter key press event 
-function loginSubmitButtonEvent(e){
+function loginSubmitButtonEvent(e) {
     if (e.keyCode == 13) {
         checkLoginCredentials();
     }
 }
 
 //  This will submit the login form on enter key press event 
-function registerSubmitButtonEvent(e){
+function registerSubmitButtonEvent(e) {
     if (e.keyCode == 13) {
         registerNewUser();
     }
 }
 
 //  Register Form validation function
-function registerFormValidation(){
-    
+function registerFormValidation() {
+
     //  Login Information
     var user = document.getElementById('register_username');
     var email = document.getElementById('register_email');
     var pass = document.getElementById('register_password');
     var repass = document.getElementById('register_re_password');
 
-    if (email.value.trim() == "" || user.value.trim() == "" || pass.value.trim() == "" || repass.value.trim() == ""){
-        if(email.value.trim() == ""){
-            email.style.borderColor  = 'red';
-        }if(user.value.trim() == ""){
-            user.style.borderColor  = 'red';
-        }if(pass.value.trim() == ""){
-            pass.style.borderColor  = 'red';
-        }if(repass.value.trim() == ""){
-            repass.style.borderColor  = 'red';
+    if (email.value.trim() == "" || user.value.trim() == "" || pass.value.trim() == "" || repass.value.trim() == "") {
+        if (email.value.trim() == "") {
+            email.style.borderColor = 'red';
+        } if (user.value.trim() == "") {
+            user.style.borderColor = 'red';
+        } if (pass.value.trim() == "") {
+            pass.style.borderColor = 'red';
+        } if (repass.value.trim() == "") {
+            repass.style.borderColor = 'red';
         }
-    }else{
+    } else {
         return true;
     }
 
-}   
+}
 
 //  This function will register new users
 function registerNewUser() {
@@ -148,16 +148,16 @@ function registerNewUser() {
     var registerFormValidationResult = registerFormValidation();
 
 
-    if(registerFormValidationResult == true){
+    if (registerFormValidationResult == true) {
 
-        if(registerPassword == registerRepass){
+        if (registerPassword == registerRepass) {
 
             document.getElementById("invalidRegister").style.display = "none";
 
             var registerNewUserRequestData = {
                 "username": registerUsername,
                 "password": registerPassword,
-                "email": registerEmail 
+                "email": registerEmail
             }
 
             //  Creating HTTP object
@@ -169,26 +169,26 @@ function registerNewUser() {
                 xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
             }
 
-             //  Preparing and send request
-             xmlhttp.open("POST", "https://infinite-reef-90129.herokuapp.com/registerUser", true);
-             xmlhttp.setRequestHeader("Content-Type", "application/json");
-             //xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
-             xmlhttp.send(JSON.stringify(registerNewUserRequestData));
-        
+            //  Preparing and send request
+            xmlhttp.open("POST", "https://infinite-reef-90129.herokuapp.com/registerUser", true);
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            //xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
+            xmlhttp.send(JSON.stringify(registerNewUserRequestData));
+
             //  Checking for response
             xmlhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     console.log(this.responseText);
                     var result = JSON.parse(this.responseText);
-                    if(result.response == "pass"){
+                    if (result.response == "pass") {
                         document.getElementById("registerResponseHolder").style.display = "block";
                         document.getElementById("registerResponseHolder").style.color = "#27ae60";
                         $('#registerResponseId').text("Confirmation email has been sent to " + registerEmail);
-                    }else if(result.response == "email in use"){
+                    } else if (result.response == "email in use") {
                         document.getElementById("registerResponseHolder").style.display = "block";
                         document.getElementById("registerResponseHolder").style.color = "#E14938";
                         $('#registerResponseId').text("Email already in use. Please log in.");
-                    }else if(result.response == "username in use"){
+                    } else if (result.response == "username in use") {
                         document.getElementById("registerResponseHolder").style.display = "block";
                         document.getElementById("registerResponseHolder").style.color = "#E14938";
                         $('#registerResponseId').text("Username in use. Try another username.");
@@ -196,10 +196,10 @@ function registerNewUser() {
                 }
             };
 
-        }else{
+        } else {
             var invalidRegister = document.getElementById("invalidRegister");
             invalidRegister.style.display = "block";
-        }   
+        }
     }
 }
 
@@ -428,7 +428,7 @@ function generatePostCards(posts) {
 
 
 
-        //  add a row for replies
+        //  Expand post
         var replyRow = document.createElement("div");
         replyRow.classList.add("row");
         replyRow.setAttribute("style", "transition: max-height 0.15s ease-out");
@@ -504,6 +504,14 @@ function generatePostCards(posts) {
         buttonForReply.appendChild(replyText);
 
 
+        //  New reply to a post when not expanded
+        var addReplyRow = document.createElement("div");
+        addReplyRow.classList.add("row");
+        addReplyRow.setAttribute("style", "transition: max-height 0.15s ease-out");
+        addReplyRow.style.display = "none";
+        addReplyRow.setAttribute("id", "addReplyRow" + posts[i].post_id);
+        cardColumn.appendChild(addReplyRow);
+
 
         //  Column for Connect
         // //Row for connect and resply
@@ -511,7 +519,6 @@ function generatePostCards(posts) {
         // conRepRow.classList.add("row");
         // conRepRow.setAttribute("style","display: block");
         // cardColumn.appendChild(postExpandRow);
-
 
 
         //Button for expanding the post's ROW
@@ -601,37 +608,39 @@ function onClickOfShowPost(post_id) {
     var buttonIcon = document.getElementById(icon);
     var replyRow = document.getElementById(rowId);
     var crdRow = document.getElementById(conRepDes);
+    var addReplyRow = document.getElementById("addReplyRow" + post_id);
 
     if (replyRow.style.display === "none") {
         buttonIcon.setAttribute("src", "../assets/up-arrow.svg");
+        addReplyRow.style.display = "none";
         replyRow.style.display = "block";
         crdRow.style.display = "none";
+
+        //Preparing JSON request object
+        var loadPostAndReplies = {
+            "post_id": post_id
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "https://infinite-reef-90129.herokuapp.com/getPostAndRepliesByPostId",
+            data: JSON.stringify(loadPostAndReplies),
+            datatype: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            async: true,
+            contentType: "application/json",
+            success: function processData(r) {
+                showReplies(r, rowId);
+
+            }
+        });
     } else if (replyRow.style.display === "block") {
         replyRow.style.display = "none";
         buttonIcon.setAttribute("src", "../assets/down-arrow.svg");
         crdRow.style.display = "block";
     }
-
-    //Preparing JSON request object
-    var loadPostAndReplies = {
-        "post_id": post_id
-    };
-
-    $.ajax({
-        type: "POST",
-        url: "https://infinite-reef-90129.herokuapp.com/getPostAndRepliesByPostId",
-        data: JSON.stringify(loadPostAndReplies),
-        datatype: "json",
-        xhrFields: {
-            withCredentials: true
-        },
-        async: true,
-        contentType: "application/json",
-        success: function processData(r) {
-            showReplies(r, rowId);
-
-        }
-    });
 
 }
 
@@ -738,7 +747,7 @@ function showReplies(allReplies, rowId) {
     } else {
         //console.log(allReplies);
         for (var i = obj.replies.length - 1; i >= 0; i--) {
-            //for (var i = 0; i < obj.replies.length; i++) {
+            // for (var i = 0; i < obj.replies.length; i++) {
 
             if (obj.replies[i].parent_id == "None") {
 
@@ -748,7 +757,7 @@ function showReplies(allReplies, rowId) {
                 // Add a main reply to post
                 var mainReplyColumn = document.createElement("div");
                 mainReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "individualMainReply");
-                mainReplyColumn.setAttribute("id", "mainReplyColumn" + obj.replies[i].reply_id);
+                mainReplyColumn.setAttribute("id", "mainReplyColumn" + obj.replies[i].reply__reply_id);
                 //allReplyRow.appendChild(mainReplyColumn);
                 allReplyRow.insertBefore(mainReplyColumn, allReplyRow.childNodes[0]);
 
@@ -758,11 +767,13 @@ function showReplies(allReplies, rowId) {
             } else if (obj.replies[i].parent_id != "None") {
                 var parentReplyId = document.getElementById("mainReplyColumn" + obj.replies[i].parent_id);
 
+                console.log("Test to append child: " + obj.replies[i].parent_id);
+
                 // Add a main reply to post
                 var mainReplyColumn = document.createElement("div");
                 mainReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "individualMainReply");
                 mainReplyColumn.setAttribute("style", "padding-left: 30px;");
-                mainReplyColumn.setAttribute("id", "mainReplyColumn" + obj.replies[i].reply_id);
+                mainReplyColumn.setAttribute("id", "mainReplyColumn" + obj.replies[i].reply__reply_id);
                 parentReplyId.appendChild(mainReplyColumn);
 
                 // var replyToReplyText = document.createTextNode(obj.replies[i].reply_body);
@@ -901,74 +912,6 @@ function showReplies(allReplies, rowId) {
 
 
 
-    /*
-         var obj = JSON.parse(allReplies);
-        console.log(obj.post);
-        allReply = {
-          "post": {
-            "post_id": "6",
-            "user": "ali",
-            "post_title": "my first forum post",
-            "post_body": "my first forum post body",
-            "post_image": "",
-            "post_datetime": "2018-03-11 01:55:08.061589+00:00",
-            "connect_count": "0"
-          },
-          "replies":
-            [
-                {
-                  "reply_id": "22",
-                  "user": "hrishi",
-                  "post_id": "6",
-                  "parent_id": "None",
-                  "reply_body": "This is a reply to the main post",
-                  "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
-                  "connect_count": "0"
-                },
-                {
-                  "reply_id": "23",
-                  "user": "jeet",
-                  "post_id": "6",
-                  "parent_id": "None",
-                  "reply_body": "This reply is to the main post",
-                  "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
-                  "connect_count": "0"
-                },
-                {
-                  "reply_id": "24",
-                  "user": "ali",
-                  "post_id": "6",
-                  "parent_id": "22",
-                  "reply_body": "This reply is to Hrishi",
-                  "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
-                  "connect_count": "0"
-                },
-                {
-                  "reply_id": "25",
-                  "user": "Manahil",
-                  "post_id": "6",
-                  "parent_id": "24",
-                  "reply_body": "This reply is to ali's reply",
-                  "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
-                  "connect_count": "0"
-                },
-                {
-                  "reply_id": "26",
-                  "user": "hrishi",
-                  "post_id": "6",
-                  "parent_id": "23",
-                  "reply_body": "This reply is to Jeet's reply",
-                  "reply_datetime": "2018-03-11 01:57:16.986748+00:00",
-                  "connect_count": "0"
-                }
-            ]
-        }
-        console.log(obj.replies);
-    */
-
-
-
-
 
 }
 
@@ -1043,10 +986,23 @@ function addReply(postId) {
 
 
 function replyToPostFun(postId) {
+    var replyRowID = document.getElementById("replyRow" + postId);
+    var addReplyID = document.getElementById("addReplyRow" + postId);
 
-    $('html, body').animate({
-        scrollTop: $("#replyTextArea" + postId).offset().top - ($(window).height() - $("#replyTextArea" + postId).outerHeight(true)) / 3
-    }, 500);
+    if (addReplyID.style.display == "block") {
+        addReplyID.style.display = "none";
+    }
+    else if (replyRowID.style.display == "none" && addReplyID.style.display == "none") {
+
+        //  empty this div
+        addReplyID.innerHTML = "";
+        addNewReplyToPost(postId);
+    } else {
+        $('html, body').animate({
+            scrollTop: $("#replyTextArea" + postId).offset().top - ($(window).height() - $("#replyTextArea" + postId).outerHeight(true)) / 3
+        }, 500);
+    }
+
     //alert(postId);
 
 }
@@ -1120,6 +1076,54 @@ function sortByTime() {
 }
 
 // This function searches for post and post by username
-function searchby(){
-    
+function searchby() {
+
+}
+
+// This function renders the new row for reply when post not expanded
+function addNewReplyToPost(postId) {
+    var addReplyRow = document.getElementById("addReplyRow" + postId);
+
+    addReplyRow.style.display = "block";
+
+    //  Add a new reply to this column
+    var addReplyColumn = document.createElement("div");
+    addReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    addReplyColumn.setAttribute("id", "addReplyColumn");
+    addReplyRow.appendChild(addReplyColumn);
+
+    // Text area and submit row
+    var textSubmitRow = document.createElement("div");
+    textSubmitRow.classList.add("row");
+    textSubmitRow.setAttribute("id", "textSubmitRow");
+    addReplyColumn.appendChild(textSubmitRow);
+
+    // A new reply text column
+    var replyTextColumn = document.createElement("div");
+    replyTextColumn.classList.add("col-12", "col-sm-10", "col-md-10", "col-lg-10");
+    replyTextColumn.setAttribute("id", "replyTextColumn");
+    textSubmitRow.appendChild(replyTextColumn);
+
+    // Text area for a new reply
+    var replyTextArea = document.createElement("textarea");
+    replyTextArea.setAttribute("rows", "3");
+    replyTextArea.classList.add("form-control");
+    replyTextArea.setAttribute("id", "replyTextArea" + postId);
+    replyTextColumn.appendChild(replyTextArea);
+
+    // Submit button column for a new reply
+    var replySubmitColumn = document.createElement("div");
+    replySubmitColumn.classList.add("col-12", "col-sm-2", "col-md-2", "col-lg-2");
+    replySubmitColumn.setAttribute("id", "replySubmitColumn");
+    textSubmitRow.appendChild(replySubmitColumn);
+
+    // Submit button for a new reply
+    var submitReply = document.createElement("button");
+    submitReply.classList.add("btn", "btn-secondary", "btn-block");
+    submitReply.setAttribute("id", "submitReply");
+    submitReply.setAttribute("onclick", "addReply(" + postId + ")");
+    replySubmitColumn.appendChild(submitReply);
+
+    var submitReplyText = document.createTextNode("Reply");
+    submitReply.appendChild(submitReplyText);
 }
