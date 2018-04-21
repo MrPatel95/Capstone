@@ -637,6 +637,7 @@ function onClickOfShowPost(post_id) {
             }
         });
     } else if (replyRow.style.display === "block") {
+        addReplyRow.innerHTML = "";
         replyRow.style.display = "none";
         buttonIcon.setAttribute("src", "../assets/down-arrow.svg");
         crdRow.style.display = "block";
@@ -736,7 +737,7 @@ function showReplies(allReplies, rowId) {
 
     if (obj.replies.length == 0) {
         var noRepliesColumn = document.createElement("div");
-        noRepliesColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "alert", "alert-info");
+        noRepliesColumn.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1", "col-10", "col-sm-10", "col-md-10", "col-lg-10", "alert", "alert-info");
         noRepliesColumn.setAttribute("id", "noRepliesColumn");
         noRepliesColumn.setAttribute("role", "alert");
         allReplyRow.appendChild(noRepliesColumn);
@@ -917,12 +918,14 @@ function showReplies(allReplies, rowId) {
 
 //  Add a reply to a post
 function addReply(postId) {
+
     var postIdTag = "replyTextArea" + postId;
     var rowId = "replyRow" + postId;
-
-    //var replyRow = document.getElementById(rowId);
+    var addReplyID = "addReplyRow" + postId;
+    alert(postId);
+    var addReplyID = document.getElementById(addReplyID);
     var reply = document.getElementById(postIdTag).value;
-
+    alert(reply);
     if (reply != "") {
 
         //  Preparing JSON request object
@@ -946,35 +949,18 @@ function addReply(postId) {
                 var myObj = JSON.parse(r);
                 if (myObj["response"] == "pass") {
                     document.getElementById(postIdTag).value = "";
+                    addReplyID.innerHTML = "";
                     alert("Reply has been added");
 
+                    var replyHasBeenAddedColumn = document.createElement("div");
+                    replyHasBeenAddedColumn.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1", "col-10", "col-sm-10", "col-md-10", "col-lg-10", "alert", "alert-success");
+                    replyHasBeenAddedColumn.setAttribute("id", "replyHasBeenAddedColumn");
+                    replyHasBeenAddedColumn.setAttribute("role", "alert");
+                    addReplyID.appendChild(replyHasBeenAddedColumn);
+            
+                    var replyAddedText = document.createTextNode("Reply has been added. Expand the post to see yours and other replies.");
+                    replyHasBeenAddedColumn.appendChild(replyAddedText);
 
-                    // {
-                    //     "post": {
-                    //         "post_id": "6",
-                    //         "user": "ali",
-                    //         "post_title": "my first forum post",
-                    //         "post_body": "my first forum post body",
-                    //         "post_image": "",
-                    //         "post_datetime": "2018-03-11 01:55:08.061589+00:00",
-                    //         "connect_count": "0"
-                    //     },
-                    //     "replies": [
-                    //         {
-                    //             "reply_id": "61",
-                    //             "user": "ali",
-                    //             "parent_id": "60",
-                    //             "parent_user": "ali",
-                    //             "reply_body": " reply to post 6. It is a long established fact that a reader will be distracted by the readable ",
-                    //             "reply_datetime": "2018-03-31 20:01:11.823876+00:00",
-                    //             "reply_count": "0",
-                    //             "connect_count": "0"
-                    //         }
-                    //     ]
-                    // }
-
-
-                    //showReplies(newReply, rowId);
                 } else {
                     alert("Error while adding a reply");
 
@@ -1115,6 +1101,7 @@ function addNewReplyToPost(postId) {
     var replySubmitColumn = document.createElement("div");
     replySubmitColumn.classList.add("col-12", "col-sm-2", "col-md-2", "col-lg-2");
     replySubmitColumn.setAttribute("id", "replySubmitColumn");
+
     textSubmitRow.appendChild(replySubmitColumn);
 
     // Submit button for a new reply
