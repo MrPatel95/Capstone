@@ -1068,7 +1068,7 @@ function addReply(postId) {
     }
 }
 
-
+// This function addes a reply to post
 function replyToPostFun(postId) {
     var replyRowID = document.getElementById("replyRow" + postId);
     var addReplyID = document.getElementById("addReplyRow" + postId);
@@ -1090,6 +1090,7 @@ function replyToPostFun(postId) {
 
 }
 
+// This function increments the connect for post and reply
 function connectIncrement(id, label) {
 
     var connectButtion = document.getElementById("postConnectButton" + id);
