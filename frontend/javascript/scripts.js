@@ -463,6 +463,11 @@ function generatePostCards(posts) {
         buttonForConnect.setAttribute("onclick", "connectIncrement(" + posts[i].post_id + ", '" + connectIncrementLabel + "')");
         connect.appendChild(buttonForConnect);
 
+
+        if (posts[i].connected == 1){
+            buttonForConnect.setAttribute("style", "background-color:#e0e0e0");
+        }
+
         var connectIcon = document.createElement("div");
         connectIcon.classList.add("material-icons", "connect-icon");
         connectIcon.setAttribute("id", "connectIcon");
@@ -998,10 +1003,7 @@ function addReplyToReply(postId, replyId){
                 var myObj = JSON.parse(r);
                 if (myObj["response"] == "pass") {
 
-                   
-
                     var replyToReplySection = document.getElementById("replyToReplyColumn" + replyId);
-                    alert("Reply to reply added");
                     replyToReplySection.style.display = "none";
 
                 } else {
@@ -1020,10 +1022,8 @@ function addReply(postId) {
     var postIdTag = "replyTextArea" + postId;
     var rowId = "replyRow" + postId;
     var addReplyID = "addReplyRow" + postId;
-    alert(postId);
     var addReplyID = document.getElementById(addReplyID);
     var reply = document.getElementById(postIdTag).value;
-    alert(reply);
     if (reply != "") {
 
         //  Preparing JSON request object
@@ -1048,7 +1048,7 @@ function addReply(postId) {
                 if (myObj["response"] == "pass") {
                     document.getElementById(postIdTag).value = "";
                     addReplyID.innerHTML = "";
-                    alert("Reply has been added");
+                   
 
                     var replyHasBeenAddedColumn = document.createElement("div");
                     replyHasBeenAddedColumn.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1", "col-10", "col-sm-10", "col-md-10", "col-lg-10", "alert", "alert-success");

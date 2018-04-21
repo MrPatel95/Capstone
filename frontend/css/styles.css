@@ -155,7 +155,7 @@ All Replies
 /* Connect and Reply Button css */
 
 .buttonForConnect{
-    background-color: white;
+    background-color: #f9f9f9;
     color: #5A6268;
     min-width: initial;
     border: none;
@@ -167,7 +167,7 @@ All Replies
 }
 
 .buttonForReply{
-    background-color: white;
+    background-color: #f9f9f9;
     color: #5A6268;
     min-width: initial;
     border: none;
