@@ -120,11 +120,14 @@ function registerFormValidation() {
     if (email.value.trim() == "" || user.value.trim() == "" || pass.value.trim() == "" || repass.value.trim() == "") {
         if (email.value.trim() == "") {
             email.style.borderColor = 'red';
-        } if (user.value.trim() == "") {
+        }
+        if (user.value.trim() == "") {
             user.style.borderColor = 'red';
-        } if (pass.value.trim() == "") {
+        }
+        if (pass.value.trim() == "") {
             pass.style.borderColor = 'red';
-        } if (repass.value.trim() == "") {
+        }
+        if (repass.value.trim() == "") {
             repass.style.borderColor = 'red';
         }
     } else {
@@ -785,7 +788,7 @@ function showReplies(allReplies, rowId) {
             // Main reply card row for main reply
             var mainReplyRow = document.createElement("div");
             mainReplyRow.classList.add("row", "replyBorder");
-            mainReplyRow.setAttribute("id", "mainReplyRow");
+            mainReplyRow.setAttribute("id", "mainReplyRow" + obj.replies[i].reply__reply_id);
             mainReplyColumn.appendChild(mainReplyRow);
 
             // Posted by and body column for main reply
@@ -894,26 +897,121 @@ function showReplies(allReplies, rowId) {
             var buttonForMainReplyToReply = document.createElement("button");
             buttonForMainReplyToReply.classList.add("button", "btn", "btn-primary", "replyButtons");
             //buttonForMainReplyToReply.setAttribute("id", replyButtonId);
-            //buttonForMainReplyToReply.setAttribute("onclick", "replyToPostFun(" + posts[i].post_id + ")");
+            buttonForMainReplyToReply.setAttribute("onclick", "replyToReplyFun(" + obj.replies[i].reply__reply_id + ")");
             replyColumn.appendChild(buttonForMainReplyToReply);
-
-            // var mianReplyToReplyIcon = document.createElement("div");
-            // mianReplyToReplyIcon.classList.add("material-icons", "reply-icon");
-            // mianReplyToReplyIcon.setAttribute("id", "replyIcon1");
-            // buttonForMainReplyToReply.appendChild(mianReplyToReplyIcon);
-
-            // var icon2 = document.createTextNode("reply");
-            // mianReplyToReplyIcon.appendChild(icon2);
 
             var mainReplyToReplyText = document.createTextNode("Reply");
             buttonForMainReplyToReply.appendChild(mainReplyToReplyText);
 
+
+
+            //  Reply to reply column
+            //  Add a new reply to this column
+            var addReplyColumn = document.createElement("div");
+            addReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+            addReplyColumn.setAttribute("id", "replyToReplyColumn" + obj.replies[i].reply__reply_id);
+            addReplyColumn.setAttribute("style", "display:none");
+            mainReplyRow.appendChild(addReplyColumn);
+
+            // Text area and submit row
+            var textSubmitRow = document.createElement("div");
+            textSubmitRow.classList.add("row");
+            textSubmitRow.setAttribute("id", "textSubmitRow");
+            addReplyColumn.appendChild(textSubmitRow);
+
+            // A new reply text column
+            var replyTextColumn = document.createElement("div");
+            replyTextColumn.classList.add("col-12", "col-sm-10", "col-md-10", "col-lg-10");
+            replyTextColumn.setAttribute("id", "replyTextColumn");
+            textSubmitRow.appendChild(replyTextColumn);
+
+            // Text area for a new reply
+            var replyTextArea = document.createElement("textarea");
+            replyTextArea.setAttribute("rows", "3");
+            replyTextArea.classList.add("form-control");
+            replyTextArea.setAttribute("id", "replyToReplyTextArea" + obj.replies[i].reply__reply_id);
+            replyTextColumn.appendChild(replyTextArea);
+
+            // Submit button column for a new reply
+            var replySubmitColumn = document.createElement("div");
+            replySubmitColumn.classList.add("col-12", "col-sm-2", "col-md-2", "col-lg-2");
+            replySubmitColumn.setAttribute("id", "replySubmitColumn");
+
+            textSubmitRow.appendChild(replySubmitColumn);
+
+            var fromWhere = "replyToReply";
+
+            // Submit button for a new reply
+            var submitReply = document.createElement("button");
+            submitReply.classList.add("btn", "btn-secondary", "btn-block");
+            submitReply.setAttribute("id", "submitReply");
+            submitReply.setAttribute("onclick", "addReplyToReply(" + obj.post.post_id + "," + obj.replies[i].reply__reply_id +")");
+            replySubmitColumn.appendChild(submitReply);
+
+            var submitReplyText = document.createTextNode("Reply");
+            submitReply.appendChild(submitReplyText);
+
+
         }
     }
 
+}
 
+//   Add a reply to reply function 
+function replyToReplyFun(replyId){
+    
+    var replyToReplySection = document.getElementById("replyToReplyColumn" + replyId);
 
+    if(replyToReplySection.style.display == "block"){
+        replyToReplySection.style.display = "none";
+    }else{
+        replyToReplySection.style.display = "block";
+    }
+}
 
+// Add a reply to a reply
+function addReplyToReply(postId, replyId){
+
+    var reply = document.getElementById("replyToReplyTextArea" + replyId).value;
+
+    if (reply != "") {
+
+        //  Preparing JSON request object
+        var addAReply = {
+            "post_id": postId,
+            "parent_id": replyId,
+            "reply_body": reply
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "https://infinite-reef-90129.herokuapp.com/addReply",
+            data: JSON.stringify(addAReply),
+            datatype: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            async: true,
+            //"Access-Control-Allow-Origin": "*",
+            contentType: "application/json; charset=utf-8",
+            success: function processData(r) {
+                var myObj = JSON.parse(r);
+                if (myObj["response"] == "pass") {
+
+                   
+
+                    var replyToReplySection = document.getElementById("replyToReplyColumn" + replyId);
+                    alert("Reply to reply added");
+                    replyToReplySection.style.display = "none";
+
+                } else {
+                    alert("Error while adding a reply");
+
+                }
+            }
+        });
+    }
+    
 }
 
 //  Add a reply to a post
@@ -957,7 +1055,7 @@ function addReply(postId) {
                     replyHasBeenAddedColumn.setAttribute("id", "replyHasBeenAddedColumn");
                     replyHasBeenAddedColumn.setAttribute("role", "alert");
                     addReplyID.appendChild(replyHasBeenAddedColumn);
-            
+
                     var replyAddedText = document.createTextNode("Reply has been added. Expand the post to see yours and other replies.");
                     replyHasBeenAddedColumn.appendChild(replyAddedText);
 
@@ -977,8 +1075,7 @@ function replyToPostFun(postId) {
 
     if (addReplyID.style.display == "block") {
         addReplyID.style.display = "none";
-    }
-    else if (replyRowID.style.display == "none" && addReplyID.style.display == "none") {
+    } else if (replyRowID.style.display == "none" && addReplyID.style.display == "none") {
 
         //  empty this div
         addReplyID.innerHTML = "";
@@ -1063,7 +1160,7 @@ function sortByTime() {
 
 // This function searches for post and post by username
 function searchby() {
-
+    //  do something
 }
 
 // This function renders the new row for reply when post not expanded
