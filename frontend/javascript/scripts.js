@@ -1091,31 +1091,31 @@ function replyToPostFun(postId) {
 }
 
 function connectIncrement(id, label) {
-    // alert(id);
-    // alert(label);
 
-    // var connectButtion = document.getElementById("postConnectButton" + id);
-    // alert(connectButtion.value);
+    var connectButtion = document.getElementById("postConnectButton" + id);
 
-    // if(label == "post"){
-    //     var connectIncrement = {
-    //         "post_id": id
-    //     };
-    // }
+    if(label == "post"){
+        var connectIncrement = {
+            "post_id": id
+        };
+    }
 
 
-    // $.ajax({
-    //     type: "POST",
-    //     url: "https://infinite-reef-90129.herokuapp.com/incrementConnectByPostId",
-    //     data: JSON.stringify(loadPostAndReplies),
-    //     datatype: "json",
-    //     xhrFields: { withCredentials: true },
-    //     async: true,
-    //     contentType: "application/json",
-    //     success: function processData(r) {
-    //         showReplies(r, rowId);
-    //     }
-    // });
+    $.ajax({
+        type: "POST",
+        url: "https://infinite-reef-90129.herokuapp.com/incrementConnectByPostId",
+        data: JSON.stringify(connectIncrement),
+        datatype: "json",
+        xhrFields: { withCredentials: true },
+        async: true,
+        contentType: "application/json",
+        success: function processData(r) {
+            var myObj = JSON.parse(r);
+            if (myObj["response"] == "pass") {
+                alert("connect has been added");
+            }
+        }
+    });
 
 }
 
