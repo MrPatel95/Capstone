@@ -397,14 +397,13 @@ def get_post_and_replies_by_post_id(request):
 					+ '"user":"' + str(reply['user__username']) + '",'
 					+ '"parent_id":"' + str(reply['parent_id']) + '",'
 				)
-				print(request.user.id, reply['replyconnector__user'])
 				if request.user.id == reply['replyconnector__user']:
 					s += ('"replyconnector__user":"' + str(reply['replyconnector__user']) + '",')
 				else:
 					s += ('"replyconnector__user":"None",')
 
 				if reply['parent_id'] != None:
-					s += ('"parent_user":"' + str(ReplyPost.objects.filter(reply_id=reply['reply_id']).values('parent_id')[0]['parent_id']) + '",')
+					s += ('"parent_user":"' + str(User.objects.filter(id=ReplyPost.objects.filter(reply_id=reply['reply_id']).values('user')[0]['user'])[0]) + '",')
 				else:
 					s += ('"parent_user":"' + str(post.user.username) + '",')
 				
