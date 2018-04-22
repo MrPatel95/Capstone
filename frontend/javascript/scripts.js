@@ -30,7 +30,7 @@ function checkLoginCredentials() {
     var loginFormValidationResult = loginFormValidation();
 
     if (loginFormValidationResult == true) {
-        $(".loginButtonModalClass").html("Confirming your existence...");
+        $(".loginButtonModalClass").html("Confirming your existence..."); 
 
         //  Preparing JSON request object
         var loginRequestData = {
@@ -888,14 +888,7 @@ function showReplies(allReplies, rowId) {
             buttonForMainReplyConnect.setAttribute("onclick", "connectIncrement(" + obj.replies[i].reply__reply_id + ",'" + label + "')");
             connectColumn.appendChild(buttonForMainReplyConnect);
 
-            // var mainReplyConnectIcon = document.createElement("div");
-            // mainReplyConnectIcon.classList.add("material-icons", "connect-icon");
-            // mainReplyConnectIcon.setAttribute("id", "connectIcon1");
-            // buttonForMainReplyConnect.appendChild(mainReplyConnectIcon);
-
-            // var icon = document.createTextNode("compare_arrows");
-            // mainReplyConnectIcon.appendChild(icon);
-
+           
             var mianReplyConnectsText = document.createTextNode(obj.replies[i].connect_count + " Connects");
             buttonForMainReplyConnect.appendChild(mianReplyConnectsText);
 
@@ -911,6 +904,8 @@ function showReplies(allReplies, rowId) {
             //buttonForMainReplyToReply.setAttribute("id", replyButtonId);
             buttonForMainReplyToReply.setAttribute("onclick", "replyToReplyFun(" + obj.replies[i].reply__reply_id + ")");
             replyColumn.appendChild(buttonForMainReplyToReply);
+
+
 
             var mainReplyToReplyText = document.createTextNode("Reply");
             buttonForMainReplyToReply.appendChild(mainReplyToReplyText);
@@ -1125,13 +1120,21 @@ function connectIncrement(id, label) {
         success: function processData(r) {
             var myObj = JSON.parse(r);
             if (myObj["response"] == "pass") {
-                var postConnectButtonSpan = document.getElementById("postConnectButtonSpan" + id);
-                var postConnectButton = document.getElementById("postConnectButton" + id);
 
-                postConnectButtonSpan.innerHTML = "";
-                postConnectButtonSpan.innerHTML = myObj["connect_count"] + " Connects";
-
-                postConnectButton.style.backgroundColor = "#e0e0e0";          
+                if(label == "post"){
+                    var postConnectButtonSpan = document.getElementById("postConnectButtonSpan" + id);
+                    var postConnectButton = document.getElementById("postConnectButton" + id);
+    
+                    postConnectButtonSpan.innerHTML = "";
+                    postConnectButtonSpan.innerHTML = myObj["connect_count"] + " Connects";
+    
+                    postConnectButton.style.backgroundColor = "#e0e0e0";
+                }else{
+                     var connectToReply = document.getElementById("connectToReply" + id);
+                     connectToReply.style.backgroundColor = "#e0e0e0";
+                    $("#connectToReply" + id).html(myObj["connect_count"] + " Connects"); 
+                }
+                         
             }
         }
     });
