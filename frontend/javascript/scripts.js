@@ -875,10 +875,13 @@ function showReplies(allReplies, rowId) {
             connectColumn.setAttribute("id", "connectColumn");
             connectReplyRow.appendChild(connectColumn);
 
+            var label = "reply";
+
             //  Connect Button for main reply
             var buttonForMainReplyConnect = document.createElement("button");
             buttonForMainReplyConnect.classList.add("button", "btn", "btn-primary", "replyButtons");
-            buttonForMainReplyConnect.setAttribute("id", obj.replies[i].reply_id);
+            buttonForMainReplyConnect.setAttribute("id", "connectToReply" + obj.replies[i].reply__reply_id);
+            buttonForMainReplyConnect.setAttribute("onclick", "connectIncrement(" + obj.replies[i].reply__reply_id + ",'" + label + "')");
             connectColumn.appendChild(buttonForMainReplyConnect);
 
             // var mainReplyConnectIcon = document.createElement("div");
@@ -1092,19 +1095,24 @@ function replyToPostFun(postId) {
 
 // This function increments the connect for post and reply
 function connectIncrement(id, label) {
-
-    var connectButtion = document.getElementById("postConnectButton" + id);
+    
 
     if(label == "post"){
         var connectIncrement = {
             "post_id": id
         };
+        var urlType = "https://infinite-reef-90129.herokuapp.com/incrementConnectByPostId";
+    }else{
+        var connectIncrement = {
+            "reply_id": id
+        };
+        var urlType = "https://infinite-reef-90129.herokuapp.com/incrementConnectByReplyId";
     }
 
 
     $.ajax({
         type: "POST",
-        url: "https://infinite-reef-90129.herokuapp.com/incrementConnectByPostId",
+        url: urlType,
         data: JSON.stringify(connectIncrement),
         datatype: "json",
         xhrFields: { withCredentials: true },
