@@ -484,8 +484,12 @@ function generatePostCards(posts) {
         var connectToolTipText = document.createTextNode("Connect");
         connectToolTip.appendChild(connectToolTipText);
 
+        var postConnectButtonSpan = document.createElement("span");
+        postConnectButtonSpan.setAttribute("id", "postConnectButtonSpan" + posts[i].post_id);
+        buttonForConnect.appendChild(postConnectButtonSpan);
+        
         var connectsText = document.createTextNode(posts[i].connect_count + " Connects");
-        buttonForConnect.appendChild(connectsText);
+        postConnectButtonSpan.appendChild(connectsText);
 
         //  Column for Reply
         var reply = document.createElement("div");
@@ -1121,7 +1125,13 @@ function connectIncrement(id, label) {
         success: function processData(r) {
             var myObj = JSON.parse(r);
             if (myObj["response"] == "pass") {
-                alert("connect has been added");
+                var postConnectButtonSpan = document.getElementById("postConnectButtonSpan" + id);
+                var postConnectButton = document.getElementById("postConnectButton" + id);
+
+                postConnectButtonSpan.innerHTML = "";
+                postConnectButtonSpan.innerHTML = myObj["connect_count"] + " Connects";
+
+                postConnectButton.style.backgroundColor = "#e0e0e0";          
             }
         }
     });
