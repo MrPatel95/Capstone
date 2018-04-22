@@ -460,7 +460,7 @@ function generatePostCards(posts) {
         buttonForConnect.classList.add("button", "btn", "btn-primary", "buttonForConnect");
         buttonForConnect.setAttribute("id", "postConnectButton" + posts[i].post_id);
         buttonForConnect.setAttribute("value", "connect");
-        buttonForConnect.setAttribute("onclick", "connectIncrement(" + posts[i].post_id + ", '" + connectIncrementLabel + "')");
+        buttonForConnect.setAttribute("onclick", "connectIncrement(" + posts[i].post_id + ", '" + connectIncrementLabel + "', '" + posts[i].connected +"')");
         connect.appendChild(buttonForConnect);
 
 
@@ -1093,53 +1093,54 @@ function replyToPostFun(postId) {
 }
 
 // This function increments the connect for post and reply
-function connectIncrement(id, label) {
-    
+function connectIncrement(id, label, flag) {
 
-    if(label == "post"){
-        var connectIncrement = {
-            "post_id": id
-        };
-        var urlType = "https://infinite-reef-90129.herokuapp.com/incrementConnectByPostId";
-    }else{
-        var connectIncrement = {
-            "reply_id": id
-        };
-        var urlType = "https://infinite-reef-90129.herokuapp.com/incrementConnectByReplyId";
+    if(flag != '1'){
+        if(label == "post"){
+            var connectIncrement = {
+                "post_id": id
+            };
+            var urlType = "https://infinite-reef-90129.herokuapp.com/incrementConnectByPostId";
+        }else{
+            var connectIncrement = {
+                "reply_id": id
+            };
+            var urlType = "https://infinite-reef-90129.herokuapp.com/incrementConnectByReplyId";
+        }
+        $.ajax({
+            type: "POST",
+            url: urlType,
+            data: JSON.stringify(connectIncrement),
+            datatype: "json",
+            xhrFields: { withCredentials: true },
+            async: true,
+            contentType: "application/json",
+            success: function processData(r) {
+                var myObj = JSON.parse(r);
+                if (myObj["response"] == "pass") {
+    
+                    if(label == "post"){
+                        var postConnectButtonSpan = document.getElementById("postConnectButtonSpan" + id);
+                        var postConnectButton = document.getElementById("postConnectButton" + id);
+        
+                        postConnectButtonSpan.innerHTML = "";
+                        postConnectButtonSpan.innerHTML = myObj["connect_count"] + " Connects";
+        
+                        postConnectButton.style.backgroundColor = "#e0e0e0";
+                    }else{
+                         var connectToReply = document.getElementById("connectToReply" + id);
+                         connectToReply.style.backgroundColor = "#e0e0e0";
+                        $("#connectToReply" + id).html(myObj["connect_count"] + " Connects"); 
+                    }
+                             
+                }
+            }
+        });
     }
 
-
-    $.ajax({
-        type: "POST",
-        url: urlType,
-        data: JSON.stringify(connectIncrement),
-        datatype: "json",
-        xhrFields: { withCredentials: true },
-        async: true,
-        contentType: "application/json",
-        success: function processData(r) {
-            var myObj = JSON.parse(r);
-            if (myObj["response"] == "pass") {
-
-                if(label == "post"){
-                    var postConnectButtonSpan = document.getElementById("postConnectButtonSpan" + id);
-                    var postConnectButton = document.getElementById("postConnectButton" + id);
-    
-                    postConnectButtonSpan.innerHTML = "";
-                    postConnectButtonSpan.innerHTML = myObj["connect_count"] + " Connects";
-    
-                    postConnectButton.style.backgroundColor = "#e0e0e0";
-                }else{
-                     var connectToReply = document.getElementById("connectToReply" + id);
-                     connectToReply.style.backgroundColor = "#e0e0e0";
-                    $("#connectToReply" + id).html(myObj["connect_count"] + " Connects"); 
-                }
-                         
-            }
-        }
-    });
-
 }
+
+
 
 //  This function is called when sort by connect is cliked
 function sortByConnect() {
