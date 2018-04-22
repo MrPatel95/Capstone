@@ -30,7 +30,7 @@ function checkLoginCredentials() {
     var loginFormValidationResult = loginFormValidation();
 
     if (loginFormValidationResult == true) {
-        $(".loginButtonModalClass").html("Confirming your existence..."); 
+        $(".loginButtonModalClass").html("Confirming your existence...");
 
         //  Preparing JSON request object
         var loginRequestData = {
@@ -460,11 +460,11 @@ function generatePostCards(posts) {
         buttonForConnect.classList.add("button", "btn", "btn-primary", "buttonForConnect");
         buttonForConnect.setAttribute("id", "postConnectButton" + posts[i].post_id);
         buttonForConnect.setAttribute("value", "connect");
-        buttonForConnect.setAttribute("onclick", "connectIncrement(" + posts[i].post_id + ", '" + connectIncrementLabel + "', '" + posts[i].connected +"')");
+        buttonForConnect.setAttribute("onclick", "connectIncrement(" + posts[i].post_id + ", '" + connectIncrementLabel + "', '" + posts[i].connected + "')");
         connect.appendChild(buttonForConnect);
 
 
-        if (posts[i].connected == 1){
+        if (posts[i].connected == 1) {
             buttonForConnect.setAttribute("style", "background-color:#e0e0e0");
         }
 
@@ -487,15 +487,15 @@ function generatePostCards(posts) {
         var postConnectButtonSpan = document.createElement("span");
         postConnectButtonSpan.setAttribute("id", "postConnectButtonSpan" + posts[i].post_id);
         buttonForConnect.appendChild(postConnectButtonSpan);
-        
-        if(posts[i].connect_count > 1){
+
+        if (posts[i].connect_count > 1) {
             var connectsText = document.createTextNode(posts[i].connect_count + " Connects");
             postConnectButtonSpan.appendChild(connectsText);
-        }else if(posts[i].connect_count <= 1){
+        } else if (posts[i].connect_count <= 1) {
             var connectsText = document.createTextNode(posts[i].connect_count + " Connect");
             postConnectButtonSpan.appendChild(connectsText);
         }
-        
+
 
         //  Column for Reply
         var reply = document.createElement("div");
@@ -518,14 +518,14 @@ function generatePostCards(posts) {
         var icon2 = document.createTextNode("reply");
         replyIcon.appendChild(icon2);
 
-        if(posts[i].reply_count > 1){
+        if (posts[i].reply_count > 1) {
             var replyText = document.createTextNode(posts[i].reply_count + " Replies");
             buttonForReply.appendChild(replyText);
-        }else if(posts[i].reply_count <= 1){
+        } else if (posts[i].reply_count <= 1) {
             var replyText = document.createTextNode(posts[i].reply_count + " Reply");
             buttonForReply.appendChild(replyText);
         }
-        
+
 
 
         //  New reply to a post when not expanded
@@ -900,14 +900,14 @@ function showReplies(allReplies, rowId) {
             buttonForMainReplyConnect.setAttribute("onclick", "connectIncrement(" + obj.replies[i].reply__reply_id + ",'" + label + "')");
             connectColumn.appendChild(buttonForMainReplyConnect);
 
-           if(obj.replies[i].connect_count > 1){
+            if (obj.replies[i].connect_count > 1) {
                 var mianReplyConnectsText = document.createTextNode(obj.replies[i].connect_count + " Connects");
                 buttonForMainReplyConnect.appendChild(mianReplyConnectsText);
-           }else if(obj.replies[i].connect_count <= 1){
-            var mianReplyConnectsText = document.createTextNode(obj.replies[i].connect_count + " Connect");
-            buttonForMainReplyConnect.appendChild(mianReplyConnectsText);
-       }
-            
+            } else if (obj.replies[i].connect_count <= 1) {
+                var mianReplyConnectsText = document.createTextNode(obj.replies[i].connect_count + " Connect");
+                buttonForMainReplyConnect.appendChild(mianReplyConnectsText);
+            }
+
 
             // Reply column for main reply
             var replyColumn = document.createElement("div");
@@ -923,14 +923,14 @@ function showReplies(allReplies, rowId) {
             replyColumn.appendChild(buttonForMainReplyToReply);
 
 
-            if(obj.replies[i].reply_count > 1){
+            if (obj.replies[i].reply_count > 1) {
                 var mainReplyToReplyText = document.createTextNode(obj.replies[i].reply_count + " Replies");
                 buttonForMainReplyToReply.appendChild(mainReplyToReplyText);
-            }else if(obj.replies[i].reply_count <= 1){
+            } else if (obj.replies[i].reply_count <= 1) {
                 var mainReplyToReplyText = document.createTextNode(obj.replies[i].reply_count + " Reply");
                 buttonForMainReplyToReply.appendChild(mainReplyToReplyText);
             }
-            
+
 
 
 
@@ -974,7 +974,7 @@ function showReplies(allReplies, rowId) {
             var submitReply = document.createElement("button");
             submitReply.classList.add("btn", "btn-secondary", "btn-block");
             submitReply.setAttribute("id", "submitReply");
-            submitReply.setAttribute("onclick", "addReplyToReply(" + obj.post.post_id + "," + obj.replies[i].reply__reply_id +")");
+            submitReply.setAttribute("onclick", "addReplyToReply(" + obj.post.post_id + "," + obj.replies[i].reply__reply_id + ",'" + obj.replies[i].user + "','" + localStorage.username + "')");
             replySubmitColumn.appendChild(submitReply);
 
             var submitReplyText = document.createTextNode("Reply");
@@ -987,19 +987,19 @@ function showReplies(allReplies, rowId) {
 }
 
 //   Add a reply to reply function 
-function replyToReplyFun(replyId){
-    
+function replyToReplyFun(replyId) {
+
     var replyToReplySection = document.getElementById("replyToReplyColumn" + replyId);
 
-    if(replyToReplySection.style.display == "block"){
+    if (replyToReplySection.style.display == "block") {
         replyToReplySection.style.display = "none";
-    }else{
+    } else {
         replyToReplySection.style.display = "block";
     }
 }
 
 // Add a reply to a reply
-function addReplyToReply(postId, replyId){
+function addReplyToReply(postId, replyId, parent_user, reply_user) {
 
     var reply = document.getElementById("replyToReplyTextArea" + replyId).value;
 
@@ -1027,8 +1027,22 @@ function addReplyToReply(postId, replyId){
                 var myObj = JSON.parse(r);
                 if (myObj["response"] == "pass") {
 
+                    //  closing add reply text area 
                     var replyToReplySection = document.getElementById("replyToReplyColumn" + replyId);
                     replyToReplySection.style.display = "none";
+
+                    var new_reply_id = "temp";
+
+                    attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_id);
+
+                    /*
+                        reply id
+                        reply user 
+                        reply 
+                        session user
+                        newly added reply ID (FROM ALI)                        
+
+                    */
 
                 } else {
                     alert("Error while adding a reply");
@@ -1037,7 +1051,124 @@ function addReplyToReply(postId, replyId){
             }
         });
     }
-    
+
+}
+
+// Attaches a newly added reply to a reply
+function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_id) {
+    // alert(replyId);
+    // alert(reply);
+    // alert(parent_user);
+    // alert(reply_user);
+    // var parentReply = "#mainReplyColumn" + replyId;
+
+    // Add a main reply to post
+    var mainReplyColumn = document.createElement("div");
+    mainReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "individualMainReply");
+    mainReplyColumn.setAttribute("style", "padding-left: 30px;");
+    mainReplyColumn.setAttribute("id", "mainReplyColumn" + new_reply_id);
+    $(mainReplyColumn).insertAfter("#mainReplyRow" + replyId);
+
+    // Main reply card row for main reply
+    var mainReplyRow = document.createElement("div");
+    mainReplyRow.classList.add("row", "replyBorder");
+    mainReplyRow.setAttribute("id", "mainReplyRow" + new_reply_id);
+    mainReplyColumn.appendChild(mainReplyRow);
+
+    // Posted by and body column for main reply
+    var postByBodyColumn = document.createElement("div");
+
+    postByBodyColumn.classList.add("col-10", "col-sm-10", "col-md-10", "col-lg-10");
+    postByBodyColumn.setAttribute("id", "postByBodyColumn");
+    mainReplyRow.appendChild(postByBodyColumn);
+
+    // Posted by and body row for main reply
+    var postByBodyRow = document.createElement("div");
+    postByBodyRow.classList.add("row");
+    postByBodyRow.setAttribute("id", "postByBodyRow");
+    postByBodyColumn.appendChild(postByBodyRow);
+
+    // Posted by and time column for main reply
+    var postByTimeColumn = document.createElement("div");
+    postByTimeColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    postByTimeColumn.setAttribute("id", "postByTimeColumn");
+    postByBodyRow.appendChild(postByTimeColumn);
+
+    //  Span for posted by user
+    var spanByUser = document.createElement("span");
+    spanByUser.setAttribute("style", "font-weight: bold; font-size: 15px;");
+    postByTimeColumn.appendChild(spanByUser);
+
+    //  Posted by user
+    var postedByText = document.createTextNode(reply_user + " replied to " + parent_user);
+    spanByUser.appendChild(postedByText);
+
+    //  Span for reply time 
+    var spanForReplyTime = document.createElement("span");
+    spanForReplyTime.setAttribute("style", "font-size: 10px; font-color: grey; margin-left: 10px;");
+    postByTimeColumn.appendChild(spanForReplyTime);
+
+    //  Posted by user
+    var postedByTimeText = document.createTextNode(" Just now");
+    spanForReplyTime.appendChild(postedByTimeText);
+
+    // Post body column for main reply
+    var replyBodyColumn = document.createElement("div");
+    replyBodyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    replyBodyColumn.setAttribute("id", "replyBodyColumn");
+    postByBodyRow.appendChild(replyBodyColumn);
+
+    //  Reply body/description
+    var replyBodyText = document.createTextNode(reply);
+    replyBodyColumn.appendChild(replyBodyText);
+
+    // Connect and reply column for main reply
+    var connectReplyColumn = document.createElement("div");
+    connectReplyColumn.classList.add("col-2", "col-sm-2", "col-md-2", "col-lg-2");
+    connectReplyColumn.setAttribute("id", "connectReplyColumn");
+    mainReplyRow.appendChild(connectReplyColumn);
+
+    // Connect and reply row for main reply
+    var connectReplyRow = document.createElement("div");
+    connectReplyRow.classList.add("row");
+    connectReplyRow.setAttribute("id", "connectReplyRow");
+    connectReplyColumn.appendChild(connectReplyRow);
+
+    // Connect column for main reply
+    var connectColumn = document.createElement("div");
+    connectColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    connectColumn.setAttribute("id", "connectColumn");
+    connectReplyRow.appendChild(connectColumn);
+
+    var label = "reply";
+
+    //  Connect Button for main reply
+    var buttonForMainReplyConnect = document.createElement("button");
+    buttonForMainReplyConnect.classList.add("button", "btn", "btn-primary", "replyButtons");
+    buttonForMainReplyConnect.setAttribute("id", "connectToReply" + new_reply_id);
+    buttonForMainReplyConnect.setAttribute("onclick", "connectIncrement('" + new_reply_id + "','" + label + "')");
+    connectColumn.appendChild(buttonForMainReplyConnect);
+
+    var mianReplyConnectsText = document.createTextNode("0 Connect");
+    buttonForMainReplyConnect.appendChild(mianReplyConnectsText);
+
+
+    // Reply column for main reply
+    var replyColumn = document.createElement("div");
+    replyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    replyColumn.setAttribute("id", "replyColumn");
+    connectReplyRow.appendChild(replyColumn);
+
+    //  Reply button for main reply
+    var buttonForMainReplyToReply = document.createElement("button");
+    buttonForMainReplyToReply.classList.add("button", "btn", "btn-primary", "replyButtons");
+    //buttonForMainReplyToReply.setAttribute("id", replyButtonId);
+    buttonForMainReplyToReply.setAttribute("onclick", "replyToReplyFun('" + new_reply_id + "')");
+    replyColumn.appendChild(buttonForMainReplyToReply);
+
+    var mainReplyToReplyText = document.createTextNode("0 Reply");
+    buttonForMainReplyToReply.appendChild(mainReplyToReplyText);   
+
 }
 
 //  Add a reply to a post
@@ -1072,7 +1203,7 @@ function addReply(postId) {
                 if (myObj["response"] == "pass") {
                     document.getElementById(postIdTag).value = "";
                     addReplyID.innerHTML = "";
-                   
+
 
                     var replyHasBeenAddedColumn = document.createElement("div");
                     replyHasBeenAddedColumn.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1", "col-10", "col-sm-10", "col-md-10", "col-lg-10", "alert", "alert-success");
@@ -1117,13 +1248,13 @@ function replyToPostFun(postId) {
 // This function increments the connect for post and reply
 function connectIncrement(id, label, flag) {
 
-    if(flag != '1'){
-        if(label == "post"){
+    if (flag != '1') {
+        if (label == "post") {
             var connectIncrement = {
                 "post_id": id
             };
             var urlType = "https://infinite-reef-90129.herokuapp.com/incrementConnectByPostId";
-        }else{
+        } else {
             var connectIncrement = {
                 "reply_id": id
             };
@@ -1140,21 +1271,21 @@ function connectIncrement(id, label, flag) {
             success: function processData(r) {
                 var myObj = JSON.parse(r);
                 if (myObj["response"] == "pass") {
-    
-                    if(label == "post"){
+
+                    if (label == "post") {
                         var postConnectButtonSpan = document.getElementById("postConnectButtonSpan" + id);
                         var postConnectButton = document.getElementById("postConnectButton" + id);
-        
+
                         postConnectButtonSpan.innerHTML = "";
                         postConnectButtonSpan.innerHTML = myObj["connect_count"] + " Connects";
-        
+
                         postConnectButton.style.backgroundColor = "#e0e0e0";
-                    }else{
-                         var connectToReply = document.getElementById("connectToReply" + id);
-                         connectToReply.style.backgroundColor = "#e0e0e0";
-                        $("#connectToReply" + id).html(myObj["connect_count"] + " Connects"); 
+                    } else {
+                        var connectToReply = document.getElementById("connectToReply" + id);
+                        connectToReply.style.backgroundColor = "#e0e0e0";
+                        $("#connectToReply" + id).html(myObj["connect_count"] + " Connects");
                     }
-                             
+
                 }
             }
         });
