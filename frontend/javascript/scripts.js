@@ -669,7 +669,7 @@ function onClickOfShowPost(post_id) {
 
 }
 
-//  This function will show all the replies
+//  This function will show all the replies WHEN EXPANDED
 function showReplies(allReplies, rowId) {
 
     var rowReply = document.getElementById(rowId);
@@ -737,11 +737,13 @@ function showReplies(allReplies, rowId) {
     replySubmitColumn.setAttribute("id", "replySubmitColumn");
     textSubmitRow.appendChild(replySubmitColumn);
 
+    var replyIsComingFrom = "whenExpanded";
+
     // Submit button for a new reply
     var submitReply = document.createElement("button");
     submitReply.classList.add("btn", "btn-secondary", "btn-block");
     submitReply.setAttribute("id", "submitReply");
-    submitReply.setAttribute("onclick", "addReply(" + obj.post.post_id + ")");
+    submitReply.setAttribute("onclick", "addReply(" + obj.post.post_id + ", '" + replyIsComingFrom + "', '" + obj.post.user + "')");
     replySubmitColumn.appendChild(submitReply);
 
     var submitReplyText = document.createTextNode("Reply");
@@ -756,7 +758,7 @@ function showReplies(allReplies, rowId) {
     // All replies row
     var allReplyRow = document.createElement("div");
     allReplyRow.classList.add("row");
-    allReplyRow.setAttribute("id", "allReplyRow");
+    allReplyRow.setAttribute("id", "allReplyRow" +  obj.post.post_id);
     allReplyColumn.appendChild(allReplyRow);
 
     if (obj.replies.length == 0) {
@@ -777,7 +779,7 @@ function showReplies(allReplies, rowId) {
             if (obj.replies[i].parent_id == "None") {
 
                 //  All reply id
-                var allRepliesIdHolder = document.getElementById("allReplyRow");
+                var allRepliesIdHolder = document.getElementById("allReplyRow" + obj.post.post_id);
 
                 // Add a main reply to post
                 var mainReplyColumn = document.createElement("div");
@@ -1032,8 +1034,9 @@ function addReplyToReply(postId, replyId, parent_user, reply_user) {
                     replyToReplySection.style.display = "none";
 
                     var new_reply_id = "temp";
+                    var replyIsComingFrom = "replyToReply";
 
-                    attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_id);
+                    attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_id, replyIsComingFrom);
 
                     /*
                         reply id
@@ -1055,19 +1058,25 @@ function addReplyToReply(postId, replyId, parent_user, reply_user) {
 }
 
 // Attaches a newly added reply to a reply
-function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_id) {
-    // alert(replyId);
-    // alert(reply);
-    // alert(parent_user);
-    // alert(reply_user);
-    // var parentReply = "#mainReplyColumn" + replyId;
+function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_id, replyIsComingFrom) {
 
+    
     // Add a main reply to post
     var mainReplyColumn = document.createElement("div");
     mainReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "individualMainReply");
-    mainReplyColumn.setAttribute("style", "padding-left: 30px;");
+    //mainReplyColumn.setAttribute("style", "padding-left: 30px;");
     mainReplyColumn.setAttribute("id", "mainReplyColumn" + new_reply_id);
-    $(mainReplyColumn).insertAfter("#mainReplyRow" + replyId);
+
+
+    if(replyIsComingFrom != "whenExpanded"){
+        $(mainReplyColumn).insertAfter("#mainReplyRow" + replyId);
+    }else if(replyIsComingFrom == "whenExpanded"){
+    
+        var allReplyRow = document.getElementById("allReplyRow" + replyId);
+        allReplyRow.insertBefore(mainReplyColumn, allReplyRow.childNodes[0]);
+        //alert("when Expanded rendering");
+    }
+    
 
     // Main reply card row for main reply
     var mainReplyRow = document.createElement("div");
@@ -1167,18 +1176,21 @@ function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_i
     replyColumn.appendChild(buttonForMainReplyToReply);
 
     var mainReplyToReplyText = document.createTextNode("0 Reply");
-    buttonForMainReplyToReply.appendChild(mainReplyToReplyText);   
+    buttonForMainReplyToReply.appendChild(mainReplyToReplyText);
 
 }
 
 //  Add a reply to a post
-function addReply(postId) {
+function addReply(postId, replyIsComingFrom, parentUser) {
+
 
     var postIdTag = "replyTextArea" + postId;
     var rowId = "replyRow" + postId;
     var addReplyID = "addReplyRow" + postId;
     var addReplyID = document.getElementById(addReplyID);
     var reply = document.getElementById(postIdTag).value;
+
+
     if (reply != "") {
 
         //  Preparing JSON request object
@@ -1201,18 +1213,39 @@ function addReply(postId) {
             success: function processData(r) {
                 var myObj = JSON.parse(r);
                 if (myObj["response"] == "pass") {
-                    document.getElementById(postIdTag).value = "";
-                    addReplyID.innerHTML = "";
 
+                    if (replyIsComingFrom != "whenExpanded") {
+                        document.getElementById(postIdTag).value = "";
+                        addReplyID.innerHTML = "";
+                        var replyHasBeenAddedColumn = document.createElement("div");
+                        replyHasBeenAddedColumn.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1", "col-10", "col-sm-10", "col-md-10", "col-lg-10", "alert", "alert-success");
+                        replyHasBeenAddedColumn.setAttribute("id", "replyHasBeenAddedColumn");
+                        replyHasBeenAddedColumn.setAttribute("role", "alert");
+                        addReplyID.appendChild(replyHasBeenAddedColumn);
 
-                    var replyHasBeenAddedColumn = document.createElement("div");
-                    replyHasBeenAddedColumn.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1", "col-10", "col-sm-10", "col-md-10", "col-lg-10", "alert", "alert-success");
-                    replyHasBeenAddedColumn.setAttribute("id", "replyHasBeenAddedColumn");
-                    replyHasBeenAddedColumn.setAttribute("role", "alert");
-                    addReplyID.appendChild(replyHasBeenAddedColumn);
+                        var replyAddedText = document.createTextNode("Reply has been added. Expand the post to see yours and other replies.");
+                        replyHasBeenAddedColumn.appendChild(replyAddedText);
 
-                    var replyAddedText = document.createTextNode("Reply has been added. Expand the post to see yours and other replies.");
-                    replyHasBeenAddedColumn.appendChild(replyAddedText);
+                    }else if(replyIsComingFrom == "whenExpanded"){
+                        //allReplyRow.insertBefore(mainReplyColumn, allReplyRow.childNodes[0]);
+                        alert(parentUser);
+
+                        // "reply__reply_id": "129",
+                        // "user": "ali",
+                        // "parent_id": "122",
+                        // "replyconnector__user": "None",
+                        // "parent_user": "ali",
+                        // "reply_body": "reply added ",
+                        // "reply_datetime": "2018-04-21 21:51:41.727107+00:00",
+                        // "reply_count": "0",
+                        // "connect_count": "2"
+                        //  call attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_id)
+
+                        var reply_user = localStorage.username;
+                        var new_reply_id = "temp";
+                        attachReplyToReply(postId, reply, parentUser, reply_user, new_reply_id, replyIsComingFrom)
+                    }
+
 
                 } else {
                     alert("Error while adding a reply");
@@ -1377,11 +1410,14 @@ function addNewReplyToPost(postId) {
 
     textSubmitRow.appendChild(replySubmitColumn);
 
+    var replyIsComingFrom = "doNothing";
+    var postUser = "null";
+
     // Submit button for a new reply
     var submitReply = document.createElement("button");
     submitReply.classList.add("btn", "btn-secondary", "btn-block");
     submitReply.setAttribute("id", "submitReply");
-    submitReply.setAttribute("onclick", "addReply(" + postId + ")");
+    submitReply.setAttribute("onclick", "addReply(" + postId + ", '" + replyIsComingFrom + "', '" + postUser + "')");
     replySubmitColumn.appendChild(submitReply);
 
     var submitReplyText = document.createTextNode("Reply");
