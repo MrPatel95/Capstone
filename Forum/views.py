@@ -330,11 +330,13 @@ def increment_connect_by_post_id(request):
 		body = json.loads(request.body.decode('utf-8'))
 		try:
 			post_id = body['post_id']
+			connect = ForumConnector.objects.filter(post_id=post_id, user=request.user)
 			post = ForumPost.objects.get(post_id=post_id)
-			post.connect_count += 1
-			connector = ForumConnector(user=request.user, post_id=post)
-			connector.save()
-			post.save()
+			if len(connect) == 0:
+				post.connect_count += 1
+				connector = ForumConnector(user=request.user, post_id=post)
+				connector.save()
+				post.save()
 			return HttpResponse('{"response":"pass","connect_count":"%s"}' % str(post.connect_count))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
@@ -351,11 +353,13 @@ def increment_connect_by_reply_id(request):
 		body = json.loads(request.body.decode('utf-8'))
 		try:
 			reply_id = body['reply_id']
+			connect = ReplyConnector.objects.filter(post_id=post_id, user=request.user)
 			reply = ReplyPost.objects.get(reply_id=reply_id)
-			reply.connect_count += 1
-			connector = ReplyConnector(user=request.user, reply_id=reply)
-			connector.save()
-			reply.save()
+			if len(connect) == 0:
+				reply.connect_count += 1
+				connector = ReplyConnector(user=request.user, reply_id=reply)
+				connector.save()
+				reply.save()
 			return HttpResponse('{"response":"pass","connect_count":"%s"}' % str(reply.connect_count))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
