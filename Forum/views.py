@@ -255,7 +255,7 @@ def get_n_recent_forum_posts(request):
 			posts = ForumPost.objects.filter().values(
 				'post_id', 'user__username', 'post_title', 'post_image', 
 				'post_datetime', 'connect_count', 'post_body', 'forumconnector__user'
-				).order_by('-post_datetime').annotate(reply_count=Count('replypost__post_id')).annotate(connected=Case(When(forumconnector__user=request.user, then=1), output_field=CharField())).distinct()[:n]
+				).order_by('-post_datetime').annotate(reply_count=Count('replypost__post_id')).distinct().annotate(connected=Case(When(forumconnector__user=request.user, then=1), output_field=CharField()))[:n]
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
@@ -276,7 +276,7 @@ def get_n_recent_forum_posts_by_connect_count(request):
 			posts = ForumPost.objects.filter().values(
 				'post_id', 'user__username', 'post_title', 'post_image',
 				'post_datetime', 'connect_count', 'post_body', 'forumconnector__post_id'
-				).order_by('-connect_count').annotate(reply_count=Count('replypost__post_id_id')).annotate(connected=Case(When(forumconnector__user=request.user, then=1), output_field=CharField()))[:n]
+				).order_by('-connect_count').annotate(reply_count=Count('replypost__post_id')).annotate(connected=Case(When(forumconnector__user=request.user, then=1), output_field=CharField()))[:n]
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
@@ -296,7 +296,7 @@ def get_forum_posts_by_username(request):
 			posts = ForumPost.objects.filter(user=request.user).values(
 				'post_id', 'user__username', 'post_title', 'post_image',
 				'post_datetime', 'connect_count', 'post_body', 'forumconnector__post_id'
-				).annotate(reply_count=Count('replypost__post_id_id')).annotate(connected=Case(When(forumconnector__user=request.user, then=1), output_field=CharField()))
+				).annotate(reply_count=Count('replypost__post_id')).annotate(connected=Case(When(forumconnector__user=request.user, then=1), output_field=CharField()))
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
