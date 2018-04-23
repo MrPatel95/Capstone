@@ -253,7 +253,7 @@ def get_n_recent_forum_posts(request):
 		try:
 			n = body['n']
 			posts = ForumPost.objects.filter().values(
-				'post_id', 'user__username', 'user', 'post_title', 'post_image', 
+				'post_id', 'user__username', 'post_title', 'post_image', 
 				'post_datetime', 'connect_count', 'post_body',
 				).order_by('-post_datetime').annotate(reply_count=Count('replypost__post_id'))[:n]
 			for i in posts:
@@ -280,7 +280,7 @@ def get_n_recent_forum_posts_by_connect_count(request):
 			n = body['n']
 			posts = ForumPost.objects.filter().values(
 				'post_id', 'user__username', 'post_title', 'post_image',
-				'post_datetime', 'connect_count', 'post_body', 'forumconnector__post_id'
+				'post_datetime', 'connect_count', 'post_body',
 				).order_by('-connect_count').annotate(reply_count=Count('replypost__post_id'))[:n]
 			for i in posts:
 				connected = ForumConnector.objects.filter(post_id=i['post_id'], user=request.user)
