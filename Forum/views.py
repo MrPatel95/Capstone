@@ -304,7 +304,7 @@ def get_forum_posts_by_username(request):
 		body = json.loads(request.body.decode('utf-8'))
 		try:
 			username = body['username']
-			posts = ForumPost.objects.filter(user=request.user).values(
+			posts = ForumPost.objects.filter(user=username).values(
 				'post_id', 'user__username', 'post_title', 'post_image',
 				'post_datetime', 'connect_count', 'post_body', 'forumconnector__post_id'
 				).annotate(reply_count=Count('replypost__post_id'))
