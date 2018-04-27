@@ -426,10 +426,15 @@ function generatePostCards(posts) {
         description.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1");
         conRepDes.appendChild(description);
 
-        var postBody = document.createTextNode(posts[i].post_body);
-        description.appendChild(postBody);
-
-
+        if((posts[i].post_body).length > 399){
+            var postBody = document.createTextNode((posts[i].post_body).substring(0,399) + "........");
+            description.appendChild(postBody);
+        }else{
+            var postBody = document.createTextNode((posts[i].post_body));
+            description.appendChild(postBody);
+        }
+        
+        
 
         //  Expand post
         var replyRow = document.createElement("div");
@@ -990,6 +995,7 @@ function showReplies(allReplies, rowId) {
 
 //   Add a reply to reply function 
 function replyToReplyFun(replyId) {
+    alert(replyId);
 
     var replyToReplySection = document.getElementById("replyToReplyColumn" + replyId);
 
@@ -1033,7 +1039,7 @@ function addReplyToReply(postId, replyId, parent_user, reply_user) {
                     var replyToReplySection = document.getElementById("replyToReplyColumn" + replyId);
                     replyToReplySection.style.display = "none";
 
-                    var new_reply_id = "temp";
+                    var new_reply_id = myObj["reply_id"];
                     var replyIsComingFrom = "replyToReply";
 
                     attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_id, replyIsComingFrom);
@@ -1172,7 +1178,7 @@ function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_i
     var buttonForMainReplyToReply = document.createElement("button");
     buttonForMainReplyToReply.classList.add("button", "btn", "btn-primary", "replyButtons");
     //buttonForMainReplyToReply.setAttribute("id", replyButtonId);
-    buttonForMainReplyToReply.setAttribute("onclick", "replyToReplyFun('" + new_reply_id + "')");
+    buttonForMainReplyToReply.setAttribute("onclick", "replyToReplyFun(" + new_reply_id + ")");
     replyColumn.appendChild(buttonForMainReplyToReply);
 
     var mainReplyToReplyText = document.createTextNode("0 Reply");
@@ -1242,7 +1248,7 @@ function addReply(postId, replyIsComingFrom, parentUser) {
                         //  call attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_id)
 
                         var reply_user = localStorage.username;
-                        var new_reply_id = "temp";
+                        var new_reply_id = myObj["reply_id"];
                         attachReplyToReply(postId, reply, parentUser, reply_user, new_reply_id, replyIsComingFrom)
                     }
 
@@ -1325,8 +1331,6 @@ function connectIncrement(id, label, flag) {
     }
 
 }
-
-
 
 //  This function is called when sort by connect is cliked
 function sortByConnect() {
