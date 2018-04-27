@@ -262,16 +262,16 @@ function createDate(todaysDate, postDate) {
 
 //  This function is called when the Forum page is fully loaded
 function onLoadFunctionForForumPosts() {
-   // alert();
-    if (localStorage.getItem("username") === null){
+    // alert();
+    if (localStorage.getItem("username") === null) {
         window.location.replace("../html/loginRegister.html");
-    }else{
+    } else {
         $("#usernameDropdown").html(localStorage.username);
 
         var loadNPosts = {
             "n": 50
         }
-    
+
         $.ajax({
             type: "POST",
             url: "https://infinite-reef-90129.herokuapp.com/getNRecentForumPosts",
@@ -284,12 +284,12 @@ function onLoadFunctionForForumPosts() {
             contentType: "application/json",
             success: function processData(r) {
                 var json_data = JSON.parse(r);
-                var postType = "displayAllPosts"; 
+                var postType = "displayAllPosts";
                 //alert(JSON.stringify(json_data));
                 generatePostCards(json_data, postType);
             }
         });
-    
+
         $(document).ready(function () {
             $('#page-body').ajaxStart(function () {
                 alert("AJAX sent");
@@ -340,10 +340,10 @@ function generatePostCards(posts, postType) {
 
     var cardsContainer = document.getElementById("cards-container");
 
-    if (postType == "displayAllPosts"){
+    if (postType == "displayAllPosts") {
         cardsContainer.innerHTML = "";
     }
-    
+
 
     var todaysDate = new Date();
 
@@ -367,12 +367,12 @@ function generatePostCards(posts, postType) {
         cardsContainer.appendChild(card);
 
         // Check if post is a new post or displayAllPosts
-        if (postType == "displayAllPosts"){
+        if (postType == "displayAllPosts") {
             cardsContainer.appendChild(card);
-        }else if (postType == "addNewPost"){
+        } else if (postType == "addNewPost") {
             cardsContainer.insertBefore(card, cardsContainer.childNodes[0]);
         }
-        
+
 
         var cardColumn = document.createElement("div");
         cardColumn.classList.add("col");
@@ -430,14 +430,14 @@ function generatePostCards(posts, postType) {
         description.classList.add("offset-sm-1", "offset-md-1", "offset-lg-1");
         conRepDes.appendChild(description);
 
-        if((posts[i].post_body).length > 399){
-            var postBody = document.createTextNode((posts[i].post_body).substring(0,399) + "........");
+        if ((posts[i].post_body).length > 399) {
+            var postBody = document.createTextNode((posts[i].post_body).substring(0, 399) + "........");
             description.appendChild(postBody);
-        }else{
+        } else {
             var postBody = document.createTextNode((posts[i].post_body));
             description.appendChild(postBody);
         }
-        
+
         //  Expand post
         var replyRow = document.createElement("div");
         replyRow.classList.add("row");
@@ -576,19 +576,19 @@ function addNewPost() {
     var newPostTitle = document.getElementById('newPostTitle').value;
     var newPostDesc = document.getElementById('newPostDesc').value;
     var newImageURL = document.getElementById('newImageURL').value;
-    
+
     var validate = false;
-    if (newPostTitle != "" && newPostDesc != ""){
+    if (newPostTitle != "" && newPostDesc != "") {
         validate = true;
     }
- 
-    if (validate){
+
+    if (validate) {
         var newPost = {
             "post_title": newPostTitle,
             "post_body": newPostDesc,
             "post_image": newImageURL,
         }
-    
+
         $.ajax({
             type: "POST",
             url: "https://infinite-reef-90129.herokuapp.com/addForumPost",
@@ -603,55 +603,55 @@ function addNewPost() {
             success: function processData(r) {
                 var myObj = JSON.parse(r);
                 if (myObj["post_id"] != null) {
-    
-                    document.getElementById('newPostTitle').value = ""; 
+
+                    document.getElementById('newPostTitle').value = "";
                     document.getElementById('newPostDesc').value = "";
                     document.getElementById('newImageURL').value = "";
-                   
-    
+
+
                     $('#exampleModalCenter').modal('hide');
-                    
+
                     snackBar();
-    
-                            var todaysDate = new Date();
-                            var postData = [
-                                {
-                                    "post_id": myObj["post_id"], 
-                                    "user__username": localStorage.username,
-                                    "post_title": myObj["post_title"],
-                                    "post_body": myObj["post_body"],
-                                    "post_datetime": todaysDate,
-                                    "post_image": myObj["post_image"],
-                                    "connect_count": myObj["connect_count"],
-                                    "reply_count": 0,
-                                    "connected": false 
-                                }
-                             ];
-    
+
+                    var todaysDate = new Date();
+                    var postData = [
+                        {
+                            "post_id": myObj["post_id"],
+                            "user__username": localStorage.username,
+                            "post_title": myObj["post_title"],
+                            "post_body": myObj["post_body"],
+                            "post_datetime": todaysDate,
+                            "post_image": myObj["post_image"],
+                            "connect_count": myObj["connect_count"],
+                            "reply_count": 0,
+                            "connected": false
+                        }
+                    ];
+
                     var postType = "addNewPost";
                     generatePostCards(postData, postType);
-                    
-                   
-    
-    
+
+
+
+
                 } else {
                     alert("User is not authenticated");
-    
+
                 }
             }
         });
-    }else{
+    } else {
         alert("Post title and post body cannot be empty");
     }
     //  Preparing JSON request object
-   
+
 }
 
 
 function snackBar() {
     var x = document.getElementById("snackbar");
     x.className = "show";
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
 }
 
 
@@ -797,7 +797,7 @@ function showReplies(allReplies, rowId) {
     // All replies row
     var allReplyRow = document.createElement("div");
     allReplyRow.classList.add("row");
-    allReplyRow.setAttribute("id", "allReplyRow" +  obj.post.post_id);
+    allReplyRow.setAttribute("id", "allReplyRow" + obj.post.post_id);
     allReplyColumn.appendChild(allReplyRow);
 
     if (obj.replies.length == 0) {
@@ -1100,7 +1100,7 @@ function addReplyToReply(postId, replyId, parent_user, reply_user) {
 // Attaches a newly added reply to a reply
 function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_id, replyIsComingFrom) {
 
-    
+
     // Add a main reply to post
     var mainReplyColumn = document.createElement("div");
     mainReplyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12", "individualMainReply");
@@ -1108,15 +1108,15 @@ function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_i
     mainReplyColumn.setAttribute("id", "mainReplyColumn" + new_reply_id);
 
 
-    if(replyIsComingFrom != "whenExpanded"){
+    if (replyIsComingFrom != "whenExpanded") {
         $(mainReplyColumn).insertAfter("#mainReplyRow" + replyId);
-    }else if(replyIsComingFrom == "whenExpanded"){
-    
+    } else if (replyIsComingFrom == "whenExpanded") {
+
         var allReplyRow = document.getElementById("allReplyRow" + replyId);
         allReplyRow.insertBefore(mainReplyColumn, allReplyRow.childNodes[0]);
         //alert("when Expanded rendering");
     }
-    
+
 
     // Main reply card row for main reply
     var mainReplyRow = document.createElement("div");
@@ -1266,7 +1266,7 @@ function addReply(postId, replyIsComingFrom, parentUser) {
                         var replyAddedText = document.createTextNode("Reply has been added. Expand the post to see yours and other replies.");
                         replyHasBeenAddedColumn.appendChild(replyAddedText);
 
-                    }else if(replyIsComingFrom == "whenExpanded"){
+                    } else if (replyIsComingFrom == "whenExpanded") {
                         //allReplyRow.insertBefore(mainReplyColumn, allReplyRow.childNodes[0]);
                         alert(parentUser);
 
@@ -1386,7 +1386,7 @@ function sortByConnect() {
         success: function processData(r) {
             var json_data = JSON.parse(r);
             //alert(JSON.stringify(json_data));
-            var postType = "displayAllPosts"; 
+            var postType = "displayAllPosts";
             //alert(JSON.stringify(json_data));
             generatePostCards(json_data, postType);
         }
@@ -1408,8 +1408,73 @@ function sortByTime() {
 }
 
 // This function searches for post and post by username
-function searchby() {
-    alert("aai gayu");
+function searchPostBy() {
+
+    var searchByOption = document.getElementById("searchByOption").value;
+    var searchById = document.getElementById("searchById").value;
+
+
+    if (searchById != "" && searchByOption != "") {
+
+        if (searchByOption == "2") {
+            //Preparing JSON request object
+            var loadNPosts = {
+                "username": searchById
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "https://infinite-reef-90129.herokuapp.com/getForumPostsByUsername",
+                data: JSON.stringify(loadNPosts),
+                datatype: "json",
+                xhrFields: {
+                    withCredentials: true
+                },
+                async: true,
+                contentType: "application/json",
+                success: function processData(r) {
+                    
+                    var json_data = JSON.parse(r);
+                    if(json_data.hasOwnProperty('response')){
+                        alert("No username found!");
+                    }else{
+                        var postType = "displayAllPosts";
+                        generatePostCards(json_data, postType);
+                    }
+                }
+            });
+        }else if (searchByOption == "1") {
+            //Preparing JSON request object
+            var loadNPosts = {
+                "keywords": searchById
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "https://infinite-reef-90129.herokuapp.com/searchPostsByTitle",
+                data: JSON.stringify(loadNPosts),
+                datatype: "json",
+                xhrFields: {
+                    withCredentials: true
+                },
+                async: true,
+                contentType: "application/json",
+                success: function processData(r) {
+                    var json_data = JSON.parse(r);
+                    if(json_data.hasOwnProperty('response')){
+                        alert("No posts found!");
+                    }else{
+                        var postType = "displayAllPosts";
+                        generatePostCards(json_data, postType);
+                    }
+                    
+                }
+            });
+        }
+
+
+    }
+
 }
 
 // This function renders the new row for reply when post not expanded
