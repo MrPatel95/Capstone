@@ -262,39 +262,45 @@ function createDate(todaysDate, postDate) {
 
 //  This function is called when the Forum page is fully loaded
 function onLoadFunctionForForumPosts() {
+   // alert();
+    if (localStorage.getItem("username") === null){
+        window.location.replace("../html/loginRegister.html");
+    }else{
+        $("#usernameDropdown").html(localStorage.username);
 
-    $("#usernameDropdown").html(localStorage.username);
-
-    var loadNPosts = {
-        "n": 50
+        var loadNPosts = {
+            "n": 50
+        }
+    
+        $.ajax({
+            type: "POST",
+            url: "https://infinite-reef-90129.herokuapp.com/getNRecentForumPosts",
+            data: JSON.stringify(loadNPosts),
+            datatype: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            async: true,
+            contentType: "application/json",
+            success: function processData(r) {
+                var json_data = JSON.parse(r);
+                var postType = "displayAllPosts"; 
+                //alert(JSON.stringify(json_data));
+                generatePostCards(json_data, postType);
+            }
+        });
+    
+        $(document).ready(function () {
+            $('#page-body').ajaxStart(function () {
+                alert("AJAX sent");
+                $('#posts-loading').show();
+            }).ajaxStop(function () {
+                $('#posts-loading').hide();
+            });
+        });
     }
 
-    $.ajax({
-        type: "POST",
-        url: "https://infinite-reef-90129.herokuapp.com/getNRecentForumPosts",
-        data: JSON.stringify(loadNPosts),
-        datatype: "json",
-        xhrFields: {
-            withCredentials: true
-        },
-        async: true,
-        contentType: "application/json",
-        success: function processData(r) {
-            var json_data = JSON.parse(r);
-            var postType = "displayAllPosts"; 
-            //alert(JSON.stringify(json_data));
-            generatePostCards(json_data, postType);
-        }
-    });
 
-    $(document).ready(function () {
-        $('#page-body').ajaxStart(function () {
-            alert("AJAX sent");
-            $('#posts-loading').show();
-        }).ajaxStop(function () {
-            $('#posts-loading').hide();
-        });
-    });
 
 }
 
@@ -1403,7 +1409,7 @@ function sortByTime() {
 
 // This function searches for post and post by username
 function searchby() {
-    //  do something
+    alert("aai gayu");
 }
 
 // This function renders the new row for reply when post not expanded
