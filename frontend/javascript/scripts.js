@@ -570,70 +570,75 @@ function addNewPost() {
     var newPostTitle = document.getElementById('newPostTitle').value;
     var newPostDesc = document.getElementById('newPostDesc').value;
     var newImageURL = document.getElementById('newImageURL').value;
-    // var modal = document.getElementById('exampleModalCenter');
-    // var modalButton = document.getElementById('newPost');n
-
-    //  form validation
     
-
-    //  Preparing JSON request object
-    var newPost = {
-        "post_title": newPostTitle,
-        "post_body": newPostDesc,
-        "post_image": newImageURL,
+    var validate = false;
+    if (newPostTitle != "" && newPostDesc != ""){
+        validate = true;
     }
-
-    $.ajax({
-        type: "POST",
-        url: "https://infinite-reef-90129.herokuapp.com/addForumPost",
-        data: JSON.stringify(newPost),
-        datatype: "json",
-        xhrFields: {
-            withCredentials: true
-        },
-        async: true,
-        //"Access-Control-Allow-Origin": "*",
-        contentType: "application/json; charset=utf-8",
-        success: function processData(r) {
-            var myObj = JSON.parse(r);
-            if (myObj["post_id"] != null) {
-
-                document.getElementById('newPostTitle').value = ""; 
-                document.getElementById('newPostDesc').value = "";
-                document.getElementById('newImageURL').value = "";
-               
-
-                $('#exampleModalCenter').modal('hide');
-                
-                snackBar();
-
-                        var todaysDate = new Date();
-                        var postData = [
-                            {
-                                "post_id": myObj["post_id"], 
-                                "user__username": localStorage.username,
-                                "post_title": myObj["post_title"],
-                                "post_body": myObj["post_body"],
-                                "post_datetime": todaysDate,
-                                "post_image": myObj["post_image"],
-                                "connect_count": myObj["connect_count"],
-                                "reply_count": 0,
-                                "connected": false 
-                            }
-                         ];
-
-                var postType = "addNewPost";
-                generatePostCards(postData, postType);
-                
-               
-
-
-            } else {
-                alert("User is not authenticated");
-
-            }
+ 
+    if (validate){
+        var newPost = {
+            "post_title": newPostTitle,
+            "post_body": newPostDesc,
+            "post_image": newImageURL,
         }
-    });
+    
+        $.ajax({
+            type: "POST",
+            url: "https://infinite-reef-90129.herokuapp.com/addForumPost",
+            data: JSON.stringify(newPost),
+            datatype: "json",
+            xhrFields: {
+                withCredentials: true
+            },
+            async: true,
+            //"Access-Control-Allow-Origin": "*",
+            contentType: "application/json; charset=utf-8",
+            success: function processData(r) {
+                var myObj = JSON.parse(r);
+                if (myObj["post_id"] != null) {
+    
+                    document.getElementById('newPostTitle').value = ""; 
+                    document.getElementById('newPostDesc').value = "";
+                    document.getElementById('newImageURL').value = "";
+                   
+    
+                    $('#exampleModalCenter').modal('hide');
+                    
+                    snackBar();
+    
+                            var todaysDate = new Date();
+                            var postData = [
+                                {
+                                    "post_id": myObj["post_id"], 
+                                    "user__username": localStorage.username,
+                                    "post_title": myObj["post_title"],
+                                    "post_body": myObj["post_body"],
+                                    "post_datetime": todaysDate,
+                                    "post_image": myObj["post_image"],
+                                    "connect_count": myObj["connect_count"],
+                                    "reply_count": 0,
+                                    "connected": false 
+                                }
+                             ];
+    
+                    var postType = "addNewPost";
+                    generatePostCards(postData, postType);
+                    
+                   
+    
+    
+                } else {
+                    alert("User is not authenticated");
+    
+                }
+            }
+        });
+    }else{
+        alert("Post title and post body cannot be empty");
+    }
+    //  Preparing JSON request object
+   
 }
 
 
