@@ -281,8 +281,9 @@ function onLoadFunctionForForumPosts() {
         contentType: "application/json",
         success: function processData(r) {
             var json_data = JSON.parse(r);
+            var postType = "displayAllPosts"; 
             //alert(JSON.stringify(json_data));
-            generatePostCards(json_data);
+            generatePostCards(json_data, postType);
         }
     });
 
@@ -328,22 +329,17 @@ function onClickOfLogout() {
 }
 
 // This function creates post cards
-function generatePostCards(posts) {
+function generatePostCards(posts, postType) {
 
-    //  addNewPost
-    //  displayAllPosts
 
     var cardsContainer = document.getElementById("cards-container");
-    cardsContainer.innerHTML = "";
-    // if (postType == "displayAllPosts"){
-    //     cardsContainer.innerHTML = "";
-    // }
 
+    if (postType == "displayAllPosts"){
+        cardsContainer.innerHTML = "";
+    }
+    
 
     var todaysDate = new Date();
-
-    // var  todaysDate1 = new Date("2018-03-17T23:04:13.781205+00:00");
-    // alert(todaysDate - todaysDate1);
 
     for (i = 0; i < posts.length; i++) {
 
@@ -363,11 +359,14 @@ function generatePostCards(posts) {
         card.classList.add("row");
         card.classList.add("custom-card");
         cardsContainer.appendChild(card);
-        // if (postType == "displayAllPosts"){
-        //     cardsContainer.appendChild(card);
-        // }else if (postType == "addNewPost"){
-        //     cardsContainer.insertBefore(card, cardsContainer.firstChild);
-        // }
+
+        // Check if post is a new post or displayAllPosts
+        if (postType == "displayAllPosts"){
+            cardsContainer.appendChild(card);
+        }else if (postType == "addNewPost"){
+            cardsContainer.insertBefore(card, cardsContainer.childNodes[0]);
+        }
+        
 
         var cardColumn = document.createElement("div");
         cardColumn.classList.add("col");
@@ -419,7 +418,6 @@ function generatePostCards(posts) {
         conRepDes.setAttribute("id", "conRepDes" + posts[i].post_id);
         cardColumn.appendChild(conRepDes);
 
-
         //  Description column
         var description = document.createElement("div");
         description.classList.add("col-12", "col-sm-10", "col-md-11", "col-lg-11", "description");
@@ -434,8 +432,6 @@ function generatePostCards(posts) {
             description.appendChild(postBody);
         }
         
-        
-
         //  Expand post
         var replyRow = document.createElement("div");
         replyRow.classList.add("row");
@@ -443,9 +439,6 @@ function generatePostCards(posts) {
         replyRow.style.display = "none";
         replyRow.setAttribute("id", "replyRow" + posts[i].post_id);
         cardColumn.appendChild(replyRow);
-
-
-
 
         //  Row for Connect and Reply
         var contentReply = document.createElement("div");
@@ -531,8 +524,6 @@ function generatePostCards(posts) {
             buttonForReply.appendChild(replyText);
         }
 
-
-
         //  New reply to a post when not expanded
         var addReplyRow = document.createElement("div");
         addReplyRow.classList.add("row");
@@ -540,15 +531,6 @@ function generatePostCards(posts) {
         addReplyRow.style.display = "none";
         addReplyRow.setAttribute("id", "addReplyRow" + posts[i].post_id);
         cardColumn.appendChild(addReplyRow);
-
-
-        //  Column for Connect
-        // //Row for connect and resply
-        // var conRepRow = document.createElement("div");
-        // conRepRow.classList.add("row");
-        // conRepRow.setAttribute("style","display: block");
-        // cardColumn.appendChild(postExpandRow);
-
 
         //Button for expanding the post's ROW
         var postExpandRow = document.createElement("div");
@@ -581,12 +563,20 @@ function generatePostCards(posts) {
 
 // This function adds a new post_title
 function addNewPost() {
-    alert("addNewPost called");
+
+    //alert("addNewPost called");
 
     //  Login Information
     var newPostTitle = document.getElementById('newPostTitle').value;
     var newPostDesc = document.getElementById('newPostDesc').value;
     var newImageURL = document.getElementById('newImageURL').value;
+    // var modal = document.getElementById('exampleModalCenter');
+    // var modalButton = document.getElementById('newPost');n
+
+    //  form validation
+    $('#exampleModalCenter').modal('hide');
+    
+    snackBar();
 
     //  Preparing JSON request object
     var newPost = {
@@ -608,10 +598,26 @@ function addNewPost() {
         contentType: "application/json; charset=utf-8",
         success: function processData(r) {
             var myObj = JSON.parse(r);
-            if (myObj["response"] == "pass") {
-                //
-                //addNewPostOnTop(newPostTitle, newPostDesc, newImageURL);
-                console.log(r);
+            if (myObj["post_id"] != null) {
+
+                        var todaysDate = new Date();
+                        var postData = [
+                            {
+                                "post_id": myObj["post_id"], 
+                                "user__username": localStorage.username,
+                                "post_title": myObj["post_title"],
+                                "post_body": myObj["post_body"],
+                                "post_datetime": todaysDate,
+                                "post_image": myObj["post_image"],
+                                "connect_count": myObj["connect_count"],
+                                "reply_count": 0,
+                                "connected": false 
+                            }
+                         ];
+
+                var postType = "addNewPost";
+                generatePostCards(postData, postType);
+                
 
             } else {
                 alert("User is not authenticated");
@@ -620,6 +626,14 @@ function addNewPost() {
         }
     });
 }
+
+
+function snackBar() {
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
 
 // This function will add a new post on the top of the displayed posts when a new post is added
 function addNewPostOnTop(newPostTitle, newPostDesc, newImageURL) {
@@ -1352,7 +1366,9 @@ function sortByConnect() {
         success: function processData(r) {
             var json_data = JSON.parse(r);
             //alert(JSON.stringify(json_data));
-            generatePostCards(json_data);
+            var postType = "displayAllPosts"; 
+            //alert(JSON.stringify(json_data));
+            generatePostCards(json_data, postType);
         }
     });
 
