@@ -316,8 +316,10 @@ def get_forum_posts_by_username(request):
 				else:
 					i['connected'] = True
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
+		except User.DoesNotExist:
+			return HttpResponse('{"response":"User does not exist"}')
 		except Exception as e:
-			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
+			return HttpResponse('{"response":"exception","error":"%s"}' % str(traceback.format_exc()))
 	else:
 		return HttpResponse('{"response":"unauthenticated"}')
 
@@ -341,6 +343,8 @@ def search_posts_by_title(request):
 					i['connected'] = False
 				else:
 					i['connected'] = True
+			if len(posts) == 0:
+				return HttpResponse('{"response":"No posts found"}')
 			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
