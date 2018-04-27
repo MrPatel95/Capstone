@@ -331,8 +331,17 @@ def search_posts_by_title(request):
 		body = json.loads(request.body.decode('utf-8'))
 		try:
 			keywords = body['keywords']
-			posts = ForumPost.objects.filter(post_title__icontains=keywords)
-			return HttpResponse(serializers.serialize('json', posts), content_type='application/json')
+			posts = ForumPost.objects.filter(post_title__icontains=keywords).values(
+				'post_id', 'user__username', 'post_title', 'post_image',
+				'post_datetime', 'connect_count', 'post_body', 'forumconnector__post_id'
+				).annotate(reply_count=Count('replypost__post_id'))
+			for i in posts:
+				connected = ForumConnector.objects.filter(post_id=i['post_id'], user=request.user)
+				if len(connected) == 0:
+					i['connected'] = False
+				else:
+					i['connected'] = True
+			return HttpResponse(json.dumps(list(posts), default=_date_handler))
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
