@@ -303,7 +303,8 @@ def get_forum_posts_by_username(request):
 	if request.user.is_authenticated:
 		body = json.loads(request.body.decode('utf-8'))
 		try:
-			username = body['username']
+			uname = body['username']
+			username = User.objects.get(username=uname)
 			posts = ForumPost.objects.filter(user=username).values(
 				'post_id', 'user__username', 'post_title', 'post_image',
 				'post_datetime', 'connect_count', 'post_body', 'forumconnector__post_id'
