@@ -384,7 +384,7 @@ def increment_connect_by_reply_id(request):
 		body = json.loads(request.body.decode('utf-8'))
 		try:
 			reply_id = body['reply_id']
-			connect = ReplyConnector.objects.filter(post_id=post_id, user=request.user)
+			connect = ReplyConnector.objects.filter(reply_id=reply_id, user=request.user)
 			reply = ReplyPost.objects.get(reply_id=reply_id)
 			if len(connect) == 0:
 				reply.connect_count += 1
