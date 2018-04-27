@@ -574,9 +574,7 @@ function addNewPost() {
     // var modalButton = document.getElementById('newPost');n
 
     //  form validation
-    $('#exampleModalCenter').modal('hide');
     
-    snackBar();
 
     //  Preparing JSON request object
     var newPost = {
@@ -600,6 +598,15 @@ function addNewPost() {
             var myObj = JSON.parse(r);
             if (myObj["post_id"] != null) {
 
+                document.getElementById('newPostTitle').value = ""; 
+                document.getElementById('newPostDesc').value = "";
+                document.getElementById('newImageURL').value = "";
+               
+
+                $('#exampleModalCenter').modal('hide');
+                
+                snackBar();
+
                         var todaysDate = new Date();
                         var postData = [
                             {
@@ -618,6 +625,8 @@ function addNewPost() {
                 var postType = "addNewPost";
                 generatePostCards(postData, postType);
                 
+               
+
 
             } else {
                 alert("User is not authenticated");
