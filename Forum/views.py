@@ -205,7 +205,7 @@ def add_reply(request):
 			reply_body = body['reply_body']
 			reply = ReplyPost(user=user, post_id=post_id, parent_id=parent_id, reply_body=reply_body)
 			reply.save()
-			return HttpResponse('{"response":"pass"}')
+			return HttpResponse('{"response":"pass", "reply_id":"%s"}' % reply.reply_id)
 		except Exception as e:
 			return HttpResponse('{"response":"exception","error":"%s"}' % traceback.format_exc())
 	else:
