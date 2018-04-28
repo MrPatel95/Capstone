@@ -360,7 +360,8 @@ function generatePostCards(posts, postType) {
         postImage = "";
 
         if (posts[i].post_image === "") {
-            postImage = "../assets/batman.jpg";
+            // postImage = "../assets/batman.jpg";
+            postImage = posts[i].post_title[0].toUpperCase();;
         } else {
             postImage = posts[i].post_image;
         }
@@ -394,11 +395,21 @@ function generatePostCards(posts, postType) {
         thumbnail.classList.add("col-lg-1");
         thumbnailRow.appendChild(thumbnail);
 
-        var thumbnailTag = document.createElement("img");
-        thumbnailTag.classList.add("thumbnail");
-        thumbnailTag.setAttribute("src", postImage);
-        thumbnailTag.setAttribute("alt", "IMG");
-        thumbnail.appendChild(thumbnailTag);
+        if (posts[i].post_image === "") {
+            var thumbnailTag = document.createElement("div");
+            thumbnailTag.setAttribute("id", "firstLetter");
+            thumbnail.appendChild(thumbnailTag);
+
+            var textFirstLetter = document.createTextNode(postImage);
+            thumbnailTag.appendChild(textFirstLetter);
+
+        } else {
+            var thumbnailTag = document.createElement("img");
+            thumbnailTag.classList.add("thumbnail");
+            thumbnailTag.setAttribute("src", postImage);
+            thumbnailTag.setAttribute("alt", "IMG");
+            thumbnail.appendChild(thumbnailTag);
+        }
 
         var titleTime = document.createElement("div");
         titleTime.classList.add("col-10");
