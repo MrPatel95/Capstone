@@ -269,7 +269,7 @@ function createDate(todaysDate, postDate) {
 function onLoadFunctionForForumPosts() {
     // alert();
     if (localStorage.getItem("username") === null) {
-        window.location.replace("../html/loginRegister.html");
+        window.location.replace("../html/index.html");
     } else {
         $("#usernameDropdown").html(localStorage.username);
 
@@ -326,7 +326,7 @@ function onClickOfLogout() {
 
             if (myObj["response"] == "pass") {
                 localStorage.clear();
-                window.location = "loginRegister.html";
+                window.location = "index.html";
             } else {
                 console.log("Logout error");
             }
@@ -583,6 +583,11 @@ function generatePostCards(posts, postType) {
 //  Show user post when clicked on username on post card
 function showUserPost(username){
     searchPostBy("2", username);
+}
+
+//  Show my account
+function showMyAccount(){
+    searchPostBy("2", localStorage.username);
 }
 
 // This function adds a new post_title
