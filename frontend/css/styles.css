@@ -387,13 +387,6 @@ body{
 
 
 
-
-
-
-
-
-
-
 #login-register-button-holder{
     text-align: center;
     margin-top: 30px;
@@ -405,8 +398,8 @@ body{
 
 #welcome-heading{
     text-align: center;
-    font-size: 75px;
-    font-weight: bold;
+    font-size: 150px;
+    font-family: 'Great Vibes', cursive;
 }
 
 #welcome-message{
@@ -414,6 +407,7 @@ body{
     font-weight: normal;
     padding-right: 30%;
     padding-left: 30%;
+    font-size: 20px;
 }
 
 #main-holder{
@@ -562,51 +556,3 @@ body{
 
 }
 
-/*
-#temp-left{
-
-    margin-top: 27%;
-    margin-left: 20%;
-    margin-right: 20%;
-    text-align: center;
-}
-
-#temp-right{
-    margin-top: 20%;
-    margin-left: 20%;
-    margin-right: 20%;
-    text-align: center;
-}
-
-#login-container{
-    padding:30px;
-
-    background-color: white;
-}
-#register-container{
-    padding:30px;
-    background-color: white;
-
-}
-
-#left-container{
-
-}
-
-#right-container{
-
-}
-
-.card-css{
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-}
-
-.bgcolor{
-    background-color: #E2E1E0;
-}
-
-body{
-    background-color: #E2E1E0;
-}
-*/
