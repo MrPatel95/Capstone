@@ -361,7 +361,7 @@ function generatePostCards(posts, postType) {
 
         if (posts[i].post_image === "") {
             // postImage = "../assets/batman.jpg";
-            postImage = posts[i].post_title[0].toUpperCase();;
+            postImage = posts[i].post_title[0].toUpperCase();
         } else {
             postImage = posts[i].post_image;
         }
@@ -1449,6 +1449,10 @@ function searchPostBy(searchByOption, searchById) {
     if (searchById != "" && searchByOption != "") {
 
         if (searchByOption == "2") {
+
+            var searchMessage = document.getElementById("searchMessage");
+            searchMessage.innerHTML = "Posts by " + searchById;
+
             //Preparing JSON request object
             var loadNPosts = {
                 "username": searchById

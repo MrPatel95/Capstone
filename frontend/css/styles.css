@@ -1,3 +1,18 @@
+#usernameAndAllFormPosts{
+    
+    margin-right: 150px;
+    margin-left: 150px;
+}
+
+#searchMessage{
+    padding-top: 5px;
+    font-size: 25px;
+}
+
+#allForumPostsButton{
+    text-align: right;
+}
+
 /* Text Thumbnail */
 
 #firstLetter{
