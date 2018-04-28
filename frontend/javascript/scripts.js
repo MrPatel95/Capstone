@@ -267,6 +267,13 @@ function createDate(todaysDate, postDate) {
 
 //  This function is called when the Forum page is fully loaded
 function onLoadFunctionForForumPosts() {
+
+    var sortSection = document.getElementById("posts");
+    sortSection.setAttribute("style", "display: block");
+
+    var searchMessageColumn = document.getElementById("searchMessageColumn");
+    searchMessageColumn.setAttribute("style", "display: none");
+
     // alert();
     if (localStorage.getItem("username") === null) {
         window.location.replace("../html/index.html");
@@ -1450,9 +1457,6 @@ function searchPostBy(searchByOption, searchById) {
 
         if (searchByOption == "2") {
 
-            var searchMessage = document.getElementById("searchMessage");
-            searchMessage.innerHTML = "Posts by " + searchById;
-
             //Preparing JSON request object
             var loadNPosts = {
                 "username": searchById
@@ -1474,12 +1478,23 @@ function searchPostBy(searchByOption, searchById) {
                     if(json_data.hasOwnProperty('response')){
                         alert("No username found!");
                     }else{
+
+                        var sortSection = document.getElementById("posts");
+                        sortSection.setAttribute("style", "display: none");
+
+                        var searchMessageColumn = document.getElementById("searchMessageColumn");
+                        searchMessageColumn.setAttribute("style", "display: block");
+
+                        var searchMessage = document.getElementById("searchMessage");
+                        searchMessage.innerHTML = "Posts by " + searchById.italics().bold();
+
                         var postType = "displayAllPosts";
                         generatePostCards(json_data, postType);
                     }
                 }
             });
         }else if (searchByOption == "1") {
+
             //Preparing JSON request object
             var loadNPosts = {
                 "keywords": searchById
@@ -1500,6 +1515,16 @@ function searchPostBy(searchByOption, searchById) {
                     if(json_data.hasOwnProperty('response')){
                         alert("No posts found!");
                     }else{
+
+                        var sortSection = document.getElementById("posts");
+                        sortSection.setAttribute("style", "display: none");
+
+                        var searchMessageColumn = document.getElementById("searchMessageColumn");
+                        searchMessageColumn.setAttribute("style", "display: block");
+
+                        var searchMessage = document.getElementById("searchMessage");
+                        searchMessage.innerHTML = "Results for " + searchById.italics().bold();
+
                         var postType = "displayAllPosts";
                         generatePostCards(json_data, postType);
                     }
