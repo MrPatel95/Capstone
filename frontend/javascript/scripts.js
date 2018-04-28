@@ -155,6 +155,8 @@ function registerNewUser() {
 
         if (registerPassword == registerRepass) {
 
+            $("#regiterUserButtonId").html("Registering...");
+
             document.getElementById("invalidRegister").style.display = "none";
 
             var registerNewUserRequestData = {
@@ -184,9 +186,12 @@ function registerNewUser() {
                     console.log(this.responseText);
                     var result = JSON.parse(this.responseText);
                     if (result.response == "pass") {
+
+                        $("#regiterUserButtonId").html("Registered!");
+
                         document.getElementById("registerResponseHolder").style.display = "block";
                         document.getElementById("registerResponseHolder").style.color = "#27ae60";
-                        $('#registerResponseId').text("Confirmation email has been sent to " + registerEmail);
+                        $('#registerResponseId').text("Registerated successfully! Please login.");
                     } else if (result.response == "email in use") {
                         document.getElementById("registerResponseHolder").style.display = "block";
                         document.getElementById("registerResponseHolder").style.color = "#E14938";
@@ -415,9 +420,17 @@ function generatePostCards(posts, postType) {
         var timeUsername = document.createElement("div");
         timeUsername.classList.add("col-12");
         timeUsername.classList.add("time-username");
-        var timeUser = document.createTextNode(time + " by " + posts[i].user__username);
+
+        var timeUser = document.createTextNode(time + " by ");
         timeUsername.appendChild(timeUser);
         titleRow.appendChild(timeUsername);
+
+        var usernameLink = document.createElement("a");
+        usernameLink.setAttribute("href", "javascript:showUserPost('" + posts[i].user__username + "')");
+        timeUsername.appendChild(usernameLink);
+
+        var userNameShow = document.createTextNode(posts[i].user__username);
+        usernameLink.appendChild(userNameShow);
 
         var conRepDes = document.createElement("div");
         conRepDes.classList.add("row");
@@ -567,6 +580,11 @@ function generatePostCards(posts, postType) {
 
 }
 
+//  Show user post when clicked on username on post card
+function showUserPost(username){
+    searchPostBy("2", username);
+}
+
 // This function adds a new post_title
 function addNewPost() {
 
@@ -654,11 +672,6 @@ function snackBar() {
     setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
 }
 
-
-// This function will add a new post on the top of the displayed posts when a new post is added
-function addNewPostOnTop(newPostTitle, newPostDesc, newImageURL) {
-
-}
 
 //  This function is called when show Post/Replies is clicked
 function onClickOfShowPost(post_id) {
@@ -1408,10 +1421,13 @@ function sortByTime() {
 }
 
 // This function searches for post and post by username
-function searchPostBy() {
+function searchPostBy(searchByOption, searchById) {
 
-    var searchByOption = document.getElementById("searchByOption").value;
-    var searchById = document.getElementById("searchById").value;
+    if (searchByOption == "fromSearchButtonType"){
+        var searchByOption = document.getElementById("searchByOption").value;
+        var searchById = document.getElementById("searchById").value;
+    }
+    
 
 
     if (searchById != "" && searchByOption != "") {
