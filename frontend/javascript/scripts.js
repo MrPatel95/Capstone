@@ -1,5 +1,12 @@
 // http://promincproductions.com/blog/cross-domain-ajax-request-cookies-cors/
 
+// This function checks if user is in local variable for idex.html
+function onLoadFunctionForIndex(){
+    if (localStorage.getItem("username") != null) {
+        window.location.replace("../html/forum.html");
+    }
+}
+
 //  This function is called on  blur of any input field
 function onBlurFormValidation(id) {
 
@@ -304,7 +311,7 @@ function onLoadFunctionForForumPosts() {
 
         $(document).ready(function () {
             $('#page-body').ajaxStart(function () {
-                alert("AJAX sent");
+                // alert("AJAX sent");
                 $('#posts-loading').show();
             }).ajaxStop(function () {
                 $('#posts-loading').hide();
@@ -1065,7 +1072,7 @@ function showReplies(allReplies, rowId) {
 
 //   Add a reply to reply function 
 function replyToReplyFun(replyId) {
-    alert(replyId);
+    // alert(replyId);
 
     var replyToReplySection = document.getElementById("replyToReplyColumn" + replyId);
 
@@ -1304,7 +1311,7 @@ function addReply(postId, replyIsComingFrom, parentUser) {
 
                     } else if (replyIsComingFrom == "whenExpanded") {
                         //allReplyRow.insertBefore(mainReplyColumn, allReplyRow.childNodes[0]);
-                        alert(parentUser);
+                        // alert(parentUser);
 
                         // "reply__reply_id": "129",
                         // "user": "ali",
@@ -1329,7 +1336,7 @@ function addReply(postId, replyIsComingFrom, parentUser) {
                 }
             }
         });
-    }
+    }                       
 }
 
 // This function addes a reply to post
@@ -1430,7 +1437,7 @@ function sortByConnect() {
 
     $(document).ready(function () {
         $('#page-body').ajaxStart(function () {
-            alert("AJAX sent");
+            // alert("AJAX sent");
             $('#posts-loading').show();
         }).ajaxStop(function () {
             $('#posts-loading').hide();

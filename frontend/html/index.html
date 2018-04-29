@@ -22,7 +22,7 @@
     <title style = "font-family: 'Great Vibes', cursive;">Etsal</title>
 </head>
 
-<body>
+<body onload="onLoadFunctionForIndex()">
 
     <!-- Image and text -->
     <nav class="navbar navbar-light bg-light">
@@ -105,13 +105,6 @@
                                     <div class="col-sm-12">
                                         <input type="password" class="form-control margin-top-for-form-elements" id="password_login" placeholder="Password" name="password"
                                             onblur="onBlurFormValidation('password_login')" onkeypress="return loginSubmitButtonEvent(event)">
-                                    </div>
-                                </div>
-
-
-                                <div class="row margin-top-for-form-elements">
-                                    <div class="col-sm-12">
-                                        <a href="#">Forgot password?</a>
                                     </div>
                                 </div>
 
