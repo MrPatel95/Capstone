@@ -1453,10 +1453,17 @@ function sortByTime() {
 // This function searches for post and post by username
 function searchPostBy(searchByOption, searchById) {
 
+   
+
     if (searchByOption == "fromSearchButtonType"){
         var searchByOption = document.getElementById("searchByOption").value;
         var searchById = document.getElementById("searchById").value;
+    }else if(searchByOption == "fromSearchButtonTypeMobile"){
+        var searchByOption = document.getElementById("searchByOptionMobile").value;
+        var searchById = document.getElementById("searchByIdMobile").value;
     }
+    alert(searchById);
+    alert(searchByOption);
     
 
 

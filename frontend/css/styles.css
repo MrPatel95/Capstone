@@ -1,3 +1,6 @@
+
+
+
 #usernameAndAllFormPosts{
     
     margin-right: 150px;
@@ -436,12 +439,59 @@ body{
     display: none;
 }
 
+#newSearchByMobile{
+    display: none;
+}
 
+#newSearchBoxMobile{
+    display: none;
+}
+
+#newSearchButtonMobile{
+    display: none;
+}
 /*
     Media query starts here
 */
 
 @media only screen and (max-width: 500px) {
+
+
+    /* Search section */
+
+    #newSearchHolderMobile{
+        
+        padding-top: 25px;
+    }
+
+    #newSearchByMobile{
+        display: block;
+        padding-right: 1px;
+        padding-left: 12px;
+    }
+
+    #newSearchBoxMobile{
+        display: block;
+        padding-left: 1px;
+        padding-right: 1px;
+    }
+
+    #newSearchButtonMobile{
+        display: block;
+        padding-left: 1px;
+        padding-right: 5px;
+    }
+
+    .newSearchButtonButtonMobile{
+        width: 79px;
+    }
+
+
+    /* serach section */
+
+
+
+
 
     #searchbycol{
         padding-right: 0px;

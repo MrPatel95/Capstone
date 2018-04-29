@@ -42,18 +42,19 @@
 
         <div id="searchOnNavbar">
 
+            <!-- search section on desktop -->
             <form class="form-inline my-2 my-lg-0">
-
-
                 <select class="form-control mr-sm-2 custom-select" id="searchByOption">
                     <option selected>Search by</option>
                     <option value="1">Post</option>
-                    <option value="2">Username</option>
+                    <option value="2">Username</option>   
                 </select>
 
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchById">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="searchPostBy('fromSearchButtonType','fromSearchButtonUsername')">Search</button>
             </form>
+
+
         </div>
 
         <div class="btn-group">
@@ -78,36 +79,22 @@
             <strong>Add a new post</strong>
         </div>
 
-
-        <!-- Search section for mobile -->
-
-        <!-- <div class="row" id="searchAndButtonOutsideNav">
-            <div class="col-3" id="searchbycol">
-                <select class="form-control custom-select" id="mobilesearchby">
+        <!-- Mobile search section  -->      
+        <div  class = "row" id = "newSearchHolderMobile">
+            <div class = "col-3" id = "newSearchByMobile">
+                <select class="form-control custom-select" id="searchByOptionMobile">
                     <option selected>By</option>
                     <option value="1">Post</option>
-                    <option value="2">Username</option>
+                    <option value="2">User</option>
                 </select>
             </div>
-            <div class="col-9 input-group" id="searchbygroup">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchOutsideNavbar">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="testSubmit()" id="searchButtonOutsideNavbar">Search</button>
+            <div class = "col-6" id = "newSearchBoxMobile">
+                <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="searchByIdMobile">
             </div>
-        </div> -->
-
-
-        <div class="row" id="mobilesearchrow">
-            <div class="col-3" id="">
-                <select class="form-control custom-select" id="">
-                    <option selected>By</option>
-                    <option value="1">Post</option>
-                    <option value="2">Username</option>
-                </select>
+            <div class = "col-3" id = "newSearchButtonMobile">
+                <button class="btn btn-outline-success newSearchButtonButtonMobile" onclick="searchPostBy('fromSearchButtonTypeMobile','fromSearchButtonUsername')" id="">Search</button>
             </div>
-            <div class="col-9 input-group" id="">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="testSubmit()" id="">Search</button>
-            </div>
+            
         </div>
 
 
