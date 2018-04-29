@@ -50,7 +50,10 @@
                     <option value="2">Username</option>   
                 </select>
 
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchById">
+                <!-- <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" id="searchById" onkeyup="navbarSearchBoxOnClick()"> -->
+
+                <input type="text" class="form-control mr-sm-2" id="searchById" placeholder="Search" onkeyup="navbarSearchBoxOnClick(this)">
+
                 <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="searchPostBy('fromSearchButtonType','fromSearchButtonUsername')">Search</button>
             </form>
 
@@ -89,7 +92,7 @@
                 </select>
             </div>
             <div class = "col-6" id = "newSearchBoxMobile">
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="searchByIdMobile">
+                <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="searchByIdMobile" onkeyup="navbarSearchBoxOnClick(this)"> 
             </div>
             <div class = "col-3" id = "newSearchButtonMobile">
                 <button class="btn btn-outline-success newSearchButtonButtonMobile" onclick="searchPostBy('fromSearchButtonTypeMobile','fromSearchButtonUsername')" id="">Search</button>

@@ -1,7 +1,16 @@
 // http://promincproductions.com/blog/cross-domain-ajax-request-cookies-cors/
 
+//  On click of ENTER of search box
+function navbarSearchBoxOnClick(e) {
+    console.log(e.keyCode);
+    if (e.keyCode == 13) {
+        //searchPostBy('fromSearchButtonType','fromSearchButtonUsername');
+        searchPostBy('fromSearchButtonTypeMobile', 'fromSearchButtonUsername');
+    }
+}
+
 // This function checks if user is in local variable for idex.html
-function onLoadFunctionForIndex(){
+function onLoadFunctionForIndex() {
     if (localStorage.getItem("username") != null) {
         window.location.replace("../html/forum.html");
     }
@@ -198,7 +207,35 @@ function registerNewUser() {
 
                         document.getElementById("registerResponseHolder").style.display = "block";
                         document.getElementById("registerResponseHolder").style.color = "#27ae60";
-                        $('#registerResponseId').text("Registerated successfully! Please login.");
+                        
+
+                        var counter = 5;
+
+                        var myVar = setInterval(
+                            function(){
+                                $('#registerResponseId').text("Registerated successfully! Please login. Modal closes in " + counter + " seconds...");
+                                counter--; 
+
+                                if (counter == 0){
+                                    $('#exampleModalCenter1').modal('hide');
+                                    clearInterval(myVar);
+                                }
+                                }, 1000);
+
+                        
+
+                        // setTimeout(
+                        //     function () {
+                                
+                        //     }, 3000);
+
+                        document.getElementById('register_username').value = "";
+                        document.getElementById('register_email').value = "";
+                        document.getElementById('register_password').value = "";
+                        document.getElementById('register_re_password').value = "";
+
+
+
                     } else if (result.response == "email in use") {
                         document.getElementById("registerResponseHolder").style.display = "block";
                         document.getElementById("registerResponseHolder").style.color = "#E14938";
@@ -606,12 +643,12 @@ function generatePostCards(posts, postType) {
 }
 
 //  Show user post when clicked on username on post card
-function showUserPost(username){
+function showUserPost(username) {
     searchPostBy("2", username);
 }
 
 //  Show my account
-function showMyAccount(){
+function showMyAccount() {
     searchPostBy("2", localStorage.username);
 }
 
@@ -662,19 +699,17 @@ function addNewPost() {
                     snackBar();
 
                     var todaysDate = new Date();
-                    var postData = [
-                        {
-                            "post_id": myObj["post_id"],
-                            "user__username": localStorage.username,
-                            "post_title": myObj["post_title"],
-                            "post_body": myObj["post_body"],
-                            "post_datetime": todaysDate,
-                            "post_image": myObj["post_image"],
-                            "connect_count": myObj["connect_count"],
-                            "reply_count": 0,
-                            "connected": false
-                        }
-                    ];
+                    var postData = [{
+                        "post_id": myObj["post_id"],
+                        "user__username": localStorage.username,
+                        "post_title": myObj["post_title"],
+                        "post_body": myObj["post_body"],
+                        "post_datetime": todaysDate,
+                        "post_image": myObj["post_image"],
+                        "connect_count": myObj["connect_count"],
+                        "reply_count": 0,
+                        "connected": false
+                    }];
 
                     var postType = "addNewPost";
                     generatePostCards(postData, postType);
@@ -699,7 +734,9 @@ function addNewPost() {
 function snackBar() {
     var x = document.getElementById("snackbar");
     x.className = "show";
-    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+    setTimeout(function () {
+        x.className = x.className.replace("show", "");
+    }, 3000);
 }
 
 
@@ -899,7 +936,7 @@ function showReplies(allReplies, rowId) {
             // Posted by and body column for main reply
             var postByBodyColumn = document.createElement("div");
 
-            postByBodyColumn.classList.add("col-10", "col-sm-10", "col-md-10", "col-lg-10");
+            postByBodyColumn.classList.add("col-12", "col-sm-10", "col-md-10", "col-lg-10");
             postByBodyColumn.setAttribute("id", "postByBodyColumn");
             mainReplyRow.appendChild(postByBodyColumn);
 
@@ -959,7 +996,7 @@ function showReplies(allReplies, rowId) {
 
             // Connect and reply column for main reply
             var connectReplyColumn = document.createElement("div");
-            connectReplyColumn.classList.add("col-2", "col-sm-2", "col-md-2", "col-lg-2");
+            connectReplyColumn.classList.add("col-12", "col-sm-2", "col-md-2", "col-lg-2");
             connectReplyColumn.setAttribute("id", "connectReplyColumn");
             mainReplyRow.appendChild(connectReplyColumn);
 
@@ -971,7 +1008,7 @@ function showReplies(allReplies, rowId) {
 
             // Connect column for main reply
             var connectColumn = document.createElement("div");
-            connectColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+            connectColumn.classList.add("col-6", "col-sm-12", "col-md-12", "col-lg-12");
             connectColumn.setAttribute("id", "connectColumn");
             connectReplyRow.appendChild(connectColumn);
 
@@ -995,7 +1032,7 @@ function showReplies(allReplies, rowId) {
 
             // Reply column for main reply
             var replyColumn = document.createElement("div");
-            replyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+            replyColumn.classList.add("col-6", "col-sm-12", "col-md-12", "col-lg-12");
             replyColumn.setAttribute("id", "replyColumn");
             connectReplyRow.appendChild(replyColumn);
 
@@ -1170,7 +1207,7 @@ function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_i
     // Posted by and body column for main reply
     var postByBodyColumn = document.createElement("div");
 
-    postByBodyColumn.classList.add("col-10", "col-sm-10", "col-md-10", "col-lg-10");
+    postByBodyColumn.classList.add("col-12", "col-sm-10", "col-md-10", "col-lg-10");
     postByBodyColumn.setAttribute("id", "postByBodyColumn");
     mainReplyRow.appendChild(postByBodyColumn);
 
@@ -1216,7 +1253,7 @@ function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_i
 
     // Connect and reply column for main reply
     var connectReplyColumn = document.createElement("div");
-    connectReplyColumn.classList.add("col-2", "col-sm-2", "col-md-2", "col-lg-2");
+    connectReplyColumn.classList.add("col-12", "col-sm-2", "col-md-2", "col-lg-2");
     connectReplyColumn.setAttribute("id", "connectReplyColumn");
     mainReplyRow.appendChild(connectReplyColumn);
 
@@ -1228,7 +1265,7 @@ function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_i
 
     // Connect column for main reply
     var connectColumn = document.createElement("div");
-    connectColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    connectColumn.classList.add("col-6", "col-sm-12", "col-md-12", "col-lg-12");
     connectColumn.setAttribute("id", "connectColumn");
     connectReplyRow.appendChild(connectColumn);
 
@@ -1247,7 +1284,7 @@ function attachReplyToReply(replyId, reply, parent_user, reply_user, new_reply_i
 
     // Reply column for main reply
     var replyColumn = document.createElement("div");
-    replyColumn.classList.add("col-12", "col-sm-12", "col-md-12", "col-lg-12");
+    replyColumn.classList.add("col-6", "col-sm-12", "col-md-12", "col-lg-12");
     replyColumn.setAttribute("id", "replyColumn");
     connectReplyRow.appendChild(replyColumn);
 
@@ -1336,7 +1373,7 @@ function addReply(postId, replyIsComingFrom, parentUser) {
                 }
             }
         });
-    }                       
+    }
 }
 
 // This function addes a reply to post
@@ -1381,7 +1418,9 @@ function connectIncrement(id, label, flag) {
             url: urlType,
             data: JSON.stringify(connectIncrement),
             datatype: "json",
-            xhrFields: { withCredentials: true },
+            xhrFields: {
+                withCredentials: true
+            },
             async: true,
             contentType: "application/json",
             success: function processData(r) {
@@ -1453,12 +1492,12 @@ function sortByTime() {
 // This function searches for post and post by username
 function searchPostBy(searchByOption, searchById) {
 
-   
 
-    if (searchByOption == "fromSearchButtonType"){
+
+    if (searchByOption == "fromSearchButtonType") {
         var searchByOption = document.getElementById("searchByOption").value;
         var searchById = document.getElementById("searchById").value;
-    }else if(searchByOption == "fromSearchButtonTypeMobile"){
+    } else if (searchByOption == "fromSearchButtonTypeMobile") {
         var searchByOption = document.getElementById("searchByOptionMobile").value;
         var searchById = document.getElementById("searchByIdMobile").value;
     }
@@ -1483,11 +1522,11 @@ function searchPostBy(searchByOption, searchById) {
                 async: true,
                 contentType: "application/json",
                 success: function processData(r) {
-                    
+
                     var json_data = JSON.parse(r);
-                    if(json_data.hasOwnProperty('response')){
+                    if (json_data.hasOwnProperty('response')) {
                         alert("No username found!");
-                    }else{
+                    } else {
 
                         var sortSection = document.getElementById("posts");
                         sortSection.setAttribute("style", "display: none");
@@ -1503,7 +1542,7 @@ function searchPostBy(searchByOption, searchById) {
                     }
                 }
             });
-        }else if (searchByOption == "1") {
+        } else if (searchByOption == "1") {
 
             //Preparing JSON request object
             var loadNPosts = {
@@ -1522,9 +1561,9 @@ function searchPostBy(searchByOption, searchById) {
                 contentType: "application/json",
                 success: function processData(r) {
                     var json_data = JSON.parse(r);
-                    if(json_data.hasOwnProperty('response')){
+                    if (json_data.hasOwnProperty('response')) {
                         alert("No posts found!");
-                    }else{
+                    } else {
 
                         var sortSection = document.getElementById("posts");
                         sortSection.setAttribute("style", "display: none");
@@ -1538,7 +1577,7 @@ function searchPostBy(searchByOption, searchById) {
                         var postType = "displayAllPosts";
                         generatePostCards(json_data, postType);
                     }
-                    
+
                 }
             });
         }
