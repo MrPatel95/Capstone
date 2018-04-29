@@ -456,6 +456,21 @@ body{
 
 @media only screen and (max-width: 500px) {
 
+    #usernameAndAllFormPosts{
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+    #searchMessage{
+        padding-left: 0px;
+        padding-right: 0px;
+        font-size: 15px;
+    }
+
+    #allForumPostsButton{
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 
     /* Search section */
 

@@ -1462,10 +1462,6 @@ function searchPostBy(searchByOption, searchById) {
         var searchByOption = document.getElementById("searchByOptionMobile").value;
         var searchById = document.getElementById("searchByIdMobile").value;
     }
-    alert(searchById);
-    alert(searchByOption);
-    
-
 
     if (searchById != "" && searchByOption != "") {
 
