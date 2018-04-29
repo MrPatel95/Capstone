@@ -583,8 +583,8 @@ function generatePostCards(posts, postType) {
         cardColumn.appendChild(postExpandRow);
 
         var postExpandCol = document.createElement("div");
-        postExpandCol.classList.add("offset-11", "offset-sm-11", "offset-md-11", "offset-lg-11");
-        postExpandCol.classList.add("col-1", "col-sm-1", "col-md-1", "col-lg-1", "postExpandCol");
+        postExpandCol.classList.add("offset-10", "offset-sm-11", "offset-md-11", "offset-lg-11");
+        postExpandCol.classList.add("col-2", "col-sm-1", "col-md-1", "col-lg-1", "postExpandCol");
         postExpandRow.appendChild(postExpandCol);
 
         //  button to hold the image

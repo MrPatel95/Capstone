@@ -456,6 +456,13 @@ body{
 
 @media only screen and (max-width: 500px) {
 
+    #firstLetter{
+        height: 45px;
+        width: 45px;
+        line-height: 42px;
+        font-size: 35px;
+    }
+
     #posts-sortby{
         margin-top: 15px;
     }
